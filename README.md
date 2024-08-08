@@ -1,1 +1,1 @@
-Sebas es una persona no binaria
+# A Dany le gusta el pilin
