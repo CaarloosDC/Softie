@@ -1,1 +1,1 @@
-# Softies - PROJECT NAME PENDING!!!
+# Softies - NeoSync
