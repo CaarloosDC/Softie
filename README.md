@@ -1,31 +1,11 @@
-# Softies - NeoSync
+# NeoSync - Softies
 
 Neosync es una plataforma de gestion de preventa de proyectos de software que utiliza Inteligenecia Artificial para eficientizar y agilizar el proceso de preventa.
 
 ## Índice
-1. [Documentos Entregados](#documentos-entregados)
-2. [Planeación](#planeación)
-3. [Diagrama de Componentes](#diagrama-de-componentes)
-4. [Prueba Técnica de AI](#prueba-técnica-de-ai)
-5. [Aplicación de AI en la Solución](#aplicación-de-ai-en-la-solución)
-
----
-
-## Documentos Entregados
-
-En este bloque hemos entregado los siguientes documentos. Puedes acceder a ellos directamente desde los siguientes enlaces:
-
-- [Plan de Proyecto](https://docs.google.com/document/d/1P0X5hc2Y5LTHBW99r5GE0Actw_C1DuLXs6NGmRDxDcM/edit?usp=sharing)
-- [Documento de Requerimientos](https://docs.google.com/document/d/1K-KegpOpBIw_idXq83HhmWMXVDrcLAwU8OVUlaL_J_4/edit?usp=sharing)
-
-Estos documentos se encuentran detallados en la Wiki del proyecto para un acceso más fácil y una consulta rápida durante el desarrollo.
-
----
-
-## Planeación
-Historias de usuario del primer sprint
-
----
+1. [Diagrama de Componentes](#diagrama-de-componentes)
+2. [Prueba Técnica de AI](#prueba-técnica-de-ai)
+3. [Aplicación de AI en la Solución](#aplicación-de-ai-en-la-solución)
 
 ## Diagrama de Componentes
 
