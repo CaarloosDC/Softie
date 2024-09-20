@@ -3,9 +3,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import LogoNeorisDark from "@/components/custom/logo-neoris-dark";
 import Divider from "@/components/custom/divider";
 import LoginImage from "@/components/custom/login-image";
+import LogoNeoris from "@/components/custom/logo-neoris";
 
 export default function LoginPage() {
   return (
@@ -13,8 +13,8 @@ export default function LoginPage() {
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
-            <LogoNeorisDark />
-            <h1 className="text-3xl font-bold">Inicio de sesión</h1>
+            <LogoNeoris />
+            <h1 className="text-3xl font-bold pt-7">Inicio de sesión</h1>
           </div>
           <div className="grid gap-4">
             {/* Correo electrónico */}

@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import LogoNeorisDark from "@/components/custom/logo-neoris-dark";
 import LoginImage from "@/components/custom/login-image";
+import LogoNeoris from "@/components/custom/logo-neoris";
 
 export default function ForgotPasswordPage() {
   return (
@@ -10,8 +10,8 @@ export default function ForgotPasswordPage() {
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
-            <LogoNeorisDark />
-            <h1 className="text-2xl font-bold">Recuperación de cuenta</h1>
+            <LogoNeoris />
+            <h1 className="text-2xl font-bold  pt-7">Recuperación de cuenta</h1>
             <p className="text-balance text-muted-foreground">
               Ingresa tu correo para la recuperación de tu cuenta
             </p>

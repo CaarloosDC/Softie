@@ -8,9 +8,9 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import LogoNeorisDark from "@/components/custom/logo-neoris-dark";
 import Divider from "@/components/custom/divider";
 import LoginImage from "@/components/custom/login-image";
+import LogoNeoris from "@/components/custom/logo-neoris";
 
 export default function CreateAccountPage() {
   return (
@@ -18,8 +18,8 @@ export default function CreateAccountPage() {
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
-            <LogoNeorisDark />
-            <h1 className="text-3xl font-bold">Crear cuenta</h1>
+            <LogoNeoris />
+            <h1 className="text-3xl font-bold pt-7">Crear cuenta</h1>
           </div>
 
           <div className="grid gap-4">
