@@ -1,9 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import LogoNeorisDark from "@/components/custom/logo-neoris-dark";
+import Divider from "@/components/custom/divider";
+import LoginImage from "@/components/custom/login-image";
 
 export default function LoginPage() {
   return (
@@ -11,12 +13,11 @@ export default function LoginPage() {
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
+            <LogoNeorisDark />
             <h1 className="text-3xl font-bold">Inicio de sesión</h1>
-            {/* <p className="text-balance text-muted-foreground">
-              Ingresa tus credenciales abajo para iniciar sesión
-            </p> */}
           </div>
           <div className="grid gap-4">
+            {/* Correo electrónico */}
             <div className="grid gap-2">
               <Label htmlFor="email">Correo electrónico</Label>
               <Input
@@ -26,6 +27,8 @@ export default function LoginPage() {
                 required
               />
             </div>
+
+            {/* Contraseña */}
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Contraseña</Label>
@@ -38,30 +41,31 @@ export default function LoginPage() {
               </div>
               <Input id="password" type="password" required />
             </div>
+
+            {/* Botón para iniciar sesión */}
             <Button type="submit" className="w-full">
               Iniciar sesión
             </Button>
+
+            <Divider />
+
+            {/* Botón para iniciar sesión con google*/}
             <Button variant="outline" className="w-full">
               Iniciar sesión con Google
             </Button>
           </div>
+
+          {/* Crear cuenta */}
           <div className="mt-4 text-center text-sm">
             ¿No tienes una cuenta?{" "}
-            <Link href="#" className="underline">
+            <Link href="/create-account" className="underline">
               Crea una
             </Link>
           </div>
         </div>
       </div>
-      <div className="hidden bg-muted lg:block">
-        <Image
-          src="/login/1.webp"
-          alt="Image"
-          width="1920"
-          height="1080"
-          className="h-full w-full object-cover max-h-screen  dark:brightness-[0.2] dark:grayscale"
-        />
-      </div>
+      {/* Imagen */}
+      <LoginImage />
     </div>
   );
 }
