@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "@/app/globals.css";
 import { Sidebar } from "@/components/global/sidebar";
 import { Navbar } from "@/components/global/navbar";
+import DynamicBreadcrumb from "@/components/global/dynamicbreadcrumb";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,10 @@ export default function RootLayout({
           <div className="flex flex-col">
             {/* Navbar */}
             <Navbar />
+            {/* Breadcrumb */}
+            <div className="pl-7 pt-5">
+              <DynamicBreadcrumb capitalizeLinks={true} />
+            </div>
             {children}
           </div>
         </div>
