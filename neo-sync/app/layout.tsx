@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
-import { Sidebar } from "@/components/global/sidebar";
-import { Navbar } from "@/components/global/navbar";
-import DynamicBreadcrumb from "@/components/global/dynamicbreadcrumb";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,22 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-          {/* Sidebar */}
-          <Sidebar />
-          {/* Main content area */}
-          <div className="flex flex-col">
-            {/* Navbar */}
-            <Navbar />
-            {/* Breadcrumb */}
-            <div className="pl-7 pt-5">
-              <DynamicBreadcrumb capitalizeLinks={true} />
-            </div>
-            {children}
-          </div>
-        </div>
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
