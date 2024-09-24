@@ -11,8 +11,12 @@ import {
 import Divider from "@/components/custom/divider";
 import LoginImage from "@/components/custom/login-image";
 import LogoNeoris from "@/components/custom/logo-neoris";
-
+import { signup } from '../login/actions'
 export default function CreateAccountPage() {
+
+
+
+
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
@@ -25,8 +29,8 @@ export default function CreateAccountPage() {
           <div className="grid gap-4">
             {/* Nombre */}
             <div className="grid gap-2">
-              <Label htmlFor="name">Nombre</Label>
-              <Input id="name" type="text" placeholder="Tu nombre" required />
+              <Label htmlFor="name">Nombre Completo</Label>
+              <Input id="name" type="text" placeholder="Tu nombre completo" required />
             </div>
 
             {/* Rol en la empresa */}
@@ -92,7 +96,7 @@ export default function CreateAccountPage() {
             </div>
 
             {/* Botón para crear cuenta */}
-            <Button type="submit" className="w-full bg-black">
+            <Button formAction={signup} type="submit" className="w-full bg-black">
               Crear cuenta
             </Button>
 
