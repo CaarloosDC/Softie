@@ -32,7 +32,7 @@ export default function DynamicBreadcrumb({
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="/" className="flex items-center">
-            {homeElement}
+            {homeElement}Home
           </BreadcrumbLink>
         </BreadcrumbItem>
         {pathNames.length > 0 && (
