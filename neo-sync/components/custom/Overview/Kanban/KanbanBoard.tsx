@@ -48,7 +48,7 @@ export function KanbanBoard() {
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]); // Memoized array of column IDs for performance.
 
   const [tasks, setTasks] = useState<Task[]>(initialTasks); // All tasks.
-  const [activeColumn, setActiveColumn] = useState<Column | null>(null); // Tracks the active column being dragged.
+  // const [activeColumn, setActiveColumn] = useState<Column | null>(null); // Tracks the active column being dragged.
   const [activeTask, setActiveTask] = useState<Task | null>(null); // Tracks the task being dragged.
 
   // State to check if component is running in the client.
@@ -176,44 +176,48 @@ export function KanbanBoard() {
   };
 
   return (
-    <DndContext // Context that contains the draggable objects.
+    <DndContext
+      // Manages all draggable and droppable components.
       accessibility={{
-        announcements, // Adding the accessibility announcements.
+        announcements, // Accessibility for users using screen readers.
       }}
-      sensors={sensors} // Adding the drag sensors.
-      onDragStart={onDragStart} // Handler for drag start.
-      onDragEnd={onDragEnd} // Handler for drag end.
-      onDragOver={onDragOver} // Handler for drag over.
+      sensors={sensors} // Specifies sensors for drag-and-drop actions.
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onDragOver={onDragOver}
     >
       <BoardContainer>
-        <SortableContext items={columnsId}>
-          {columns.map((col) => (
-            <BoardColumn
-              key={col.id}
-              column={col}
-              tasks={tasks.filter((task) => task.columnId === col.id)} // Filtering tasks by their column.
-            />
-          ))}
-        </SortableContext>
+        {/* SortableContext wraps the draggable items (columns in this case), allowing them to be reordered via drag-and-drop */}
+        {/* <SortableContext items={columnsId}> */}
+        {columns.map((col) => (
+          <BoardColumn
+            key={col.id} // Unique key for each column (based on its ID).
+            column={col} // Passes the column data (like title, id) to the BoardColumn component.
+            tasks={tasks.filter((task) => task.columnId === col.id)} // Passes the tasks that belong to the current column.
+          />
+        ))}
+        {/* </SortableContext> */}
       </BoardContainer>
 
-      {/* Creating the drag overlay that appears when dragging a task/column */}
+      {/* Drag overlay is created here, which follows the dragged item visually while dragging. */}
       {isClient &&
-        "document" in window &&
+        "document" in window && // Ensures this is running on the client-side to prevent issues during server-side rendering.
         createPortal(
           <DragOverlay>
-            {activeColumn && (
+            {/* If a column is being dragged, show BoardColumn as an overlay */}
+            {/* {activeColumn && (
               <BoardColumn
-                isOverlay
-                column={activeColumn}
+                isOverlay // Indicates this is a visual overlay and not the actual column in its place.
+                column={activeColumn} // The column data (like title) being dragged.
                 tasks={tasks.filter(
-                  (task) => task.columnId === activeColumn.id
+                  (task) => task.columnId === activeColumn.id // Filters the tasks that belong to the dragged column.
                 )}
               />
-            )}
+            )} */}
+            {/* If a task is being dragged, show the TaskCard as an overlay */}
             {activeTask && <TaskCard task={activeTask} isOverlay />}
           </DragOverlay>,
-          document.body
+          document.body // The drag overlay is rendered in the document body, not inside the container, to ensure smooth dragging.
         )}
     </DndContext>
   );
@@ -225,10 +229,10 @@ export function KanbanBoard() {
     const data = event.active.data.current; // Get the current data associated with the active draggable item.
 
     // If the active item is a column, set it as the active column for dragging.
-    if (data?.type === "Column") {
-      setActiveColumn(data.column); // Set active column when dragging starts.
-      return; // Stop further execution since the column is being handled.
-    }
+    // if (data?.type === "Column") {
+    //   setActiveColumn(data.column); // Set active column when dragging starts.
+    //   return; // Stop further execution since the column is being handled.
+    // }
 
     // If the active item is a task, set it as the active task for dragging.
     if (data?.type === "Task") {
@@ -239,7 +243,7 @@ export function KanbanBoard() {
 
   function onDragEnd(event: DragEndEvent) {
     // Clear the active column and task after dragging ends.
-    setActiveColumn(null); // Clear active column.
+    // setActiveColumn(null); // Clear active column.
     setActiveTask(null); // Clear active task.
 
     const { active, over } = event; // Destructure active and over (the item being dragged over) from the event.

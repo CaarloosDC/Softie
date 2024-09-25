@@ -8,7 +8,7 @@ export default function SearchBar() {
       <Input
         type="search"
         placeholder="Buscar requerimiento"
-        className="w-full appearance-none bg-background pl-10 py-3 rounded-lg border border-gray-400 hover:border-gray-500 shadow-sm"
+        className="w-full appearance-none bg-background pl-10 py-3 rounded-lg border hover:border-gray-500 shadow-sm"
       />
     </div>
   );
