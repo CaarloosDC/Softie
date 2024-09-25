@@ -76,7 +76,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
   );
   return (
     <div className="flex flex-col gap-4">
-      <ColumnHeader column={column.title} />
+      <ColumnHeader column={column} />
       <Card
         ref={setNodeRef} // Ref for the sortable column (so dnd-kit can control the DOM node).
         style={style} // Apply the drag styles (transition and transform).
