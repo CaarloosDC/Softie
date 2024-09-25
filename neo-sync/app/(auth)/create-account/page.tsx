@@ -64,7 +64,7 @@ export default function CreateAccountPage() {
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
-          <div className="grid gap-2 text-center">
+          <div className="grid gap-2 text-center justify-center items-center">
             <LogoNeoris />
             <h1 className="text-3xl font-bold pt-7">Crear cuenta</h1>
           </div>

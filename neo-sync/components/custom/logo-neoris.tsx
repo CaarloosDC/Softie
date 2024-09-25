@@ -1,21 +1,43 @@
+"use client";
+
 import Image from "next/image";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 interface LogoNeorisProps {
-  variant?: "dark" | "light"; // Define la prop que controlará la variante del logo
+  variant?: "dark" | "light";
 }
 
-export default function LogoNeoris({ variant = "dark" }: LogoNeorisProps) {
+export default function LogoNeoris({ variant }: LogoNeorisProps) {
+  const { resolvedTheme } = useTheme(); // resolvedTheme asegura que el tema se haya cargado
+  const [mounted, setMounted] = useState(false); // Estado para verificar si el componente está montado
+
+  // Efecto para actualizar el estado de "mounted" una vez que el componente esté montado
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Evitar renderizar hasta que el componente esté montado
+  if (!mounted) {
+    return null;
+  }
+
+  // Si no se proporciona la prop `variant`, usamos el valor del tema actual
+  const logoVariant = variant || (resolvedTheme === "dark" ? "light" : "dark");
+
   const logoSrc =
-    variant === "light" ? "/NEORIS logo light.png" : "/NEORIS logo dark.png";
+    logoVariant === "light"
+      ? "/NEORIS logo light.png"
+      : "/NEORIS logo dark.png";
 
   return (
-    <div className="relative w-full h-full max-h-[60px] flex items-center justify-center">
+    <div className="relative max-w-[200px] h-auto flex items-center">
       <Image
         src={logoSrc}
-        alt={`Logo Neoris ${variant}`}
-        width={1920} // Definir el ancho de la imagen
-        height={1080} // Definir la altura de la imagen
-        className="h-auto max-h-full object-contain"
+        alt={`Logo Neoris ${logoVariant}`}
+        width={1920}
+        height={1080}
+        className="h-auto max-h-[60px] object-contain"
         priority
       />
     </div>

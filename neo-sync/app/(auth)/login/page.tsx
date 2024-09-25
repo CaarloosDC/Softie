@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Divider from "@/components/custom/divider";
 import LoginImage from "@/components/custom/login-image";
 import LogoNeoris from "@/components/custom/logo-neoris";
-import { login } from './actions'
+import { login } from "./actions";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('email', email);
-    formData.append('password', password);
+    formData.append("email", email);
+    formData.append("password", password);
     try {
       await login(formData);
-      router.push('/dashboard');
+      router.push("/dashboard");
     } catch (error) {
-      console.error('Login error:', error);
-      alert('An error occurred during login. Please try again.');
+      console.error("Login error:", error);
+      alert("An error occurred during login. Please try again.");
     }
   };
 
@@ -34,7 +34,7 @@ export default function LoginPage() {
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
-          <div className="grid gap-2 text-center">
+          <div className="grid gap-2 text-center justify-center items-center">
             <LogoNeoris />
             <h1 className="text-3xl font-bold pt-7">Inicio de sesión</h1>
           </div>
@@ -61,10 +61,10 @@ export default function LoginPage() {
                   ¿Olvidaste tu contraseña?
                 </Link>
               </div>
-              <Input 
-                id="password" 
-                type="password" 
-                required 
+              <Input
+                id="password"
+                type="password"
+                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />

@@ -20,8 +20,8 @@ type TBreadCrumbProps = {
 }
 
 export default function DynamicBreadcrumb({
-  homeElement = <Home className="h-4 w-4" />,
-  separator = <ChevronRight className="h-4 w-4" />,
+  homeElement = <Home className="h-4 w-4 dark:text-white" />,
+  separator = <ChevronRight className="h-4 w-4 dark:text-gray-400" />,
   capitalizeLinks = false,
 }: TBreadCrumbProps) {
   const paths = usePathname()
@@ -31,11 +31,15 @@ export default function DynamicBreadcrumb({
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/" className="flex items-center">
+          <BreadcrumbLink href="/" className="flex items-center dark:text-gray-300">
             {homeElement}
           </BreadcrumbLink>
         </BreadcrumbItem>
-        {pathNames.length > 0 && <BreadcrumbSeparator>{separator}</BreadcrumbSeparator>}
+        {pathNames.length > 0 && (
+          <BreadcrumbSeparator className="dark:text-gray-400">
+            {separator}
+          </BreadcrumbSeparator>
+        )}
         {pathNames.map((link, index) => {
           const href = `/${pathNames.slice(0, index + 1).join("/")}`
           const isLast = index === pathNames.length - 1
@@ -47,12 +51,18 @@ export default function DynamicBreadcrumb({
             <React.Fragment key={index}>
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage>{itemLink}</BreadcrumbPage>
+                  <BreadcrumbPage className="dark:text-white">{itemLink}</BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink href={href}>{itemLink}</BreadcrumbLink>
+                  <BreadcrumbLink href={href} className="dark:text-gray-300">
+                    {itemLink}
+                  </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
-              {!isLast && <BreadcrumbSeparator>{separator}</BreadcrumbSeparator>}
+              {!isLast && (
+                <BreadcrumbSeparator className="dark:text-gray-400">
+                  {separator}
+                </BreadcrumbSeparator>
+              )}
             </React.Fragment>
           )
         })}

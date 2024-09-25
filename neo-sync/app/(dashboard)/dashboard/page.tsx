@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "../../../components/ui/button";
+import { Button } from "@/components/ui/button";
 
 export default function DashboardPage() {
   return (
@@ -11,12 +11,12 @@ export default function DashboardPage() {
       <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
         <div className="flex flex-col items-center gap-1 text-center">
           <h3 className="text-2xl font-bold tracking-tight">
-            Welcome to your dashboard
+            Bienvenido a tu dashboard
           </h3>
           <p className="text-sm text-muted-foreground">
-            This is where you'll see your project overview and key metrics.
+            Aquí es donde verás tus proyectos activos.
           </p>
-          <Button className="mt-4">Start a new project</Button>
+          <Button className="mt-4">Nuevo proyecto</Button>
         </div>
       </div>
     </main>
