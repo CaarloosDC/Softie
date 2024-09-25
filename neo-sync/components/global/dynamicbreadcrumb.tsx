@@ -31,7 +31,10 @@ export default function DynamicBreadcrumb({
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/" className="flex items-center dark:text-gray-300">
+          <BreadcrumbLink
+            href="/"
+            className="flex items-center dark:text-gray-300"
+          >
             {homeElement}
           </BreadcrumbLink>
         </BreadcrumbItem>
@@ -39,7 +42,6 @@ export default function DynamicBreadcrumb({
           <BreadcrumbSeparator className="dark:text-gray-400">
             {separator}
           </BreadcrumbSeparator>
-
         )}
         {pathNames.map((link, index) => {
           const href = `/${pathNames.slice(0, index + 1).join("/")}`;
@@ -52,7 +54,9 @@ export default function DynamicBreadcrumb({
             <React.Fragment key={index}>
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage className="dark:text-white">{itemLink}</BreadcrumbPage>
+                  <BreadcrumbPage className="dark:text-white">
+                    {itemLink}
+                  </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink href={href} className="dark:text-gray-300">
                     {itemLink}
@@ -69,6 +73,5 @@ export default function DynamicBreadcrumb({
         })}
       </BreadcrumbList>
     </Breadcrumb>
-  )
   );
 }
