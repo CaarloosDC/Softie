@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,28 +15,69 @@ import {
 import Divider from "@/components/custom/divider";
 import LoginImage from "@/components/custom/login-image";
 import LogoNeoris from "@/components/custom/logo-neoris";
+import { signup } from '../login/actions'
+;
 
 export default function CreateAccountPage() {
+  const [formData, setFormData] = useState({
+    name: '',
+    role: '',
+    expertiseLevel: '',
+    email: '',
+    phone: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const router = useRouter();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords don't match!");
+      return;
+    }
+    try {
+      await signup(formData);
+      router.push('/registration-success'); 
+    } catch (error) {
+      console.error('Signup error:', error);
+      alert('An error occurred during signup. Please try again.');
+    }
+  };
+
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
-          <div className="grid gap-2 text-center">
+          <div className="grid gap-2 text-center justify-center items-center">
             <LogoNeoris />
             <h1 className="text-3xl font-bold pt-7">Crear cuenta</h1>
           </div>
 
-          <div className="grid gap-4">
-            {/* Nombre */}
+          <form onSubmit={handleSubmit} className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="name">Nombre</Label>
-              <Input id="name" type="text" placeholder="Tu nombre" required />
+              <Label htmlFor="name">Nombre Completo</Label>
+              <Input id="name" name="name" type="text" placeholder="Tu nombre completo" required onChange={handleInputChange} />
             </div>
 
-            {/* Rol en la empresa */}
             <div className="grid gap-2">
               <Label htmlFor="role">Rol en la empresa</Label>
-              <Select>
+              <Select onValueChange={(value) => handleSelectChange('role', value)}>
                 <SelectTrigger id="role" className="w-full">
                   <SelectValue placeholder="Selecciona rol en la empresa" />
                 </SelectTrigger>
@@ -45,11 +90,10 @@ export default function CreateAccountPage() {
               </Select>
             </div>
 
-            {/* Nivel de expertiz*/}
             <div className="grid gap-2">
-              <Label htmlFor="role">Nivel de expertiz</Label>
-              <Select>
-                <SelectTrigger id="role" className="w-full">
+              <Label htmlFor="expertiseLevel">Nivel de expertiz</Label>
+              <Select onValueChange={(value) => handleSelectChange('expertiseLevel', value)}>
+                <SelectTrigger id="expertiseLevel" className="w-full">
                   <SelectValue placeholder="Selecciona nivel de expertiz" />
                 </SelectTrigger>
                 <SelectContent>
@@ -60,53 +104,49 @@ export default function CreateAccountPage() {
               </Select>
             </div>
 
-            {/* Correo y teléfono */}
             <div className="grid gap-2">
               <div className="flex gap-2">
                 <div className="w-1/2">
                   <Label htmlFor="email">Correo electrónico</Label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="correo@ejemplo.com"
                     required
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="w-1/2">
                   <Label htmlFor="phone">Teléfono</Label>
-                  <Input id="phone" type="tel" placeholder="+52 123 4567890" />
+                  <Input id="phone" name="phone" type="tel" placeholder="+52 123 4567890" onChange={handleInputChange} />
                 </div>
               </div>
             </div>
 
-            {/* Contraseña */}
             <div className="grid gap-2">
               <Label htmlFor="password">Contraseña</Label>
-              <Input id="password" type="password" required />
+              <Input id="password" name="password" type="password" required onChange={handleInputChange} />
             </div>
 
-            {/* Confirmar contraseña */}
             <div className="grid gap-2">
-              <Label htmlFor="confirm-password">Confirma tu contraseña</Label>
-              <Input id="confirm-password" type="password" required />
+              <Label htmlFor="confirmPassword">Confirma tu contraseña</Label>
+              <Input id="confirmPassword" name="confirmPassword" type="password" required onChange={handleInputChange} />
             </div>
 
-            {/* Botón para crear cuenta */}
             <Button type="submit" className="w-full bg-black">
               Crear cuenta
             </Button>
 
             <Divider />
 
-            {/* Botón para crear cuenta con Google */}
             <Button variant="outline" className="w-full">
               Google
             </Button>
-          </div>
+          </form>
         </div>
       </div>
 
-      {/* Imagen*/}
       <LoginImage />
     </div>
   );
