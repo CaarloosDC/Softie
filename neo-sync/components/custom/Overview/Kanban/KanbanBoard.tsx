@@ -22,7 +22,7 @@ import { coordinateGetter } from "./multipleContainersKeyboardPreset"; // Custom
 import type { Column } from "./BoardColumn"; // Type for columns.
 import { BoardColumn, BoardContainer } from "./BoardColumn";
 import { type Task, TaskCard } from "./TaskCard";
-import { initialTasks } from "./mockData";
+import { initialProjects } from "./mockData";
 
 const defaultCols = [
   {
@@ -47,7 +47,7 @@ export function KanbanBoard() {
   const pickedUpTaskColumn = useRef<ColumnId | null>(null); // Reference to keep track of which column a task was picked from.
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]); // Memoized array of column IDs for performance.
 
-  const [tasks, setTasks] = useState<Task[]>(initialTasks); // All tasks.
+  const [tasks, setTasks] = useState<Task[]>(initialProjects); // All tasks.
   // const [activeColumn, setActiveColumn] = useState<Column | null>(null); // Tracks the active column being dragged.
   const [activeTask, setActiveTask] = useState<Task | null>(null); // Tracks the task being dragged.
 
