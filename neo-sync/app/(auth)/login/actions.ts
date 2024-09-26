@@ -60,4 +60,21 @@ export async function login(formData: FormData) {
     redirect('/registration-success')
   }
 
-
+  export async function googleLogin() {
+    const supabase = createClient()
+    console.log("Starting Google OAuth process...");
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/dashboard`,
+      },
+    })
+    
+    if (error) {
+      console.error('Google login error:', error)
+      throw error
+    }
+    
+    console.log("OAuth initiation successful, data:", data);
+    return data
+  }
