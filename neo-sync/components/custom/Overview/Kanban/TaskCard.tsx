@@ -80,9 +80,7 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
           {/* First Row: Task Title and Drag Handle */}
           <div className="flex flex-row items-center justify-between w-full">
             {/* Task Title */}
-            <CardTitle className="text-sm font-semibold">
-              {task.title}
-            </CardTitle>
+            <CardTitle className="text-lg font-bold">{task.title}</CardTitle>
             {/* A smaller font for task title */}
 
             {/* Button with drag handle (GripVertical icon) */}
