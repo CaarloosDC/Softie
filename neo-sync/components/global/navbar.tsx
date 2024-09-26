@@ -1,7 +1,7 @@
 // components/global/navbar.tsx
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Bell, Menu, Search, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,13 +13,39 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"; // Asegúrate de importar SheetContent
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { ModeToggle } from "../custom/mode-toggle";
 import { NotificationButton } from "../custom/notification-button";
 import { SidebarContent } from "./sidebar-content";
-
+import { createClient } from '@/utils/supabase/client';
+import { User } from '@supabase/supabase-js';
 export function Navbar() {
+
+  const [user, setUser] = useState<User | null>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    fetchUser();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+  };
+
   return (
     <header className="flex h-14 py-8 items-center gap-4 bg-muted/40 px-4 lg:h-[60px] lg:px-6 bg-white dark:bg-gray-800">
       <Sheet>
@@ -60,9 +86,9 @@ export function Navbar() {
             <PersonIcon className="h-6 w-6 text-gray-600 dark:text-gray-300" />
           </div>
           <div>
-            <p className="text-sm font-medium dark:text-white">John Doe</p>
+          <p className="text-sm font-medium dark:text-white">{user ? user.user_metadata.full_name || user.email : 'Guest'}</p>
             <p className="text-xs text-muted-foreground dark:text-gray-400">
-              johndoe@gmail.com
+              {user ? user.email : 'Not signed in'}
             </p>
           </div>
         </div>
