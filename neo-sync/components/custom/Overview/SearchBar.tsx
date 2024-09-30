@@ -7,7 +7,7 @@ export default function SearchBar() {
       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
       <Input
         type="search"
-        placeholder="Buscar requerimiento"
+        placeholder="Buscar proyecto"
         className="w-full appearance-none bg-background pl-10 py-3 rounded-lg border hover:border-gray-500 shadow-sm"
       />
     </div>

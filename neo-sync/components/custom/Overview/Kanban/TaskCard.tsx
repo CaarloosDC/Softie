@@ -1,14 +1,14 @@
 import type { UniqueIdentifier } from "@dnd-kit/core"; // Type for unique identifiers used for dragging.
 import { useSortable } from "@dnd-kit/sortable"; // Hook to make an item sortable/draggable.
+import NextLink from "next/link"; // Import Next.js Link
 import { CSS } from "@dnd-kit/utilities"; // Utility to apply CSS transforms for dragging.
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // UI components for Card structure.
 import { Button } from "@/components/ui/button"; // Button component.
 import { Separator } from "@/components/ui/separator"; // Optional: Separator component for layout separation.
 import { cva } from "class-variance-authority"; // Utility for managing CSS class variants.
 import { GripVertical } from "lucide-react"; // Icon used for the drag handle.
-import { Badge } from "@/components/ui/badge"; // Badge component for labels or tags.
 import { ColumnId } from "./KanbanBoard"; // Importing type for the column ID from the KanbanBoard.
-import { MessageCircle, Link, MoreVertical } from "lucide-react"; // Additional icons used in the task card layout.
+import { MessageCircle, Link as LinkIcon, MoreVertical } from "lucide-react"; // Additional icons used in the task card layout.
 
 export interface Task {
   id: UniqueIdentifier; // Unique identifier for the task (used by dnd-kit for drag-and-drop).
@@ -67,65 +67,68 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
   });
 
   return (
-    <Card
-      ref={setNodeRef} // Ref for the sortable card (dnd-kit uses this to manage the DOM node).
-      style={style} // Apply the dragging transform and transition styles.
-      className={variants({
-        dragging: isOverlay ? "overlay" : isDragging ? "over" : undefined, // Apply class variants based on whether the task is dragging or in overlay mode.
-      })}
-    >
-      {/* Card Header with task title and drag handle */}
-      <CardHeader className="px-3 py-3 flex flex-col space-y-2 pb-2 border-b-2 border-secondary">
-        {/* First Row: Task Title and Drag Handle */}
-        <div className="flex flex-row items-center justify-between w-full">
-          {/* Task Title */}
-          <CardTitle className="text-sm font-semibold">{task.title}</CardTitle>
-          {/* A smaller font for task title */}
+    <NextLink href="/login" passHref>
+      <Card
+        ref={setNodeRef} // Ref for the sortable card (dnd-kit uses this to manage the DOM node).
+        style={style} // Apply the dragging transform and transition styles.
+        className={variants({
+          dragging: isOverlay ? "overlay" : isDragging ? "over" : undefined, // Apply class variants based on whether the task is dragging or in overlay mode.
+        })}
+      >
+        {/* Card Header with task title and drag handle */}
+        <CardHeader className="px-3 py-3 flex flex-col space-y-2 pb-2 border-b-2 border-secondary">
+          {/* First Row: Task Title and Drag Handle */}
+          <div className="flex flex-row items-center justify-between w-full">
+            {/* Task Title */}
+            <CardTitle className="text-lg font-bold">{task.title}</CardTitle>
+            {/* A smaller font for task title */}
 
-          {/* Button with drag handle (GripVertical icon) */}
-          <Button
-            variant={"ghost"} // Button with no background (ghost variant).
-            {...attributes} // Accessibility attributes for the drag button (e.g., aria-label).
-            {...listeners} // Drag listeners (onMouseDown, onTouchStart, etc.).
-            className="p-1 text-secondary-foreground/50 -ml-2 h-auto cursor-grab" // Styles for the drag handle button.
-          >
-            <span className="sr-only">Move task</span>{" "}
-            {/* Screen-reader only label */}
-            <GripVertical /> {/* Icon for drag handle (vertical grip lines) */}
-          </Button>
-        </div>
-
-        {/* Second Row: Task Content (description) */}
-        <p className="text-sm text-gray-500">{task.content}</p>
-        {/* A smaller font and gray color for task content/description */}
-      </CardHeader>
-
-      {/* Remaining Card Content (additional task info) */}
-      <CardContent className="px-3 pt-3 pb-6 space-y-4">
-        <div className="flex items-center justify-between">
-          {/* Section for icons and counts */}
-          <div className="flex space-x-4">
-            {/* Comments count with icon */}
-            <div className="flex items-center space-x-1">
-              <MessageCircle className="h-4 w-4" /> {/* Icon for comments */}
-              <span className="text-sm">20</span> {/* Number of comments */}
-            </div>
-            {/* Links count with icon */}
-            <div className="flex items-center space-x-1">
-              <Link className="h-4 w-4" /> {/* Icon for links */}
-              <span className="text-sm">5</span> {/* Number of links */}
-            </div>
+            {/* Button with drag handle (GripVertical icon) */}
+            <Button
+              variant={"ghost"} // Button with no background (ghost variant).
+              {...attributes} // Accessibility attributes for the drag button (e.g., aria-label).
+              {...listeners} // Drag listeners (onMouseDown, onTouchStart, etc.).
+              className="p-1 text-secondary-foreground/50 -ml-2 h-auto cursor-grab" // Styles for the drag handle button.
+            >
+              <span className="sr-only">Move task</span>{" "}
+              {/* Screen-reader only label */}
+              <GripVertical />{" "}
+              {/* Icon for drag handle (vertical grip lines) */}
+            </Button>
           </div>
 
-          {/* Section for avatars (team members) */}
-          <div className="flex -space-x-2">
-            <div className="h-6 w-6 rounded-full bg-gray-300"></div>{" "}
-            {/* Smaller avatar placeholder */}
-            <div className="h-6 w-6 rounded-full bg-gray-400"></div>{" "}
-            {/* Smaller avatar placeholder */}
+          {/* Second Row: Task Content (description) */}
+          <p className="text-sm text-gray-500">{task.content}</p>
+          {/* A smaller font and gray color for task content/description */}
+        </CardHeader>
+
+        {/* Remaining Card Content (additional task info) */}
+        <CardContent className="px-3 pt-3 pb-6 space-y-4">
+          <div className="flex items-center justify-between">
+            {/* Section for icons and counts */}
+            <div className="flex space-x-4">
+              {/* Comments count with icon */}
+              <div className="flex items-center space-x-1">
+                <MessageCircle className="h-4 w-4" /> {/* Icon for comments */}
+                <span className="text-sm">20</span> {/* Number of comments */}
+              </div>
+              {/* Links count with icon */}
+              <div className="flex items-center space-x-1">
+                <LinkIcon className="h-4 w-4" /> {/* Icon for links */}
+                <span className="text-sm">5</span> {/* Number of links */}
+              </div>
+            </div>
+
+            {/* Section for avatars (team members) */}
+            <div className="flex -space-x-2">
+              <div className="h-6 w-6 rounded-full bg-gray-300"></div>{" "}
+              {/* Smaller avatar placeholder */}
+              <div className="h-6 w-6 rounded-full bg-gray-400"></div>{" "}
+              {/* Smaller avatar placeholder */}
+            </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </NextLink>
   );
 }
