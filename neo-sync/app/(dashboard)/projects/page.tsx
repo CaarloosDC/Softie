@@ -6,6 +6,7 @@ import SearchBar from "@/components/custom/Overview/SearchBar";
 import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
+import { initialProjects } from "./mockData";
 
 export default function ProjectsPage() {
   return (
@@ -36,7 +37,7 @@ export default function ProjectsPage() {
         {/* <InfoCard /> */}
         <CustomSeparator />
         <SearchBar />
-        <KanbanBoard />
+        <KanbanBoard data={initialProjects} />
       </div>
     </div>
   );
