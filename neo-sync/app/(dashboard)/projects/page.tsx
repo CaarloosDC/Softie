@@ -9,8 +9,8 @@ import BlueButton from "@/components/custom/BlueButton";
 
 export default function ProjectsPage() {
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
-      <div className="flex justify-between max-w-[1082px]">
+    <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
+      <div className="flex justify-between">
         <h1 className="text-lg font-semibold md:text-2xl">Dashboard</h1>
         <div className="flex flex-row justify-between gap-3">
           <BlueButton
@@ -32,12 +32,12 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 rounded-lg max-w-[1082px] shadow-sm">
+      <div className="flex flex-col gap-3 rounded-lg shadow-sm">
         {/* <InfoCard /> */}
         <CustomSeparator />
         <SearchBar />
         <KanbanBoard />
       </div>
-    </main>
+    </div>
   );
 }
