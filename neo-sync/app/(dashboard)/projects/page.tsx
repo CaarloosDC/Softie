@@ -7,6 +7,27 @@ import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
 import { initialProjects } from "./mockData";
+import { createClient } from '@/utils/supabase/server'
+
+export async function getProjects() {
+  const supabase = createClient()
+  
+  const { data, error } = await supabase
+    .from('proyecto')
+    .select('id, nombre, descripcion, status')
+  
+  if (error) {
+    console.error('Error fetching projects:', error)
+    return []
+  }
+  
+  return data.map(project => ({
+    id: project.id,
+    columnId: project.status,
+    title: project.nombre,
+    content: project.descripcion
+  }))
+}
 
 export default function ProjectsPage() {
   return (
