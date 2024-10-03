@@ -2,94 +2,94 @@ import { type Task } from "../../../components/custom/Overview/Kanban/TaskCard";
 
 export const initialProjects: Task[] = [
   {
-    id: "task1",
+    id: "project1",
     columnId: "done",
-    title: "CEMEX - Definición de Requerimientos Funcionales",
+    title: "CEMEX - Sistema de Gestión de Proyectos",
     content:
-      "Identificación y documentación de los requerimientos funcionales del sistema para mejorar la gestión de proyectos en CEMEX.",
+      "Desarrollo de una plataforma personalizada para la gestión de proyectos de construcción en CEMEX, con integración de proveedores y seguimiento de obra.",
   },
   {
-    id: "task2",
+    id: "project2",
     columnId: "done",
-    title: "CEMEX - Análisis de Integración de Sistemas",
+    title: "IBM - Solución de Cloud Híbrida",
     content:
-      "Análisis detallado de la integración con los sistemas existentes de CEMEX para asegurar la compatibilidad y eficiencia.",
+      "Implementación de una solución de nube híbrida para IBM, facilitando la transición de sus aplicaciones críticas a la nube mientras mantiene una parte en servidores locales.",
   },
   {
-    id: "task3",
-    columnId: "done",
-    title: "CEMEX - Diseño de Interfaz de Usuario",
-    content:
-      "Desarrollo de prototipos y wireframes para la nueva plataforma de gestión interna, asegurando usabilidad y eficiencia.",
-  },
-  {
-    id: "task4",
+    id: "project3",
     columnId: "in-progress",
-    title: "CEMEX - Requerimientos de Seguridad",
+    title: "Coca-Cola - Sistema de Monitoreo de Producción",
     content:
-      "Establecimiento de los requerimientos de seguridad y autenticación para proteger la información sensible de CEMEX.",
+      "Desarrollo de un sistema de monitoreo en tiempo real para las plantas de producción de Coca-Cola, optimizando la cadena de suministro y los procesos de fabricación.",
   },
   {
-    id: "task5",
+    id: "project4",
     columnId: "in-progress",
-    title: "CEMEX - Requerimientos de Base de Datos",
+    title: "Walmart - Plataforma de Comercio Electrónico",
     content:
-      "Diseño y definición de los requerimientos de la base de datos para soportar el nuevo sistema de gestión de proyectos.",
+      "Creación de una plataforma de comercio electrónico escalable para Walmart, diseñada para manejar grandes volúmenes de transacciones y mejorar la experiencia del cliente.",
   },
   {
-    id: "task6",
+    id: "project5",
     columnId: "todo",
-    title: "CEMEX - Integración con Proveedores Externos",
+    title: "Tesla - Sistema de Gestión de Inventarios",
     content:
-      "Desarrollo de las especificaciones para integrar el sistema con proveedores externos y optimizar la cadena de suministro.",
+      "Desarrollo de un sistema avanzado de gestión de inventarios para Tesla, con integración en tiempo real con las plantas de producción y centros de distribución.",
   },
   {
-    id: "task7",
+    id: "project6",
     columnId: "todo",
-    title: "CEMEX - Sistema de Reportes y Analíticas",
+    title: "Pfizer - Portal de Gestión de Investigación Clínica",
     content:
-      "Definición de los requerimientos para el módulo de reportes y analíticas, facilitando la toma de decisiones basadas en datos.",
+      "Implementación de un portal para gestionar la investigación clínica de Pfizer, facilitando el seguimiento de ensayos clínicos y la gestión de datos de pacientes.",
   },
   {
-    id: "task8",
+    id: "project7",
     columnId: "todo",
-    title: "CEMEX - Requerimientos de Mantenimiento del Sistema",
+    title: "Amazon - Sistema de Automatización de Logística",
     content:
-      "Documentación de los requerimientos de mantenimiento y soporte continuo para asegurar el correcto funcionamiento del sistema.",
+      "Desarrollo de un sistema automatizado para la gestión y optimización de la cadena logística de Amazon, con integración de robots en los centros de distribución.",
   },
   {
-    id: "task9",
+    id: "project8",
     columnId: "todo",
-    title: "CEMEX - Requerimientos de Pruebas y Validación",
+    title: "Nike - Plataforma de Marketing Personalizado",
     content:
-      "Especificación de los escenarios de pruebas y validación para asegurar la calidad del software antes de su despliegue.",
+      "Creación de una plataforma de marketing digital personalizada para Nike, diseñada para ofrecer recomendaciones y promociones basadas en los intereses y comportamientos de los clientes.",
   },
   {
-    id: "task10",
+    id: "project9",
     columnId: "todo",
-    title: "CEMEX - Optimización para Dispositivos Móviles",
+    title: "BMW - Sistema de Diagnóstico Vehicular",
     content:
-      "Definición de los requerimientos para asegurar que la plataforma sea completamente funcional en dispositivos móviles.",
+      "Desarrollo de un sistema avanzado de diagnóstico vehicular para BMW, facilitando la detección y resolución temprana de problemas en los automóviles mediante datos telemétricos.",
   },
   {
-    id: "task11",
+    id: "project10",
     columnId: "todo",
-    title: "CEMEX - Requerimientos de Acceso y Permisos",
+    title: "Microsoft - Plataforma de Gestión de Recursos Humanos",
     content:
-      "Establecimiento de los roles de usuario y permisos para garantizar el control adecuado del acceso a la plataforma.",
+      "Implementación de una plataforma de gestión de recursos humanos para Microsoft, con módulos para la administración de nóminas, beneficios y desempeño de los empleados.",
   },
   {
-    id: "task12",
+    id: "project11",
     columnId: "todo",
-    title: "CEMEX - Pruebas de Carga y Rendimiento",
+    title: "Google - Sistema de Gestión de Proyectos de Investigación",
     content:
-      "Realización de pruebas de carga y rendimiento para garantizar que el sistema soporte grandes volúmenes de datos y usuarios.",
+      "Desarrollo de una plataforma para la gestión de proyectos de investigación de Google, con herramientas para seguimiento de hitos, colaboración entre equipos y análisis de datos.",
   },
   {
-    id: "task13",
+    id: "project12",
     columnId: "todo",
-    title: "CEMEX - Despliegue y Capacitación del Usuario Final",
+    title: "Apple - Aplicación de Salud y Bienestar",
     content:
-      "Lanzamiento del sistema en los servidores de CEMEX y capacitación de los usuarios para asegurar una transición fluida.",
+      "Desarrollo de una aplicación de salud y bienestar para Apple, integrada con Apple Watch y iPhone, para el seguimiento de la actividad física y recomendaciones personalizadas.",
+  },
+  {
+    id: "project13",
+    columnId: "todo",
+    title: "Netflix - Plataforma de Recomendación Personalizada",
+    content:
+      "Optimización de la plataforma de recomendaciones de contenido de Netflix, utilizando algoritmos avanzados de aprendizaje automático para mejorar la experiencia del usuario.",
   },
 ];
