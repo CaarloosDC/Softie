@@ -7,8 +7,12 @@ import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
 import { initialRequirements } from "./mockData";
+import { getRequirements } from "./getRequirements";
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+
+const requirements = await getRequirements();
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
       <div className="flex justify-between">
@@ -40,7 +44,7 @@ export default function ProjectsPage() {
         <InfoCard />
         <CustomSeparator />
         <SearchBar />
-        <KanbanBoard data={initialRequirements} />
+        <KanbanBoard data={requirements} />
       </div>
     </div>
   );
