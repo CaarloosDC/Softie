@@ -63,7 +63,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
   // Class variants for different drag states (e.g., default, over, overlay).
   const variants = cva(
     // "h-[500px] max-h-[500px] w-[350px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center",
-    "w-[350px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center border-none",
+    "w-[400px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center border-none",
     {
       variants: {
         dragging: {
@@ -76,7 +76,48 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
   );
   return (
     <div className="flex flex-col gap-4">
-      <ColumnHeader column={column.title} />
+      <ColumnHeader column={column} />
+      <div
+        ref={setNodeRef} // Ref for the sortable column (so dnd-kit can control the DOM node).
+        style={style} // Apply the drag styles (transition and transform).
+        className={variants({
+          dragging: isOverlay ? "overlay" : isDragging ? "over" : undefined, // Apply different styles based on dragging state.
+        })}
+      >
+        {/* 
+        <CardHeader className="p-4 font-semibold text-left flex flex-row justify-between">
+          
+        Optional drag handle for the column (currently commented out).
+        This would allow the column to be dragged by clicking the button with the GripVertical icon.
+        */}
+        {/* <Button
+          variant={"ghost"}
+          {...attributes} // Accessibility attributes for drag.
+          {...listeners} // Event listeners for drag start.
+          className=" p-1 text-primary/50 -ml-2 h-auto cursor-grab relative"
+          >
+          <span className="sr-only">{`Move column: ${column.title}`}</span> // Screen reader text.
+          <GripVertical /> // Drag handle icon.
+          </Button> 
+          <span>{column.title}</span> <Plus className="mr-2 h-4 w-4" />
+        </CardHeader> */}
+
+        {/* Task list - No scroll area, tasks will stack */}
+        <div className="flex flex-col gap-3">
+          <SortableContext items={tasksIds}>
+            {/* Render each task inside the column using TaskCard component */}
+            {tasks.map((task) => (
+              <TaskCard key={task.id} task={task} />
+            ))}
+          </SortableContext>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="flex flex-col gap-4">
+      <ColumnHeader column={column} />
       <Card
         ref={setNodeRef} // Ref for the sortable column (so dnd-kit can control the DOM node).
         style={style} // Apply the drag styles (transition and transform).
@@ -171,16 +212,16 @@ export function BoardContainer({ children }: { children: React.ReactNode }) {
   });
 
   return (
-    // <ScrollArea
-    //   className={variations({
-    //     dragging: dndContext.active ? "active" : "default", // Change scrolling behavior based on drag state.
-    //   })}
-    // >
-    // <div className="flex gap-4 items-center flex-row justify-center">
-    <div className="flex flex-wrap gap-4 items-start justify-center p-4">
-      {/* Render the columns passed as children. */}
-      {children}
-    </div>
-    // </ScrollArea>
+    <ScrollArea
+      className={variations({
+        dragging: dndContext.active ? "active" : "default", // Change scrolling behavior based on drag state.
+      })}
+    >
+      {/* <div className="flex gap-4 items-center flex-row justify-center"> */}
+      <div className="flex gap-4 items-start justify-center">
+        {/* Render the columns passed as children. */}
+        {children}
+      </div>
+    </ScrollArea>
   );
 }
