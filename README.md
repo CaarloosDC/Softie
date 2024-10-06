@@ -1,5 +1,8 @@
 # NeoSync - Softies
 
+## Link de video de youtube de pruebas
+https://youtu.be/1hPmd7niZwk
+
 Neosync es una plataforma de gestion de preventa de proyectos de software que utiliza Inteligenecia Artificial para eficientizar y agilizar el proceso de preventa.
 
 ## Índice
