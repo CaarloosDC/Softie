@@ -21,7 +21,7 @@ export async function login(formData: FormData) {
     }
   
     revalidatePath('/', 'layout')
-    redirect('/dashboard')
+    redirect('/projects')
   }
   
   export async function signup(formData: any) {
@@ -41,7 +41,7 @@ export async function login(formData: FormData) {
       // Insert additional user data into the service_users table
       const supabaseAdmin = getAdminClient();
       const { error: insertError } = await supabaseAdmin
-        .from('usuarios_servicio')
+        .from('usuarios')
         .insert({
           supabase_usuario: authData.user.id, 
           name: formData.name,
