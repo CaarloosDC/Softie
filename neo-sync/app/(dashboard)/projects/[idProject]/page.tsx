@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, Calendar, SlidersHorizontal, ChevronDown } from "lucide-react";
 import InfoCard from "@/components/custom/Overview/InfoCard";
@@ -11,6 +13,18 @@ import { CreateRequirement } from "@/components/custom/Overview/Alerts/CreateReq
 import GenerateProposal from "@/components/custom/Overview/Alerts/GenerateProposal";
 
 export default function RequirementsPage() {
+  //* Function that will be passed to the SearchBar to filter the initialProjects and only show those on the kanban
+  const [filteredRequirements, setFilteredRequirements] =
+    useState(initialRequirements);
+  const handleSearch = (query: string) => {
+    const filtered = initialRequirements.filter(
+      (project) =>
+        project.title.toLowerCase().includes(query.toLowerCase()) ||
+        project.content.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredRequirements(filtered);
+  };
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
       {/* Header */}
@@ -43,8 +57,8 @@ export default function RequirementsPage() {
       <div className="flex flex-col gap-3 rounded-lg shadow-sm">
         <InfoCard />
         <CustomSeparator />
-        <SearchBar />
-        <KanbanBoard data={initialRequirements} />
+        <SearchBar onSearch={handleSearch} />
+        <KanbanBoard data={filteredRequirements} />
       </div>
     </div>
   );

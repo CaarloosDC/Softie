@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, SlidersHorizontal, ChevronDown } from "lucide-react";
 import SearchBar from "@/components/custom/Overview/SearchBar";
@@ -9,6 +11,17 @@ import { initialProjects } from "./mockData";
 import { NewProject } from "@/components/custom/Overview/Alerts/NewProject";
 
 export default function ProjectsPage() {
+  //* Function that will be passed to the SearchBar to filter the initialProjects and only show those on the kanban
+  const [filteredProjects, setFilteredProjects] = useState(initialProjects);
+  const handleSearch = (query: string) => {
+    const filtered = initialProjects.filter(
+      (project) =>
+        project.title.toLowerCase().includes(query.toLowerCase()) ||
+        project.content.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredProjects(filtered);
+  };
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
       {/* Header */}
@@ -32,8 +45,8 @@ export default function ProjectsPage() {
       {/* Bundle of main operations of the website */}
       <div className="flex flex-col gap-3 rounded-lg shadow-sm">
         <CustomSeparator />
-        <SearchBar />
-        <KanbanBoard data={initialProjects} />
+        <SearchBar onSearch={handleSearch} />
+        <KanbanBoard data={filteredProjects} />
       </div>
     </div>
   );
