@@ -67,7 +67,7 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
   });
 
   return (
-    <NextLink href="/projects/1" passHref>
+    <NextLink href={`/projects/${task.id}`} passHref>
       <Card
         ref={setNodeRef} // Ref for the sortable card (dnd-kit uses this to manage the DOM node).
         style={style} // Apply the dragging transform and transition styles.

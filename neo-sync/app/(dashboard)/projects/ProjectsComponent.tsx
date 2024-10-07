@@ -15,6 +15,9 @@ interface ProjectsComponentProps {
 }
 
 export default function ProjectsComponent({ projects }: ProjectsComponentProps) {
+
+
+    
   const [filteredProjects, setFilteredProjects] = useState<Task[]>(projects);
 
   const handleSearch = (query: string) => {

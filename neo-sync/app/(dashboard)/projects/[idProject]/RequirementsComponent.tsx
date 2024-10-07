@@ -2,34 +2,40 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Calendar, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { Plus, Calendar, SlidersHorizontal } from "lucide-react";
 import InfoCard from "@/components/custom/Overview/InfoCard";
 import SearchBar from "@/components/custom/Overview/SearchBar";
 import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
-import { initialRequirements } from "./mockData";
 import { CreateRequirement } from "@/components/custom/Overview/Alerts/CreateRequirement";
 import GenerateProposal from "@/components/custom/Overview/Alerts/GenerateProposal";
+import { useParams } from "next/navigation";
+import { Task } from "@/components/custom/Overview/Kanban/TaskCard";
 
-export default function RequirementsPage() {
-  //* Function that will be passed to the SearchBar to filter the initialProjects and only show those on the kanban
-  const [filteredRequirements, setFilteredRequirements] =
-    useState(initialRequirements);
+interface RequirementsComponentProps {
+  requirements: Task[];
+}
+
+export default function RequirementsComponent({ requirements }: RequirementsComponentProps) {
+  const params = useParams();
+  const projectId = params.idProject;
+
+  const [filteredRequirements, setFilteredRequirements] = useState<Task[]>(requirements);
+
   const handleSearch = (query: string) => {
-    const filtered = initialRequirements.filter(
-      (project) =>
-        project.title.toLowerCase().includes(query.toLowerCase()) ||
-        project.content.toLowerCase().includes(query.toLowerCase())
+    const filtered = requirements.filter(
+      (requirement) =>
+        requirement.title.toLowerCase().includes(query.toLowerCase()) ||
+        requirement.content.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredRequirements(filtered);
   };
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
-      {/* Header */}
       <div className="flex justify-between">
-        <h1 className="text-lg font-semibold md:text-2xl">CEMEX</h1>
+        <h1 className="text-lg font-semibold md:text-2xl">Project: {projectId}</h1>
         <div className="flex flex-row justify-between gap-3">
           <BlueButton
             text="Agregar Requerimiento"
@@ -53,7 +59,6 @@ export default function RequirementsPage() {
         </div>
       </div>
 
-      {/* Bundle of main operations of the website */}
       <div className="flex flex-col gap-3 rounded-lg shadow-sm">
         <InfoCard />
         <CustomSeparator />
