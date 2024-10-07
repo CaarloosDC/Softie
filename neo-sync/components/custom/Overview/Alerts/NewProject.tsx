@@ -17,19 +17,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
 import { DatePicker } from "@/components/global/DatePicker";
 import { Wand2Icon, PlusIcon } from "lucide-react";
 
 export function NewProject() {
-  const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date>();
-
   return (
     <>
       <AlertDialogHeader>
         <AlertDialogTitle>Crear nuevo proyecto</AlertDialogTitle>
         <AlertDialogDescription>
+          {/* Section where all the text input is received */}
           <div className="space-y-4 mt-4">
             <div>
               <label
@@ -94,6 +91,7 @@ export function NewProject() {
               </div>
             </div>
           </div>
+          {/* All the main buttons of the form */}
           <div className="space-y-4 mt-4">
             <div className="flex gap-1">
               <AlertDialogAction className="bg-blue-500 hover:bg-blue-600 text-white rounded-md">

@@ -10,9 +10,10 @@ import { initialRequirements } from "./mockData";
 import { CreateRequirement } from "@/components/custom/Overview/Alerts/CreateRequirement";
 import GenerateProposal from "@/components/custom/Overview/Alerts/GenerateProposal";
 
-export default function ProjectsPage() {
+export default function RequirementsPage() {
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
+      {/* Header */}
       <div className="flex justify-between">
         <h1 className="text-lg font-semibold md:text-2xl">CEMEX</h1>
         <div className="flex flex-row justify-between gap-3">
@@ -38,6 +39,7 @@ export default function ProjectsPage() {
         </div>
       </div>
 
+      {/* Bundle of main operations of the website */}
       <div className="flex flex-col gap-3 rounded-lg shadow-sm">
         <InfoCard />
         <CustomSeparator />

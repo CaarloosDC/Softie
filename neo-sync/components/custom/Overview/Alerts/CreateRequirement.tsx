@@ -66,6 +66,7 @@ export function CreateRequirement() {
       {/* Use the view state to manage which view the user wants  */}
       {view === "form" ? (
         <div className="space-y-4">
+          {/* Text input */}
           <div>
             <label
               htmlFor="description"
@@ -78,6 +79,7 @@ export function CreateRequirement() {
               placeholder="Describe los detalles del requerimiento del proyecto"
             />
           </div>
+          {/* Selection fo requirements and date picker */}
           <div className="flex gap-2">
             <div className="w-1/2">
               <label
@@ -107,6 +109,7 @@ export function CreateRequirement() {
               <DatePicker />
             </div>
           </div>
+          {/* Effort + AI estimate */}
           <div>
             <label
               htmlFor="effort"
@@ -128,6 +131,7 @@ export function CreateRequirement() {
         </div>
       ) : (
         <div className="space-y-4">
+          {/* Search + Filter */}
           <div className="flex space-x-2">
             <Input placeholder="Buscar por nombre" className="flex-grow" />
             <Button variant="outline">
@@ -135,6 +139,7 @@ export function CreateRequirement() {
               Filtrar lista
             </Button>
           </div>
+          {/* Table for showing possible team members */}
           <div>
             <h3 className="text-sm font-medium text-gray-700 mb-2">
               Selecciona al equipo para este requerimiento
@@ -176,6 +181,7 @@ export function CreateRequirement() {
               </TableBody>
             </Table>
           </div>
+          {/* Footer of table for extra information/actions */}
           <div className="flex justify-between items-center">
             <span className="text-sm">
               {selectedTeamMembers.length} personas seleccionadas
@@ -190,11 +196,15 @@ export function CreateRequirement() {
           <Separator />
         </div>
       )}
+      {/* Display the main buttons/actions of the forms */}
       <AlertDialogFooter className="">
-        <AlertDialogCancel className="w-1/3">Cancelar</AlertDialogCancel>
+        {/* Depending which view is displayed, the arrengment of the buttons change */}
+        <AlertDialogCancel className={view === "form" ? "w-1/2" : "w-1/3"}>
+          Cancelar
+        </AlertDialogCancel>
         {view === "form" ? (
           <Button
-            className="bg-gray-800 hover:bg-gray-700 text-white rounded-md"
+            className="w-1/2 bg-gray-800 hover:bg-gray-700 text-white rounded-md"
             onClick={() => setView("team")}
           >
             Siguiente
