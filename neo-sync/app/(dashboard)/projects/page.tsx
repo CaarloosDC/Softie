@@ -7,6 +7,7 @@ import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
 import { initialProjects } from "./mockData";
+import { NewProject } from "@/components/custom/Overview/Alerts/NewProject";
 
 export default function ProjectsPage() {
   return (
@@ -14,14 +15,15 @@ export default function ProjectsPage() {
       <div className="flex justify-between">
         <h1 className="text-lg font-semibold md:text-2xl">Dashboard</h1>
         <div className="flex flex-row justify-between gap-3">
-          <BlueButton
-            text="Nuevo Proyecto"
-            icon={<Plus className="h-4 w-4" />}
-          />
+          <BlueButton text="Nuevo Proyecto" icon={<Plus className="h-4 w-4" />}>
+            <NewProject />
+          </BlueButton>
           <BlueButton
             text="Agendar una reunión"
             icon={<Calendar className="h-4 w-4" />}
-          />
+          >
+            {" "}
+          </BlueButton>
           <Button
             variant="outline"
             className="bg-gray-200 text-gray-700 hover:bg-gray-300 border-gray-300 rounded-md shadow-sm"

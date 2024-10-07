@@ -1,20 +1,26 @@
-import { Button } from "@/components/ui/button"; // Import the Button component
+import { Button } from "@/components/ui/button";
 import { ReactNode } from "react";
-
+import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 interface BlueButtonProps {
   text: string;
   icon: ReactNode; // icon
+  children: ReactNode; // View to render alert
 }
 
-const BlueButton: React.FC<BlueButtonProps> = ({ text, icon }) => {
+const BlueButton: React.FC<BlueButtonProps> = ({ text, icon, children }) => {
   return (
-    <Button
-      variant="default"
-      className="bg-gray-800 hover:bg-gray-700 text-white rounded-md px-4 py-2 text-sm font-medium flex items-center"
-    >
-      {icon && <span className="mr-2">{icon}</span>} {/* Render the icon */}
-      {text} {/* Render the button text */}
-    </Button>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button
+          variant="default"
+          className="bg-gray-800 hover:bg-gray-700 text-white rounded-md px-4 py-2 text-sm font-medium flex items-center"
+        >
+          {icon && <span className="mr-2">{icon}</span>} {/* Render icon */}
+          {text} {/* Render button text */}
+        </Button>
+      </AlertDialogTrigger>
+      {children}
+    </AlertDialog>
   );
 };
 

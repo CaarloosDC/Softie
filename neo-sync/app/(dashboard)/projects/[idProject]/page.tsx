@@ -17,15 +17,21 @@ export default function ProjectsPage() {
           <BlueButton
             text="Agregar Requerimiento"
             icon={<Plus className="h-4 w-4" />}
-          />
+          >
+            {" "}
+          </BlueButton>
           <BlueButton
             text="Agendar una reunión"
             icon={<Calendar className="h-4 w-4" />}
-          />
+          >
+            {" "}
+          </BlueButton>
           <BlueButton
             text="Generar Propuesta"
             icon={<Calendar className="h-4 w-4" />}
-          />
+          >
+            {" "}
+          </BlueButton>
           <Button
             variant="outline"
             className="bg-red-600 hover:bg-red-700 text-white hover:text-white rounded-md px-4 py-2 text-sm font-medium flex items-center"
