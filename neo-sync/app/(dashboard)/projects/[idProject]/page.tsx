@@ -8,6 +8,7 @@ import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
 import { initialRequirements } from "./mockData";
 import { CreateRequirement } from "@/components/custom/Overview/Alerts/CreateRequirement";
+import GenerateProposal from "@/components/custom/Overview/Alerts/GenerateProposal";
 
 export default function ProjectsPage() {
   return (
@@ -25,7 +26,7 @@ export default function ProjectsPage() {
             text="Generar Propuesta"
             icon={<Calendar className="h-4 w-4" />}
           >
-            {" "}
+            <GenerateProposal />
           </BlueButton>
           <Button
             variant="outline"

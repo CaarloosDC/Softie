@@ -31,6 +31,7 @@ import { FilterIcon, Wand2Icon, Plus } from "lucide-react";
 import { DatePicker } from "@/components/global/DatePicker";
 import BlueButton from "../../BlueButton";
 import Divider from "../../divider";
+import { Separator } from "@/components/ui/separator";
 
 /**
  * This component handles the creation of a new requirement form by returning an alert dialog view that will be displayed by clicking a button
@@ -186,7 +187,7 @@ export function CreateRequirement() {
               Deseleccionar todo
             </Button>
           </div>
-          <Divider />
+          <Separator />
         </div>
       )}
       <AlertDialogFooter className="">
