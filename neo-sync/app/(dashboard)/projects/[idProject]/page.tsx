@@ -7,6 +7,7 @@ import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
 import { initialRequirements } from "./mockData";
+import { CreateRequirement } from "@/components/custom/Overview/Alerts/CreateRequirement";
 
 export default function ProjectsPage() {
   return (
@@ -18,13 +19,7 @@ export default function ProjectsPage() {
             text="Agregar Requerimiento"
             icon={<Plus className="h-4 w-4" />}
           >
-            {" "}
-          </BlueButton>
-          <BlueButton
-            text="Agendar una reunión"
-            icon={<Calendar className="h-4 w-4" />}
-          >
-            {" "}
+            <CreateRequirement />
           </BlueButton>
           <BlueButton
             text="Generar Propuesta"

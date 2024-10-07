@@ -18,12 +18,6 @@ export default function ProjectsPage() {
           <BlueButton text="Nuevo Proyecto" icon={<Plus className="h-4 w-4" />}>
             <NewProject />
           </BlueButton>
-          <BlueButton
-            text="Agendar una reunión"
-            icon={<Calendar className="h-4 w-4" />}
-          >
-            {" "}
-          </BlueButton>
           <Button
             variant="outline"
             className="bg-gray-200 text-gray-700 hover:bg-gray-300 border-gray-300 rounded-md shadow-sm"

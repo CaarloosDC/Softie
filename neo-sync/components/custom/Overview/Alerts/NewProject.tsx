@@ -5,6 +5,7 @@ import {
   AlertDialogDescription,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -95,20 +96,14 @@ export function NewProject() {
           </div>
           <div className="space-y-4 mt-4">
             <div className="flex gap-1">
-              <Button
-                variant="default"
-                className="bg-blue-500 hover:bg-blue-600 text-white rounded-md"
-              >
+              <AlertDialogAction className="bg-blue-500 hover:bg-blue-600 text-white rounded-md">
                 <Wand2Icon className="w-4 mr-1" />
                 Generar con inteligencia artificial
-              </Button>
-              <Button
-                variant="default"
-                className="bg-gray-900 hover:bg-gray-800 text-white rounded-md flex-row justify-between"
-              >
+              </AlertDialogAction>
+              <AlertDialogAction className="bg-gray-900 hover:bg-gray-800 text-white rounded-md flex-row justify-between">
                 <PlusIcon className="w-4 mr-1" />
                 <span className="text-sm">Generar desde cero</span>
-              </Button>
+              </AlertDialogAction>
             </div>
             <AlertDialogCancel className="w-full">Cancelar</AlertDialogCancel>
           </div>

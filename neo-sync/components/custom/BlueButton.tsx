@@ -7,8 +7,8 @@ import {
 } from "@/components/ui/alert-dialog";
 interface BlueButtonProps {
   text: string;
-  icon: ReactNode; // icon
-  children: ReactNode; // View to render alert
+  icon: ReactNode;
+  children?: ReactNode; // * Optional to pass children. Alert will only trigger when children are passed
 }
 
 const BlueButton: React.FC<BlueButtonProps> = ({ text, icon, children }) => {
@@ -19,15 +19,16 @@ const BlueButton: React.FC<BlueButtonProps> = ({ text, icon, children }) => {
           variant="default"
           className="bg-gray-800 hover:bg-gray-700 text-white rounded-md px-4 py-2 text-sm font-medium flex items-center"
         >
-          {icon && <span className="mr-2">{icon}</span>} {/* Render icon */}
-          {text} {/* Render button text */}
+          {icon && <span className="mr-2">{icon}</span>}
+          {text}
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="overflow-auto">
-        {" "}
-        {/* Ensure content is inside dialog */}
-        {children} {/* Pass the form content here */}
-      </AlertDialogContent>
+      {/* Only render AlertDialogContent if children are passed */}
+      {children && (
+        <AlertDialogContent className="overflow-auto">
+          {children} {/* Content to render */}
+        </AlertDialogContent>
+      )}
     </AlertDialog>
   );
 };
