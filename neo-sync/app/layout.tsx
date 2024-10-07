@@ -17,6 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/" />
+        <title>NeoSync</title>
+      </head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"

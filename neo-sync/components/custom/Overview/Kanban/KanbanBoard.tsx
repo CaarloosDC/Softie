@@ -48,6 +48,11 @@ export function KanbanBoard({ data }: { data: Task[] }) {
 
   const [tasks, setTasks] = useState<Task[]>(data); // All tasks.
   // const [activeColumn, setActiveColumn] = useState<Column | null>(null); // Tracks the active column being dragged.
+  //* The useEffect will update the tasks whenever the data changes. This ensures that kanban reloads whenever the data changes (such as when filtering)
+  useEffect(() => {
+    setTasks(data);
+  }, [data]);
+
   const [activeTask, setActiveTask] = useState<Task | null>(null); // Tracks the task being dragged.
 
   // State to check if component is running in the client.
