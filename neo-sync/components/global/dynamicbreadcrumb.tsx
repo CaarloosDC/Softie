@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ReactNode } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation"; // Import useRouter to handle routing
 import { ChevronRight, Home } from "lucide-react";
 
 import {
@@ -25,15 +25,21 @@ export default function DynamicBreadcrumb({
   capitalizeLinks = false,
 }: TBreadCrumbProps) {
   const paths = usePathname();
+  const router = useRouter(); // Get the router instance
   const pathNames = paths.split("/").filter((path) => path);
+
+  const handleClick = (href: string) => {
+    router.push(href); // Use router.push for smooth navigation
+  };
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink
-            href="/"
-            className="flex items-center dark:text-gray-300"
+            // Use button to prevent anchor behavior
+            onClick={() => handleClick("/")} // Use router push to navigate
+            className="flex items-center dark:text-gray-300 cursor-pointer"
           >
             {homeElement}
           </BreadcrumbLink>
@@ -58,7 +64,11 @@ export default function DynamicBreadcrumb({
                     {itemLink}
                   </BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink href={href} className="dark:text-gray-300">
+                  <BreadcrumbLink
+                    // Use button to prevent anchor behavior
+                    onClick={() => handleClick(href)} // Use router.push for navigation
+                    className="dark:text-gray-300 cursor-pointer"
+                  >
                     {itemLink}
                   </BreadcrumbLink>
                 )}

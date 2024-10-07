@@ -63,7 +63,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
   // Class variants for different drag states (e.g., default, over, overlay).
   const variants = cva(
     // "h-[500px] max-h-[500px] w-[350px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center",
-    "w-[400px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center border-none",
+    "w-[370px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center border-none",
     {
       variants: {
         dragging: {
