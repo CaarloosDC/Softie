@@ -1,6 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { ReactNode } from "react";
-import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+} from "@/components/ui/alert-dialog";
 interface BlueButtonProps {
   text: string;
   icon: ReactNode; // icon
@@ -19,7 +23,11 @@ const BlueButton: React.FC<BlueButtonProps> = ({ text, icon, children }) => {
           {text} {/* Render button text */}
         </Button>
       </AlertDialogTrigger>
-      {children}
+      <AlertDialogContent className="overflow-auto">
+        {" "}
+        {/* Ensure content is inside dialog */}
+        {children} {/* Pass the form content here */}
+      </AlertDialogContent>
     </AlertDialog>
   );
 };
