@@ -1,3 +1,4 @@
+// ProjectsComponent.tsx (Client Component)
 "use client";
 
 import React, { useState } from "react";
@@ -8,16 +9,13 @@ import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
 import { Task } from "@/components/custom/Overview/Kanban/TaskCard";
-import { NewProject } from "@/components/custom/Overview/Alerts/NewProject"; // Corrected import
+import { NewProject } from "@/components/custom/Overview/Alerts/NewProject";
 
 interface ProjectsComponentProps {
   projects: Task[];
 }
 
 export default function ProjectsComponent({ projects }: ProjectsComponentProps) {
-
-
-    
   const [filteredProjects, setFilteredProjects] = useState<Task[]>(projects);
 
   const handleSearch = (query: string) => {
@@ -29,13 +27,48 @@ export default function ProjectsComponent({ projects }: ProjectsComponentProps) 
     setFilteredProjects(filtered);
   };
 
+  const handleCreateProject = async (projectData: any) => {
+    try {
+      const response = await fetch('/api/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(projectData),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Server response:', errorData);
+        throw new Error(`Failed to create project: ${response.status} ${response.statusText}`);
+      }
+  
+      const newProject = await response.json();
+      console.log('New project created:', newProject);
+      
+      toast({
+        title: "Project created",
+        description: "Your new project has been successfully created.",
+      });
+  
+      // Here you might want to update your local state or refetch projects
+    } catch (error) {
+      console.error('Error creating project:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "There was a problem creating your project.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
       <div className="flex justify-between">
         <h1 className="text-lg font-semibold md:text-2xl">Dashboard</h1>
         <div className="flex flex-row justify-between gap-3">
           <BlueButton text="Nuevo Proyecto" icon={<Plus className="h-4 w-4" />}>
-            <NewProject />
+            <NewProject onSubmit={handleCreateProject} />
           </BlueButton>
           <Button
             variant="outline"
@@ -55,4 +88,8 @@ export default function ProjectsComponent({ projects }: ProjectsComponentProps) 
       </div>
     </div>
   );
+}
+
+function toast(arg0: { title: string; description: string; }) {
+    throw new Error("Function not implemented.");
 }
