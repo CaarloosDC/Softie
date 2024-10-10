@@ -3,6 +3,7 @@ import React from "react";
 import { Sidebar } from "../../components/global/sidebar";
 import { Navbar } from "../../components/global/navbar";
 import DynamicBreadcrumb from "../../components/global/dynamicbreadcrumb";
+import { NavbarWrapper } from "@/components/global/navbar-wrapper";
 
 export default function DashboardLayout({
   children,
@@ -13,7 +14,7 @@ export default function DashboardLayout({
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] bg-gray-50 dark:bg-gray-900">
       <Sidebar />
       <div className="flex flex-col">
-        <Navbar />
+      <NavbarWrapper />
         <div className="pl-7 pt-5">
           <DynamicBreadcrumb capitalizeLinks={true} />
         </div>

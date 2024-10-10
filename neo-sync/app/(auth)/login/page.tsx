@@ -23,7 +23,7 @@ export default function LoginPage() {
     formData.append("password", password);
     try {
       await login(formData);
-      router.push("/dashboard");
+      router.push("/projects");
     } catch (error) {
       console.error("Login error:", error);
       alert("An error occurred during login. Please try again.");

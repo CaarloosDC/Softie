@@ -41,7 +41,7 @@ export async function login(formData: FormData) {
       // Insert additional user data into the service_users table
       const supabaseAdmin = getAdminClient();
       const { error: insertError } = await supabaseAdmin
-        .from('usuarios_servicio')
+        .from('usuario_servicio')
         .insert({
           supabase_usuario: authData.user.id, 
           name: formData.name,
@@ -66,7 +66,7 @@ export async function login(formData: FormData) {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/dashboard`,
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/projects`,
       },
     })
     
