@@ -5,5 +5,6 @@ export {};
 declare global {
     interface Window {
         HuggingFaceEmbeddingSingleton: ReturnType<THuggingFaceEmbeddingSingleton> | undefined; 
+        VectorStoreSingleton: ReturnType<TVectorStore> | undefined;
     }
 }
