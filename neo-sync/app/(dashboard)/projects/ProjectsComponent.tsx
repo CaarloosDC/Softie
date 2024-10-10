@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Plus, SlidersHorizontal, ChevronDown } from "lucide-react";
 import SearchBar from "@/components/custom/Overview/SearchBar";
@@ -11,12 +12,15 @@ import BlueButton from "@/components/custom/BlueButton";
 import { Task } from "@/components/custom/Overview/Kanban/TaskCard";
 import { NewProject } from "@/components/custom/Overview/Alerts/NewProject";
 
+
 interface ProjectsComponentProps {
   projects: Task[];
 }
 
 export default function ProjectsComponent({ projects }: ProjectsComponentProps) {
+    
   const [filteredProjects, setFilteredProjects] = useState<Task[]>(projects);
+
 
   const handleSearch = (query: string) => {
     const filtered = projects.filter(
@@ -36,6 +40,7 @@ export default function ProjectsComponent({ projects }: ProjectsComponentProps) 
         },
         body: JSON.stringify(projectData),
       });
+      
   
       if (!response.ok) {
         const errorData = await response.json();
@@ -46,10 +51,12 @@ export default function ProjectsComponent({ projects }: ProjectsComponentProps) 
       const newProject = await response.json();
       console.log('New project created:', newProject);
       
+      
       toast({
         title: "Project created",
         description: "Your new project has been successfully created.",
       });
+      
   
       // Here you might want to update your local state or refetch projects
     } catch (error) {
@@ -57,7 +64,6 @@ export default function ProjectsComponent({ projects }: ProjectsComponentProps) 
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "There was a problem creating your project.",
-        variant: "destructive",
       });
     }
   };
