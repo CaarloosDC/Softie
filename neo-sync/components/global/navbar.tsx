@@ -2,6 +2,8 @@
 "use client";
 
 import React from "react";
+import { createClient } from '@/utils/supabase/client';
+import { useRouter } from 'next/navigation';
 import { Bell, Menu, Search, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +27,17 @@ interface NavbarProps {
 }
 
 export function Navbar({ userName, userEmail }: NavbarProps) {
+  const router = useRouter();
+  const supabase = createClient();
+
+const handleLogout = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    console.error('Error logging out:', error);
+  } else {
+    router.push('/login'); // Redirect to login page after successful logout
+  }
+};
   return (
     <header className="flex h-14 py-8 items-center gap-4 bg-muted/40 px-4 lg:h-[60px] lg:px-6 bg-white dark:bg-gray-800">
       <Sheet>
@@ -91,7 +104,9 @@ export function Navbar({ userName, userEmail }: NavbarProps) {
               Ajustes
             </DropdownMenuItem>
             <DropdownMenuSeparator className="dark:bg-gray-700" />
-            <DropdownMenuItem className="dark:text-gray-300">
+            <DropdownMenuItem className="dark:text-gray-300"
+              onSelect={handleLogout}
+            >
               Cerrar sesión
             </DropdownMenuItem>
           </DropdownMenuContent>
