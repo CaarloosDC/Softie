@@ -21,7 +21,7 @@ export async function login(formData: FormData) {
     }
   
     revalidatePath('/', 'layout')
-    redirect('/dashboard')
+    redirect('/projects')
   }
   
   export async function signup(formData: any) {
@@ -77,4 +77,28 @@ export async function login(formData: FormData) {
     
     console.log("OAuth initiation successful, data:", data);
     return data
+  }
+
+  export async function requestPasswordReset(email: string) {
+    const supabase = createClient()
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/password-recovery`,
+    })
+
+    if (error) {
+      console.error('Password reset request error:', error)
+      throw error
+    }
+  }
+
+  export async function updatePassword(password: string) {
+    const supabase = createClient()
+    const { error } = await supabase.auth.updateUser({ password })
+
+    if (error) {
+      console.error('Password update error:', error)
+      throw error
+    }
+
+    revalidatePath('/', 'layout')
   }
