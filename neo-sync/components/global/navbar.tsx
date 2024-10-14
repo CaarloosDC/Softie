@@ -52,7 +52,7 @@ export function Navbar() {
       </div>
 
       {/* Theme toggle de la página */}
-      <ModeToggle />
+      {/* <ModeToggle /> */}
 
       {/* Botón de notificaciones */}
       <NotificationButton />
