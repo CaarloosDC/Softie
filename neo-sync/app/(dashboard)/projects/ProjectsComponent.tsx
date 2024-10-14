@@ -23,7 +23,7 @@ export default function ProjectsComponent({ projects }: ProjectsComponentProps) 
     
   const [filteredProjects, setFilteredProjects] = useState<Task[]>(projects);
 
-
+  const router = useRouter();
   const handleSearch = (query: string) => {
     const filtered = projects.filter(
       (project) =>
@@ -43,6 +43,7 @@ export default function ProjectsComponent({ projects }: ProjectsComponentProps) 
         },
         body: JSON.stringify(projectData),
       });
+      
       
   
       if (!response.ok) {
