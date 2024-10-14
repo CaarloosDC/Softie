@@ -17,18 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import React, { useState } from "react";
-import { FilterIcon, Wand2Icon } from "lucide-react";
+import { Wand2Icon } from "lucide-react";
 import { DatePicker } from "@/components/global/DatePicker";
-import { Separator } from "@/components/ui/separator";
 
 /**
  * This component handles the creation of a new requirement form by returning an alert dialog view that will be displayed by clicking a button
