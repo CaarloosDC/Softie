@@ -16,7 +16,7 @@ export async function generateAnswer(question: string, context: string, jsonForm
   Por favor, proporciona tu respuesta en el formato JSON especificado.`;
 
   // Generate response from Llama 3.1
-  const response = await ollamaClient.chat({ model: 'llama3.2:1b', messages: [{ role: 'user', content: prompt }] });
+  const response = await ollamaClient.chat({ model: 'llama3.1', messages: [{ role: 'user', content: prompt }] });
 
   console.log(response.message.content);
 
