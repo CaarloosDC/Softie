@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import {
   Card,
@@ -23,9 +25,17 @@ import {
   Download,
 } from "lucide-react";
 import BlueButton from "../BlueButton";
+import { useRouter } from "next/navigation";
 
 export default function ContractCard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  //* Handle the click when going to specific contracts page
+  const router = useRouter();
+
+  const handleEdit = () => {
+    router.push("/contracts/1"); // Navigates to /contracts/1
+  };
 
   return (
     <Card className="w-[300px] bg-white shadow-lg">
@@ -38,7 +48,7 @@ export default function ContractCard() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem onClick={handleEdit} className="cursor-pointer">
               <Eye className="mr-2 h-4 w-4" />
               <span>View</span>
             </DropdownMenuItem>

@@ -3,13 +3,9 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, SlidersHorizontal, ChevronDown } from "lucide-react";
-import SearchBar from "@/components/custom/Overview/SearchBar";
-import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
-import { initialProjects } from "../projects/mockData";
 import { NewContract } from "@/components/custom/Alerts/NewContract";
-import ContractCard from "@/components/custom/Contracts/ContractCard";
 import ContractsList from "@/components/custom/Contracts/ContractsList";
 
 export default function ContractsPage() {
