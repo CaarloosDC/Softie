@@ -7,7 +7,6 @@ import {
   AlertDialogTitle,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -19,9 +18,7 @@ import {
 } from "@/components/ui/select";
 import { DatePicker } from "@/components/global/DatePicker";
 import { Wand2Icon, PlusIcon } from "lucide-react";
-import { retrieveRelevantDocs } from "@/lib/ollama/retrieval/retrieveRelevantDocs";
-import { generateAnswer } from "@/lib/ollama/retrieval/generateLlamaResponse";
-import { supabaseClient } from "@/supabase/client";
+import { json } from "stream/consumers";
 
 export function NewProject() {
   const handleGenerateWithAI = async () => {
@@ -43,6 +40,13 @@ export function NewProject() {
 
       // const data = await response.json();
       // console.log(data);
+      const jsonFormat = `{
+        "nombre": "string",
+        "descripcion": "string",
+        "costo": "number",
+        "transcripcion": "string",
+        "giro_empresa": "string"
+      }`;
 
       const response = await fetch('/api/generateAIResponse', {
         method: 'POST',
@@ -51,7 +55,7 @@ export function NewProject() {
         },
         body: JSON.stringify({
           query: `Descripción: Una aplicación web sencilla donde los usuarios pueden crear y gestionar listas de tareas. Cada lista de tareas puede compartirse con otros usuarios para que puedan colaborar en tiempo real. Los usuarios pueden agregar, editar, marcar como completadas o eliminar tareas. Además, el sistema enviará recordatorios y notificaciones a los usuarios cuando las fechas de vencimiento de las tareas se acerquen. La aplicación también permitirá asignar tareas a personas específicas dentro de un equipo y ver el progreso general de cada lista.`,
-
+          jsonFormat: jsonFormat
         }),
       });
 

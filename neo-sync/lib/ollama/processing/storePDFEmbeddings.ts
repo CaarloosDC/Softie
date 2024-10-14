@@ -1,6 +1,6 @@
 import { fetchAndParsePDF } from "./pdfParser";
 import { supabaseClient } from "@/supabase/client";
-import { OllamaEmbeddings } from "@langchain/ollama";
+import { ollamaEmbeddingClient } from "../client/ollamaEmbeddingClient";
 
 function splitText(text: string, maxLength: number): string[] {
     const regex = new RegExp(`(.|[\r\n]){1,${maxLength}}`, 'g');
@@ -10,17 +10,12 @@ function splitText(text: string, maxLength: number): string[] {
 export async function storePDFEmbeddings(filePath: string) {
     const pdfText = await fetchAndParsePDF(filePath);
 
-    const ollamaEmbeddings = new OllamaEmbeddings({
-        model: "jmorgan/gte-small", // Default value
-        baseUrl: "http://localhost:11434", // Default value
-    });
-
     const maxLength = 384; // Ajusta este valor según sea necesario
     const textChunks = splitText(pdfText, maxLength);
 
     const embeddings = [];
     for (const chunk of textChunks) {
-        const embedding = await ollamaEmbeddings.embedQuery(chunk);
+        const embedding = await ollamaEmbeddingClient.embedQuery(chunk);
         // Asegúrate de que cada embedding tenga exactamente 384 dimensiones
         if (embedding.length !== 384) {
             console.error('Embedding length mismatch:', embedding.length);
