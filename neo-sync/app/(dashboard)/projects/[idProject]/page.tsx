@@ -9,8 +9,8 @@ import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
 import { initialRequirements } from "./mockData";
-import { CreateRequirement } from "@/components/custom/Overview/Alerts/CreateRequirement";
-import GenerateProposal from "@/components/custom/Overview/Alerts/GenerateProposal";
+import { CreateRequirement } from "@/components/custom/Alerts/CreateRequirement";
+import GenerateProposal from "@/components/custom/Alerts/GenerateProposal";
 
 export default function RequirementsPage() {
   //* Function that will be passed to the SearchBar to filter the initialProjects and only show those on the kanban
