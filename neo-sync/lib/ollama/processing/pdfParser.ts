@@ -1,8 +1,10 @@
-const pdf = require('pdf-parse');
+
 import { supabaseClient } from '@/supabase/client';
 import { RecursiveCharacterTextSplitter, TextSplitter } from 'langchain/text_splitter'
 
 export async function fetchAndParsePDF(filePath: string) {
+    const pdf = require('pdf-parse');
+    
     const { data: fileData, error: fileError } = await supabaseClient.storage.from('pdfs').download(filePath);
 
     if (fileError) {

@@ -19,8 +19,75 @@ import {
 } from "@/components/ui/select";
 import { DatePicker } from "@/components/global/DatePicker";
 import { Wand2Icon, PlusIcon } from "lucide-react";
+import { retrieveRelevantDocs } from "@/lib/ollama/retrieval/retrieveRelevantDocs";
+import { generateAnswer } from "@/lib/ollama/retrieval/generateLlamaResponse";
+import { supabaseClient } from "@/supabase/client";
 
 export function NewProject() {
+  const handleGenerateWithAI = async () => {
+    console.log('hello world')
+    try {
+      // const response = await fetch('/api/createEmbeddingsFromPdfs', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+  
+      //   }),
+      // });
+
+      // if (!response.ok) {
+      //   throw new Error('Error generating embeddings');
+      // }
+
+      // const data = await response.json();
+      // console.log(data);
+
+      const response = await fetch('/api/generateAIResponse', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `Un proyecto de e-commerce de electrodomésticos podría ser una plataforma en línea donde los usuarios puedan explorar, comparar y comprar una amplia variedad de electrodomésticos, como refrigeradores, lavadoras, hornos, y más. El sitio incluiría:
+
+1. **Catálogo de productos**: Mostrar electrodomésticos con imágenes, descripciones, precios, y especificaciones técnicas.
+2. **Filtro de búsqueda**: Permitir a los usuarios filtrar por categorías, marcas, rangos de precio, características específicas, etc.
+3. **Carrito de compras**: Función que permita a los usuarios agregar productos al carrito, revisar el total y proceder al pago.
+4. **Sistema de pago seguro**: Integración con pasarelas de pago seguras para tarjetas de crédito, PayPal, u otros métodos.
+5. **Reseñas y calificaciones**: Los usuarios pueden dejar comentarios y calificaciones sobre los productos.
+6. **Envío y seguimiento**: Proveer opciones de envío y seguimiento de pedidos.
+
+Esto ofrecería una experiencia de compra rápida y eficiente para los clientes que buscan electrodomésticos en línea.`,
+
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error generating AI response');
+      }
+
+      const data = await response.json();
+      console.log("Fetched json",data);
+
+      // // Almacenar embeddings en la base de datos
+      // const { error } = await supabaseClient.from("embeddings").insert([{
+      //   content: data.response,
+      //   embedding: data.response,
+      //   metadata: { type: 'project', name: data.response.name }
+      // }])
+
+      // if (error) {
+      //   console.error('Error storing embeddings:', error);
+      //   throw new Error('Failed to store embeddings');
+      // }
+      
+    } catch (error) {
+      console.error('Error generating AI response ', error);
+    }
+  }
+
   return (
     <>
       <AlertDialogHeader>
@@ -94,7 +161,7 @@ export function NewProject() {
           {/* All the main buttons of the form */}
           <div className="space-y-4 mt-4">
             <div className="flex gap-1">
-              <AlertDialogAction className="bg-blue-500 hover:bg-blue-600 text-white rounded-md">
+              <AlertDialogAction className="bg-blue-500 hover:bg-blue-600 text-white rounded-md" onClick={handleGenerateWithAI}>
                 <Wand2Icon className="w-4 mr-1" />
                 Generar con inteligencia artificial
               </AlertDialogAction>
