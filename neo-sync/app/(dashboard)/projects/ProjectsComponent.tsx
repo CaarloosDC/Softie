@@ -4,13 +4,15 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Plus, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { Plus, SlidersHorizontal, ChevronDown, UserPlus } from "lucide-react";
 import SearchBar from "@/components/custom/Overview/SearchBar";
 import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
 import { Task } from "@/components/custom/Overview/Kanban/TaskCard";
 import { NewProject } from "@/components/custom/Overview/Alerts/NewProject";
+import { AddUser } from "@/components/custom/Overview/Alerts/AddUser";
+
 
 
 interface ProjectsComponentProps {
@@ -30,6 +32,7 @@ export default function ProjectsComponent({ projects }: ProjectsComponentProps) 
     );
     setFilteredProjects(filtered);
   };
+ 
 
   const handleCreateProject = async (projectData: any) => {
     try {
@@ -68,6 +71,40 @@ export default function ProjectsComponent({ projects }: ProjectsComponentProps) 
     }
   };
 
+  
+
+  const handleAddUser = async (userData: any) => {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Server response:', errorData);
+        throw new Error(`Failed to add user: ${response.status} ${response.statusText}`);
+      }
+  
+      const newUser = await response.json();
+      console.log('New user added:', newUser);
+      
+      toast({
+        title: "User added",
+        description: "The new user has been successfully added.",
+      });
+    } catch (error) {
+      console.error('Error adding user:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "There was a problem adding the user.",
+      });
+    }
+  };
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
       <div className="flex justify-between">
@@ -76,6 +113,10 @@ export default function ProjectsComponent({ projects }: ProjectsComponentProps) 
           <BlueButton text="Nuevo Proyecto" icon={<Plus className="h-4 w-4" />}>
             <NewProject onSubmit={handleCreateProject} />
           </BlueButton>
+          <BlueButton text="Agregar Usuario" icon={<UserPlus className="h-4 w-4" />}>
+            <AddUser onSubmit={handleAddUser} />
+          </BlueButton>
+          
           <Button
             variant="outline"
             className="bg-gray-200 text-gray-700 hover:bg-gray-300 border-gray-300 rounded-md shadow-sm"
