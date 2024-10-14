@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import BlueButton from "../BlueButton";
 import { useRouter } from "next/navigation";
+import CustomSeparator from "../Overview/CustomSeparator";
 
 export default function ContractCard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -71,13 +72,13 @@ export default function ContractCard() {
           ))}
         </div>
       </CardContent>
-      <Separator className="mx-4" />
+      <CustomSeparator />
       <CardFooter className="flex justify-between items-center px-4 py-3">
         <div className="flex items-center text-sm text-gray-500">
           <Calendar className="mr-2 h-4 w-4" />
           <span>4/09/2024</span>
         </div>
-        <BlueButton text="Descargar" icon={<Download className="h-3 w-3" />} />
+        {/* <BlueButton text="Descargar" icon={<Download className="h-3 w-3" />} /> */}
       </CardFooter>
     </Card>
   );
