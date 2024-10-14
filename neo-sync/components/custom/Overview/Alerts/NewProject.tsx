@@ -7,7 +7,6 @@ import {
   AlertDialogTitle,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -19,8 +18,59 @@ import {
 } from "@/components/ui/select";
 import { DatePicker } from "@/components/global/DatePicker";
 import { Wand2Icon, PlusIcon } from "lucide-react";
+import { json } from "stream/consumers";
 
 export function NewProject() {
+  const handleGenerateWithAI = async () => {
+    console.log('hello world')
+    try {
+      // const response = await fetch('/api/createEmbeddingsFromPdfs', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+  
+      //   }),
+      // });
+
+      // if (!response.ok) {
+      //   throw new Error('Error generating embeddings');
+      // }
+
+      // const data = await response.json();
+      // console.log(data);
+      const jsonFormat = `{
+        "nombre": "string",
+        "descripcion": "string",
+        "costo": "number",
+        "transcripcion": "string",
+        "giro_empresa": "string"
+      }`;
+
+      const response = await fetch('/api/generateAIResponse', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `Descripción: Una aplicación web sencilla donde los usuarios pueden crear y gestionar listas de tareas. Cada lista de tareas puede compartirse con otros usuarios para que puedan colaborar en tiempo real. Los usuarios pueden agregar, editar, marcar como completadas o eliminar tareas. Además, el sistema enviará recordatorios y notificaciones a los usuarios cuando las fechas de vencimiento de las tareas se acerquen. La aplicación también permitirá asignar tareas a personas específicas dentro de un equipo y ver el progreso general de cada lista.`,
+          jsonFormat: jsonFormat
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error generating AI response');
+      }
+
+      const data = await response.json();
+      console.log("Fetched json",data);
+      
+    } catch (error) {
+      console.error('Error generating AI response ', error);
+    }
+  }
+
   return (
     <>
       <AlertDialogHeader>
@@ -94,7 +144,7 @@ export function NewProject() {
           {/* All the main buttons of the form */}
           <div className="space-y-4 mt-4">
             <div className="flex gap-1">
-              <AlertDialogAction className="bg-blue-500 hover:bg-blue-600 text-white rounded-md">
+              <AlertDialogAction className="bg-blue-500 hover:bg-blue-600 text-white rounded-md" onClick={handleGenerateWithAI}>
                 <Wand2Icon className="w-4 mr-1" />
                 Generar con inteligencia artificial
               </AlertDialogAction>
