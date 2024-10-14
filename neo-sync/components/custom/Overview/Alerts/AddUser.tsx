@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AlertDialogCancel,
   AlertDialogDescription,
@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UserPlus, RefreshCw } from "lucide-react";
 
 interface AddUserProps {
@@ -15,7 +16,7 @@ interface AddUserProps {
 }
 
 export function AddUser({ onSubmit }: AddUserProps) {
-  const [password, setPassword] = React.useState('');
+  const [password, setPassword] = useState('');
 
   const generatePassword = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
@@ -30,8 +31,12 @@ export function AddUser({ onSubmit }: AddUserProps) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const userData = {
-      email: formData.get('email'),
+      email: formData.get('email') as string,
       password: password,
+      name: formData.get('name') as string,
+      role: formData.get('role') as string,
+      expertiseLevel: formData.get('expertiseLevel') as string,
+      phone: formData.get('phone') as string,
     };
     console.log('Submitting user data:', userData);
     await onSubmit(userData);
@@ -48,6 +53,47 @@ export function AddUser({ onSubmit }: AddUserProps) {
                 Correo electrónico
               </label>
               <Input id="email" name="email" type="email" placeholder="usuario@ejemplo.com" required />
+            </div>
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                Nombre
+              </label>
+              <Input id="name" name="name" type="text" placeholder="Nombre completo" required />
+            </div>
+            <div>
+              <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                Rol
+              </label>
+              <Select name="role" required>
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccionar rol" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Administrador</SelectItem>
+                  <SelectItem value="user">Usuario</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label htmlFor="expertiseLevel" className="block text-sm font-medium text-gray-700">
+                Nivel de experiencia
+              </label>
+              <Select name="expertiseLevel" required>
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccionar nivel" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="beginner">Principiante</SelectItem>
+                  <SelectItem value="intermediate">Intermedio</SelectItem>
+                  <SelectItem value="expert">Experto</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                Teléfono
+              </label>
+              <Input id="phone" name="phone" type="tel" placeholder="Número de teléfono" required />
             </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">

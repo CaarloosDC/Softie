@@ -1,52 +1,51 @@
 import { createClient } from '@/utils/supabase/server'
 import { getSupabaseAdminClient } from '@/utils/supabase/adminClient'
 
+
 interface UserInput {
   email: string;
   password: string;
-  // Add any additional fields you want to store for users
+  name: string;
+  role: string;
+  expertiseLevel: string;
+  phone: string;
 }
 
 export async function addUser(userData: UserInput) {
-  const supabase = createClient();
-  const adminClient = getSupabaseAdminClient();
+  const supabaseAdmin = getSupabaseAdminClient();
   
   try {
     // Create user without email confirmation using admin client
-    const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
+    const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: userData.email,
       password: userData.password,
       email_confirm: true // This automatically confirms the email
     });
-    
+
     if (authError) {
-      console.error('Error creating user in Supabase Auth:', authError);
-      throw new Error(`Failed to create user: ${authError.message}`);
+      console.error('Auth error:', authError);
+      throw authError;
     }
-    
+
     if (!authData.user) {
       throw new Error('No user data returned from user creation');
     }
 
-    // Add user data to your custom 'usuarios_servicios' table using regular client
-    const { data, error } = await supabase
-      .from('usuarios_servicios')
-      .insert([
-        {
-          supabase_usuario: authData.user.id,
-          // We'll discuss whether to include email here
-        }
-      ])
+    // Insert additional user data into the usuario_servicio table
+    const { data, error: insertError } = await supabaseAdmin
+      .from('usuario_servicio')
+      .insert({
+        supabase_usuario: authData.user.id,
+        nombre: userData.name,
+        rol_sistema: userData.role,
+        telefono: userData.phone,
+      })
       .select()
       .single();
-    
-    if (error) {
-      console.error('Error adding user data to Supabase:', error);
-      throw new Error(`Failed to add user data: ${error.message}`);
-    }
-    
-    if (!data) {
-      throw new Error('No data returned from user data insertion');
+
+    if (insertError) {
+      console.error('Insert error:', insertError);
+      throw insertError;
     }
 
     console.log('User created successfully:', data);
@@ -54,10 +53,12 @@ export async function addUser(userData: UserInput) {
     return {
       id: data.id,
       email: authData.user.email,
-      // Return any additional fields you want
+      nombre: data.name,
+      rol_usuario: data.role,
+      telefono: data.phone,
     };
   } catch (error) {
-    console.error('Detailed error:', error);
+    console.error('Error in addUser:', error);
     throw error;
   }
 }
