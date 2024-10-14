@@ -50,16 +50,7 @@ export function NewProject() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          query: `Un proyecto de e-commerce de electrodomésticos podría ser una plataforma en línea donde los usuarios puedan explorar, comparar y comprar una amplia variedad de electrodomésticos, como refrigeradores, lavadoras, hornos, y más. El sitio incluiría:
-
-1. **Catálogo de productos**: Mostrar electrodomésticos con imágenes, descripciones, precios, y especificaciones técnicas.
-2. **Filtro de búsqueda**: Permitir a los usuarios filtrar por categorías, marcas, rangos de precio, características específicas, etc.
-3. **Carrito de compras**: Función que permita a los usuarios agregar productos al carrito, revisar el total y proceder al pago.
-4. **Sistema de pago seguro**: Integración con pasarelas de pago seguras para tarjetas de crédito, PayPal, u otros métodos.
-5. **Reseñas y calificaciones**: Los usuarios pueden dejar comentarios y calificaciones sobre los productos.
-6. **Envío y seguimiento**: Proveer opciones de envío y seguimiento de pedidos.
-
-Esto ofrecería una experiencia de compra rápida y eficiente para los clientes que buscan electrodomésticos en línea.`,
+          query: `Descripción: Una aplicación web sencilla donde los usuarios pueden crear y gestionar listas de tareas. Cada lista de tareas puede compartirse con otros usuarios para que puedan colaborar en tiempo real. Los usuarios pueden agregar, editar, marcar como completadas o eliminar tareas. Además, el sistema enviará recordatorios y notificaciones a los usuarios cuando las fechas de vencimiento de las tareas se acerquen. La aplicación también permitirá asignar tareas a personas específicas dentro de un equipo y ver el progreso general de cada lista.`,
 
         }),
       });
@@ -70,18 +61,6 @@ Esto ofrecería una experiencia de compra rápida y eficiente para los clientes 
 
       const data = await response.json();
       console.log("Fetched json",data);
-
-      // // Almacenar embeddings en la base de datos
-      // const { error } = await supabaseClient.from("embeddings").insert([{
-      //   content: data.response,
-      //   embedding: data.response,
-      //   metadata: { type: 'project', name: data.response.name }
-      // }])
-
-      // if (error) {
-      //   console.error('Error storing embeddings:', error);
-      //   throw new Error('Failed to store embeddings');
-      // }
       
     } catch (error) {
       console.error('Error generating AI response ', error);

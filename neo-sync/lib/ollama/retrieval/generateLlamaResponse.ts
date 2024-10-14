@@ -1,4 +1,7 @@
+import { supabaseClient } from "@/supabase/client";
 import { ollamaClient } from "../client/ollamaClient";
+import { createAndStoreEmbeddings } from "./generateEmbeddings";
+import { error } from "console";
 
 
 export async function generateAnswer(question: string, context: string) {
@@ -26,7 +29,23 @@ Por favor, proporciona tu respuesta en el formato JSON especificado.`;
 
   console.log(response.message.content);
 
+  // Convertir objeto a json para poder acceder a los valores
   const jsonResponse = JSON.parse(response.message.content);
+
+  const { error } = await supabaseClient.from("proyecto").insert([{
+    nombre: jsonResponse.nombre,
+    descripcion: jsonResponse.descripcion,
+    costo: jsonResponse.costo,
+    transcripcion: jsonResponse.transcripcion,
+    giro_empresa: jsonResponse.giro_empresa,
+  }])
+
+  if (error) {
+    console.error('Error storing project:', error);
+    throw new Error('Failed to store project');
+  }
+
+  await createAndStoreEmbeddings(question, jsonResponse);
   
   // Return the generated text
   return jsonResponse; // Returns a string
