@@ -35,7 +35,7 @@ interface NewProjectProps {
   onSubmit: (projectData: any) => Promise<void>;
 }
 
-export function NewProject({ onSubmit }: NewProjectProps) {
+export function NewProject2({ onSubmit }: NewProjectProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
