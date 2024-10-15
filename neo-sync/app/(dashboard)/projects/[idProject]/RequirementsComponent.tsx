@@ -8,8 +8,8 @@ import SearchBar from "@/components/custom/Overview/SearchBar";
 import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
-import { CreateRequirement } from "@/components/custom/Overview/Alerts/CreateRequirement";
-import GenerateProposal from "@/components/custom/Overview/Alerts/GenerateProposal";
+import { CreateRequirement } from "@/components/custom/Alerts/CreateRequirement";
+import GenerateProposal from "@/components/custom/Alerts/GenerateProposal";
 import { useParams } from "next/navigation";
 import { Task } from "@/components/custom/Overview/Kanban/TaskCard";
 
@@ -17,11 +17,14 @@ interface RequirementsComponentProps {
   requirements: Task[];
 }
 
-export default function RequirementsComponent({ requirements }: RequirementsComponentProps) {
+export default function RequirementsComponent({
+  requirements,
+}: RequirementsComponentProps) {
   const params = useParams();
   const projectId = params.idProject;
 
-  const [filteredRequirements, setFilteredRequirements] = useState<Task[]>(requirements);
+  const [filteredRequirements, setFilteredRequirements] =
+    useState<Task[]>(requirements);
 
   const handleSearch = (query: string) => {
     const filtered = requirements.filter(
@@ -35,7 +38,9 @@ export default function RequirementsComponent({ requirements }: RequirementsComp
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
       <div className="flex justify-between">
-        <h1 className="text-lg font-semibold md:text-2xl">Project: {projectId}</h1>
+        <h1 className="text-lg font-semibold md:text-2xl">
+          Project: {projectId}
+        </h1>
         <div className="flex flex-row justify-between gap-3">
           <BlueButton
             text="Agregar Requerimiento"

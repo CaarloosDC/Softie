@@ -41,29 +41,29 @@ interface MenuData {
 const menuData: MenuData = {
   main: [
     {
-      href: "/dashboard",
+      href: "/projects",
       icon: LayoutDashboard,
       label: "Dashboard",
     },
   ],
-  workspace: {
-    title: "CEMEX",
-    iconClosed: ChevronRight,
-    iconOpened: ChevronDown,
-    projects: [
-      {
-        href: "#",
-        label: "App móvil",
-      },
-      {
-        href: "#",
-        label: "Rebranding web",
-      },
-    ],
-  },
+  // workspace: {
+  //   title: "CEMEX",
+  //   iconClosed: ChevronRight,
+  //   iconOpened: ChevronDown,
+  //   projects: [
+  //     {
+  //       href: "#",
+  //       label: "App móvil",
+  //     },
+  //     {
+  //       href: "#",
+  //       label: "Rebranding web",
+  //     },
+  //   ],
+  // },
   contracts: [
     {
-      href: "#",
+      href: "/contracts",
       icon: ReceiptText,
       label: "Contratos Marco",
     },
@@ -152,7 +152,7 @@ export function SidebarContent({ onItemClick }: { onItemClick?: () => void }) {
 
         {/* Espacio de trabajo con menú desplegable */}
         <h2 className="py-3 dark:text-gray-300">ESPACIO DE TRABAJO</h2>
-        <div>
+        {/* <div>
           <div
             onClick={toggleCemexMenu}
             className="cursor-pointer flex items-center"
@@ -181,7 +181,7 @@ export function SidebarContent({ onItemClick }: { onItemClick?: () => void }) {
               ))}
             </div>
           )}
-        </div>
+        </div> */}
 
         {/* Contratos Marco */}
         {menuData.contracts.map((item) => (
