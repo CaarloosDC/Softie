@@ -18,8 +18,6 @@ import {
 } from "@/components/ui/select";
 import { DatePicker } from "@/components/global/DatePicker";
 import { Wand2Icon, PlusIcon } from "lucide-react";
-import { json } from "stream/consumers";
-
 
 interface NewProjectProps {
   onSubmit: (projectData: any) => Promise<void>;
