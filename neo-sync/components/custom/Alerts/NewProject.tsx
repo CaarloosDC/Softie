@@ -131,7 +131,7 @@ export function NewProject() {
   };
 
   return (
-    <form onSubmit={}>
+    <form onSubmit={() => {}}>
       <AlertDialogHeader>
         <AlertDialogTitle>Crear nuevo proyecto</AlertDialogTitle>
       </AlertDialogHeader>
