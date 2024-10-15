@@ -1,5 +1,4 @@
-// components/custom/Overview/Alerts/NewProject.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AlertDialogCancel,
   AlertDialogDescription,
@@ -24,57 +23,53 @@ interface NewProjectProps {
 }
 
 export function NewProject({ onSubmit }: NewProjectProps) {
+  const [formData, setFormData] = useState({
+    nombre: '',
+    descripcion: '',
+    transcripcion: '',
+    giro_empresa: '',
+    fecha_inicio: null as Date | null,
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData(prev => ({ ...prev, giro_empresa: value }));
+  };
+
+  const handleDateChange = (date: Date | undefined) => {
+    setFormData(prev => ({ ...prev, fecha_inicio: date || null }));
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
     const projectData = {
-      nombre: formData.get('name'),
-      descripcion: formData.get('description'),
-      transcripcion: formData.get('transcription'),
-      giro_empresa: formData.get('sector'),
-      fecha_inicio: formData.get('date'),
+      ...formData,
+      fecha_inicio: formData.fecha_inicio ? formData.fecha_inicio.toISOString() : null,
       estatus: "todo" // Default status
     };
-    console.log('Submitting project data:', projectData);
     await onSubmit(projectData);
   };
-    
-export function NewProject() {
+
   const handleGenerateWithAI = async () => {
-    console.log('hello world')
     try {
-      // const response = await fetch('/api/createEmbeddingsFromPdfs', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-  
-      //   }),
-      // });
-
-      // if (!response.ok) {
-      //   throw new Error('Error generating embeddings');
-      // }
-
-      // const data = await response.json();
-      // console.log(data);
-      const jsonFormat = `{
-        "nombre": "string",
-        "descripcion": "string",
-        "costo": "number",
-        "transcripcion": "string",
-        "giro_empresa": "string"
-      }`;
-
       const response = await fetch('/api/generateAIResponse', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          query: `Descripción: Una aplicación web sencilla donde los usuarios pueden crear y gestionar listas de tareas. Cada lista de tareas puede compartirse con otros usuarios para que puedan colaborar en tiempo real. Los usuarios pueden agregar, editar, marcar como completadas o eliminar tareas. Además, el sistema enviará recordatorios y notificaciones a los usuarios cuando las fechas de vencimiento de las tareas se acerquen. La aplicación también permitirá asignar tareas a personas específicas dentro de un equipo y ver el progreso general de cada lista.`,
-          jsonFormat: jsonFormat
+          query: formData.descripcion,
+          jsonFormat: `{
+            "nombre": "string",
+            "descripcion": "string",
+            "costo": "number",
+            "transcripcion": "string",
+            "giro_empresa": "string"
+          }`
         }),
       });
 
@@ -83,13 +78,21 @@ export function NewProject() {
       }
 
       const data = await response.json();
-      console.log("Fetched json",data);
+      console.log("AI-generated project data:", data);
+      
+      // Update form with AI-generated data
+      setFormData(prev => ({
+        ...prev,
+        nombre: data.response.nombre || prev.nombre,
+        descripcion: data.response.descripcion || prev.descripcion,
+        transcripcion: data.response.transcripcion || prev.transcripcion,
+        giro_empresa: data.response.giro_empresa || prev.giro_empresa,
+      }));
       
     } catch (error) {
-      console.error('Error generating AI response ', error);
+      console.error('Error generating AI response:', error);
     }
   }
-
 
   return (
     <form onSubmit={handleSubmit}>
@@ -98,38 +101,48 @@ export function NewProject() {
         <AlertDialogDescription>
           <div className="space-y-4 mt-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">
                 Nombre
               </label>
-              <Input id="name" name="name" placeholder="Nombre del proyecto" />
+              <Input 
+                id="nombre" 
+                name="nombre" 
+                value={formData.nombre}
+                onChange={handleInputChange}
+                placeholder="Nombre del proyecto" 
+              />
             </div>
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="descripcion" className="block text-sm font-medium text-gray-700">
                 Descripción del proyecto
               </label>
               <Textarea
-                id="description"
-                name="description"
+                id="descripcion"
+                name="descripcion"
+                value={formData.descripcion}
+                onChange={handleInputChange}
                 placeholder="Escribe aquí a grandes rasgos las necesidades del cliente"
               />
             </div>
             <div>
-              <label htmlFor="transcription" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="transcripcion" className="block text-sm font-medium text-gray-700">
                 Transcripción de la reunión con el cliente (opcional)
               </label>
               <Textarea
-                id="transcription"
-                name="transcription"
+                id="transcripcion"
+                name="transcripcion"
+                value={formData.transcripcion}
+                onChange={handleInputChange}
                 placeholder="Copia y pega la transcripción de la videollamada con el cliente aquí (opcional)"
               />
             </div>
             <div className="flex space-x-4">
               <div className="flex-1">
-                <label htmlFor="sector" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="giro_empresa" className="block text-sm font-medium text-gray-700">
                   Giro de la empresa
                 </label>
-                <Select name="sector">
-                  <SelectTrigger id="sector">
+                <Select name="giro_empresa" onValueChange={handleSelectChange} value={formData.giro_empresa}>
+                  <SelectTrigger id="giro_empresa">
                     <SelectValue placeholder="Seleccionar" />
                   </SelectTrigger>
                   <SelectContent>
@@ -140,20 +153,19 @@ export function NewProject() {
                 </Select>
               </div>
               <div className="flex-1">
-                <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="fecha_inicio" className="block text-sm font-medium text-gray-700">
                   Fecha de inicio del proyecto
                 </label>
-                <DatePicker />
+                <DatePicker 
+                  onDateChange={handleDateChange} 
+                  selectedDate={formData.fecha_inicio || undefined}
+                />
               </div>
             </div>
           </div>
           <div className="space-y-4 mt-4">
             <div className="flex gap-1">
-
-              <AlertDialogAction type="submit" className="bg-blue-500 hover:bg-blue-600 text-white rounded-md">
-
               <AlertDialogAction className="bg-blue-500 hover:bg-blue-600 text-white rounded-md" onClick={handleGenerateWithAI}>
-
                 <Wand2Icon className="w-4 mr-1" />
                 Generar con inteligencia artificial
               </AlertDialogAction>
