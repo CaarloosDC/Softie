@@ -2,7 +2,7 @@
 "use client";
 
 import React from "react";
-import { Bell, Menu, Search, MoreVertical } from "lucide-react";
+import { Menu, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,10 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"; // Asegúrate de importar SheetContent
 import { PersonIcon } from "@radix-ui/react-icons";
-import { ModeToggle } from "../custom/mode-toggle";
 import { NotificationButton } from "../custom/notification-button";
 import { SidebarContent } from "./sidebar-content";
 
