@@ -1,10 +1,36 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import LoginImage from "@/components/custom/login-image";
 import LogoNeoris from "@/components/custom/logo-neoris";
+import { updatePassword } from "@/app/(auth)/login/actions";
 
 export default function PasswordRecoveryPage() {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match.");
+      return;
+    }
+    try {
+      await updatePassword(password);
+      setMessage("Password updated successfully.");
+      setTimeout(() => router.push("/login"), 2000);
+    } catch (error) {
+      console.error("Password update error:", error);
+      setMessage("An error occurred. Please try again.");
+    }
+  };
+
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
@@ -16,27 +42,36 @@ export default function PasswordRecoveryPage() {
               Ingresa una nueva contraseña para la recuperación de tu cuenta
             </p>
           </div>
-          <div className="grid gap-4">
-            {/* Contraseña */}
+          <form onSubmit={handleSubmit} className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="password">Contraseña</Label>
-              <Input id="password" type="password" required />
+              <Input
+                id="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
 
-            {/* Confirmar contraseña */}
             <div className="grid gap-2">
               <Label htmlFor="confirm-password">Confirma tu contraseña</Label>
-              <Input id="confirm-password" type="password" required />
+              <Input
+                id="confirm-password"
+                type="password"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
             </div>
 
-            {/* Botón para recuperar contraseña */}
             <Button type="submit" className="w-full bg-black">
               Recuperar contraseña
             </Button>
-          </div>
+          </form>
+          {message && <p className="text-center text-sm">{message}</p>}
         </div>
       </div>
-      {/* Imagen */}
       <LoginImage />
     </div>
   );

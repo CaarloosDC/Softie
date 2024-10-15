@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import Divider from "@/components/custom/divider";
 import LoginImage from "@/components/custom/login-image";
 import LogoNeoris from "@/components/custom/logo-neoris";
-import { login } from "./actions";
+import { login, googleLogin} from "./actions";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -23,12 +23,32 @@ export default function LoginPage() {
     formData.append("password", password);
     try {
       await login(formData);
-      router.push("/dashboard");
+      router.push("/projects");
     } catch (error) {
       console.error("Login error:", error);
       alert("An error occurred during login. Please try again.");
     }
   };
+
+  const handleGoogleLogin = async () => {
+    try {
+      console.log("Initiating Google login...");
+      const result = await googleLogin();
+      console.log("Google login result:", result);
+      
+      if (result?.url) {
+        // Redirect the user to the URL provided by Supabase
+        window.location.href = result.url;
+      } else {
+        console.error("No URL returned from googleLogin");
+        alert("An error occurred during Google login. Please try again.");
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+      alert("An error occurred during Google login. Please check the console for details.");
+    }
+  };
+
 
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
@@ -73,13 +93,18 @@ export default function LoginPage() {
             <Button type="submit" className="w-full">
               Iniciar sesión
             </Button>
-
-            <Divider />
-
-            <Button variant="outline" className="w-full">
-              Iniciar sesión con Google
-            </Button>
           </form>
+
+          <Divider />
+
+          <Button 
+            type="button"
+            variant="outline" 
+            className="w-full" 
+            onClick={handleGoogleLogin}
+          >
+            Iniciar sesión con Google
+          </Button>
 
           <div className="mt-4 text-center text-sm">
             ¿No tienes una cuenta?{" "}

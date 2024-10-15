@@ -1,10 +1,28 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import LoginImage from "@/components/custom/login-image";
 import LogoNeoris from "@/components/custom/logo-neoris";
+import { requestPasswordReset } from "@/app/(auth)/login/actions";
 
 export default function ForgotPasswordPage() {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      await requestPasswordReset(email);
+      setMessage("If an account exists for this email, a password reset link has been sent.");
+    } catch (error) {
+      console.error("Password reset request error:", error);
+      setMessage("An error occurred. Please try again.");
+    }
+  };
+
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
@@ -16,8 +34,7 @@ export default function ForgotPasswordPage() {
               Ingresa tu correo para la recuperación de tu cuenta
             </p>
           </div>
-          <div className="grid gap-4">
-            {/* Correo electrónico */}
+          <form onSubmit={handleSubmit} className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Correo electrónico</Label>
               <Input
@@ -25,17 +42,18 @@ export default function ForgotPasswordPage() {
                 type="email"
                 placeholder="ejemplo@correo.com"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
-            {/* Botón para recuperar contraseña */}
             <Button type="submit" className="w-full">
               Recuperar contraseña
             </Button>
-          </div>
+          </form>
+          {message && <p className="text-center text-sm">{message}</p>}
         </div>
       </div>
-      {/* Imagen */}
       <LoginImage />
     </div>
   );

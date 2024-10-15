@@ -21,7 +21,7 @@ export async function login(formData: FormData) {
     }
   
     revalidatePath('/', 'layout')
-    redirect('/dashboard')
+    redirect('/projects')
   }
   
   export async function signup(formData: any) {
@@ -41,7 +41,7 @@ export async function login(formData: FormData) {
       // Insert additional user data into the service_users table
       const supabaseAdmin = getAdminClient();
       const { error: insertError } = await supabaseAdmin
-        .from('usuarios_servicio')
+        .from('usuario_servicio')
         .insert({
           supabase_usuario: authData.user.id, 
           name: formData.name,
@@ -60,4 +60,45 @@ export async function login(formData: FormData) {
     redirect('/registration-success')
   }
 
+  export async function googleLogin() {
+    const supabase = createClient()
+    console.log("Starting Google OAuth process...");
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/projects`,
+      },
+    })
+    
+    if (error) {
+      console.error('Google login error:', error)
+      throw error
+    }
+    
+    console.log("OAuth initiation successful, data:", data);
+    return data
+  }
 
+  export async function requestPasswordReset(email: string) {
+    const supabase = createClient()
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/password-recovery`,
+    })
+
+    if (error) {
+      console.error('Password reset request error:', error)
+      throw error
+    }
+  }
+
+  export async function updatePassword(password: string) {
+    const supabase = createClient()
+    const { error } = await supabase.auth.updateUser({ password })
+
+    if (error) {
+      console.error('Password update error:', error)
+      throw error
+    }
+
+    revalidatePath('/', 'layout')
+  }
