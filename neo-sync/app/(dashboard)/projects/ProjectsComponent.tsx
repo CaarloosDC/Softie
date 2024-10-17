@@ -54,6 +54,8 @@ export default function ProjectsComponent({
       const newProject = await response.json();
       console.log("New project created:", newProject);
 
+      setFilteredProjects(prevProjects => [...prevProjects, newProject]);
+
       toast({
         title: "Project created",
         description: "Your new project has been successfully created.",
