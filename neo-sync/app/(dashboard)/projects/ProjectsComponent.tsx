@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Plus, SlidersHorizontal, ChevronDown, UserPlus } from "lucide-react";
+import { Plus, SlidersHorizontal, ChevronDown, UserPlus, Users } from "lucide-react";
 import SearchBar from "@/components/custom/Overview/SearchBar";
 import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
@@ -12,6 +12,7 @@ import BlueButton from "@/components/custom/BlueButton";
 import { Task } from "@/components/custom/Overview/Kanban/TaskCard";
 import { NewProject } from "@/components/custom/Alerts/NewProject";
 import { AddUser } from "@/components/custom/Alerts/AddUser";
+import UserManagement from '@/components/custom/Alerts/UserManagement';
 
 interface ProjectsComponentProps {
   projects: Task[];
@@ -53,10 +54,13 @@ export default function ProjectsComponent({
       const newProject = await response.json();
       console.log("New project created:", newProject);
 
+      setFilteredProjects(prevProjects => [...prevProjects, newProject]);
+
       toast({
         title: "Project created",
         description: "Your new project has been successfully created.",
       });
+      router.refresh();
 
       // Here you might want to update your local state or refetch projects
     } catch (error) {
@@ -122,7 +126,9 @@ export default function ProjectsComponent({
           >
             <AddUser onSubmit={handleAddUser} />
           </BlueButton>
-
+          <BlueButton text="Gestionar Usuarios" icon={<Users className="h-4 w-4" />}>
+          <UserManagement />
+          </BlueButton>
           <Button
             variant="outline"
             className="bg-gray-200 text-gray-700 hover:bg-gray-300 border-gray-300 rounded-md shadow-sm"
