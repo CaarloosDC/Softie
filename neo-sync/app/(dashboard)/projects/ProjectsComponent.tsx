@@ -125,7 +125,7 @@ export default function ProjectsComponent({
             <AddUser onSubmit={handleAddUser} />
           </BlueButton>
           <BlueButton text="Gestionar Usuarios" icon={<Users className="h-4 w-4" />}>
-            <UserManagement />
+          <UserManagement />
           </BlueButton>
           <Button
             variant="outline"
@@ -142,7 +142,6 @@ export default function ProjectsComponent({
         <CustomSeparator />
         <SearchBar onSearch={handleSearch} />
         <KanbanBoard data={filteredProjects} />
-        <UserManagement />
       </div>
     </div>
   );
