@@ -72,6 +72,9 @@ export function NewProject({ onSubmit }: NewProjectProps) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          query: JSON.stringify(requestBody.query),
+          jsonFormat: JSON.stringify(requestBody.jsonFormat),
+
         },
         body: JSON.stringify(requestBody),
       });
@@ -91,6 +94,7 @@ export function NewProject({ onSubmit }: NewProjectProps) {
         ...formData,
         ...data.response
       };
+
       console.log("Updated form data after AI generation:", JSON.stringify(updatedFormData, null, 2));
       setFormData(updatedFormData);
     } catch (error) {

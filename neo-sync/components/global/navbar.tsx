@@ -20,7 +20,6 @@ import { PersonIcon } from "@radix-ui/react-icons";
 import { ModeToggle } from "../custom/mode-toggle";
 import { NotificationButton } from "../custom/notification-button";
 import { SidebarContent } from "./sidebar-content";
-import { ModeToggle } from "../custom/mode-toggle";
 
 interface NavbarProps {
   userName: string;
