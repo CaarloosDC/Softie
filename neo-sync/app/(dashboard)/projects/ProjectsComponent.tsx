@@ -8,7 +8,6 @@ import { Plus, SlidersHorizontal, ChevronDown, UserPlus, Users } from "lucide-re
 import SearchBar from "@/components/custom/Overview/SearchBar";
 import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
-
 import BlueButton from "@/components/custom/BlueButton";
 import { Task } from "@/components/custom/Overview/Kanban/TaskCard";
 import { NewProject } from "@/components/custom/Alerts/NewProject";
@@ -59,6 +58,7 @@ export default function ProjectsComponent({
         title: "Project created",
         description: "Your new project has been successfully created.",
       });
+      router.refresh();
 
       // Here you might want to update your local state or refetch projects
     } catch (error) {
