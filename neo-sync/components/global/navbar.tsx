@@ -16,6 +16,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"; // As
 import { PersonIcon } from "@radix-ui/react-icons";
 import { NotificationButton } from "../custom/notification-button";
 import { SidebarContent } from "./sidebar-content";
+import { ModeToggle } from "../custom/mode-toggle";
 
 export function Navbar() {
   return (
@@ -50,7 +51,7 @@ export function Navbar() {
       </div>
 
       {/* Theme toggle de la página */}
-      {/* <ModeToggle /> */}
+      <ModeToggle />
 
       {/* Botón de notificaciones */}
       <NotificationButton />
