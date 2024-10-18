@@ -1,6 +1,8 @@
 import { supabaseClient } from "@/supabase/client";
 import { ollamaClient } from "../client/ollamaClient";
 import { createAndStoreEmbeddings } from "./generateEmbeddings";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { error } from "console";
 
 export async function generateAnswer(question: string, context: string, jsonFormat: string) {
   // Construct a prompt with the context
@@ -23,17 +25,31 @@ export async function generateAnswer(question: string, context: string, jsonForm
   // Convertir objeto a json para poder acceder a los valores
   const jsonResponse = JSON.parse(response.message.content);
 
-  const { error } = await supabaseClient.from("proyecto").insert([{
+  const { data, error } = await supabaseClient.from("proyecto").insert([{
     nombre: jsonResponse.nombre,
     descripcion: jsonResponse.descripcion,
     costo: jsonResponse.costo,
     transcripcion: jsonResponse.transcripcion,
     giro_empresa: jsonResponse.giro_empresa,
-  }])
+  }]).select("id");
 
   if (error) {
     console.error('Error storing project:', error);
     throw new Error('Failed to store project');
+  }
+
+  const projectID = data[0].id;
+
+  const requerimientos = jsonResponse.requerimientos.map((req: any) => ({
+    ...req,
+    proyecto_id: projectID
+  }))
+
+  const { error: reqError } = await supabaseClient.from("requerimiento").insert(requerimientos);
+
+  if (reqError) {
+    console.error('Error storing requirements:', reqError);
+    throw new Error('Failed to store requirements');
   }
 
   await createAndStoreEmbeddings(question, jsonResponse);
