@@ -7,7 +7,7 @@ interface RequirementInput {
   fecha_inicio: string;
   estatus: string;
   proyecto_id: number;
-  effort: string;
+  effort: number;
 }
 
 export async function createRequirement(requirementData: RequirementInput) {
