@@ -57,7 +57,15 @@ export function NewProject({ onSubmit }: NewProjectProps) {
       "descripcion": "string",
       "costo": "number",
       "transcripcion": "string",
-      "giro_empresa": "string"
+      "giro_empresa": "string",
+      "requerimientos": [
+        {
+          "nombre": "string",
+          "descripcion": "string",
+          "tipo": "string" // Puede ser "funcional", "no funcional", "restricción", etc.,
+          "effort": "number" // Numero entero que representa story points,
+        }
+      ]
     }`;
   
     const requestBody = {
@@ -72,9 +80,6 @@ export function NewProject({ onSubmit }: NewProjectProps) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          query: JSON.stringify(requestBody.query),
-          jsonFormat: JSON.stringify(requestBody.jsonFormat),
-
         },
         body: JSON.stringify(requestBody),
       });
