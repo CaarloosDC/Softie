@@ -104,19 +104,6 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
               {/* Task Title */}
               <CardTitle className="text-lg font-bold">{task.title}</CardTitle>
               {/* A smaller font for task title */}
-
-              {/* Button with drag handle (GripVertical icon) */}
-              <Button
-                variant={"ghost"} // Button with no background (ghost variant).
-                {...attributes} // Accessibility attributes for the drag button (e.g., aria-label).
-                {...listeners} // Drag listeners (onMouseDown, onTouchStart, etc.).
-                className="p-1 text-secondary-foreground/50 -ml-2 h-auto cursor-grab" // Styles for the drag handle button.
-              >
-                <span className="sr-only">Move task</span>{" "}
-                {/* Screen-reader only label */}
-                <GripVertical />{" "}
-                {/* Icon for drag handle (vertical grip lines) */}
-              </Button>
             </div>
 
             {/* Second Row: Task Content (description) */}
