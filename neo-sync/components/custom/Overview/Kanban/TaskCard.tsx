@@ -79,6 +79,8 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
     if (currentPath === "/projects") {
       // Navigate to /projects/1 if the route is /projects
       router.push("/projects/" + task.id);
+    } else if (currentPath === "/projects" + ) {
+
     } else {
       // Open the RightSideDrawer if the route is /projects/something
       setIsDrawerOpen(true);
