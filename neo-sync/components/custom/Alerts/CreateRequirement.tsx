@@ -31,7 +31,7 @@ export function CreateRequirement({ onSubmit, projectId }: CreateRequirementProp
     descripcion: '',
     tipo: '',
     fecha_inicio: undefined as Date | undefined,
-    effort: '',
+    esfuerzo_requerimiento: '',
     estatus: 'todo', // Add a default status
   });
 
@@ -116,14 +116,14 @@ export function CreateRequirement({ onSubmit, projectId }: CreateRequirementProp
               </div>
             </div>
             <div>
-              <label htmlFor="effort" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="esfuerzo_requerimiento" className="block text-sm font-medium text-gray-700">
                 Esfuerzo estimado (en horas)
               </label>
               <div className="flex space-x-2">
                 <Input
-                  id="effort"
-                  name="effort"
-                  value={formData.effort}
+                  id="esfuerzo_requerimiento"
+                  name="esfuerzo_requerimiento"
+                  value={formData.esfuerzo_requerimiento}
                   onChange={handleInputChange}
                   placeholder="Total de horas"
                 />

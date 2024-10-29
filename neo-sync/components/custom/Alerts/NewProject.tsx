@@ -63,7 +63,7 @@ export function NewProject({ onSubmit }: NewProjectProps) {
           "nombre": "string",
           "descripcion": "string",
           "tipo": "string" // Puede ser "funcional", "no funcional", "restricción", etc.,
-          "effort": "number" // Numero entero que representa story points,
+          "esfuerzo_requerimiento": "number" // Numero entero que representa story points,
         }
       ]
     }`;
