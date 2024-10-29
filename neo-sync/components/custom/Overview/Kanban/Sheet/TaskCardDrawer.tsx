@@ -1,10 +1,20 @@
+// TaskCardDrawer.tsx
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EstimationsCard } from "./EstimationsCard";
 import { RequirementDescription } from "./RequirementDescription";
+import { RequirementHeader } from "./RequirementHeader"; // New component
 import { useEffect, useState } from "react";
 import { Estimation } from "@/types/types";
 import { createClient } from '@/utils/supabase/client';
 import { TodoList } from "./TodoList";
+
+interface RequirementData {
+  id: string;
+  nombre: string;
+  tipo: "funcional" | "no funcional";
+  fecha_inicio: string | null;
+  estatus: string;
+}
 
 interface TaskCardDrawerProps {
   isOpen: boolean;
@@ -18,34 +28,60 @@ export default function TaskCardDrawer({
   requirementId,
 }: TaskCardDrawerProps) {
   const [estimationData, setEstimationData] = useState<Estimation | null>(null);
+  const [requirementData, setRequirementData] = useState<RequirementData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEstimationData = async () => {
+    const fetchData = async () => {
       const supabase = createClient();
-      const { data, error } = await supabase
-        .from('requerimiento')
-        .select('esfuerzo_requerimiento, tiempo_requerimiento, costo_requerimiento')
-        .eq('id', requirementId)
-        .single();
+      const [estimationResponse, requirementResponse] = await Promise.all([
+        supabase
+          .from('requerimiento')
+          .select('esfuerzo_requerimiento, tiempo_requerimiento, costo_requerimiento')
+          .eq('id', requirementId)
+          .single(),
+        supabase
+          .from('requerimiento')
+          .select('id, nombre, tipo, fecha_inicio, estatus')
+          .eq('id', requirementId)
+          .single()
+      ]);
 
-      if (error) {
-        console.error('Error fetching estimation data:', error);
-        setIsLoading(false);
-        return;
+      if (estimationResponse.error) {
+        console.error('Error fetching estimation data:', estimationResponse.error);
+      } else {
+        setEstimationData({
+          ...estimationResponse.data,
+          requerimiento_id: requirementId
+        });
       }
 
-      setEstimationData({
-        ...data,
-        requerimiento_id: requirementId
-      });
+      if (requirementResponse.error) {
+        console.error('Error fetching requirement data:', requirementResponse.error);
+      } else {
+        setRequirementData(requirementResponse.data);
+      }
+
       setIsLoading(false);
     };
 
     if (isOpen && requirementId) {
-      fetchEstimationData();
+      fetchData();
     }
   }, [isOpen, requirementId]);
+
+  if (isLoading) {
+    return (
+      <Sheet open={isOpen} onOpenChange={onClose}>
+        <SheetContent
+          side="right"
+          className="w-full max-w-[100vw] sm:max-w-[100vw] lg:max-w-[50vw] p-2"
+        >
+          <div>Loading...</div>
+        </SheetContent>
+      </Sheet>
+    );
+  }
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
@@ -53,8 +89,13 @@ export default function TaskCardDrawer({
         side="right"
         className="w-full max-w-[100vw] sm:max-w-[100vw] lg:max-w-[50vw] p-2 flex flex-col h-full"
       >
-        {/* Add RequirementDescription at the top */}
         <div className="flex-grow overflow-y-auto space-y-6">
+          {requirementData && (
+            <RequirementHeader 
+              data={requirementData}
+              onUpdate={(updatedData) => setRequirementData(updatedData)}
+            />
+          )}
           <RequirementDescription requirementId={requirementId} />
           <TodoList requirementId={requirementId} />
           
@@ -65,9 +106,7 @@ export default function TaskCardDrawer({
           </div>
 
           {/* Estimations section */}
-          {isLoading ? (
-            <div>Loading estimation data...</div>
-          ) : (
+          {estimationData && (
             <EstimationsCard 
               initialData={estimationData}
               requirementId={requirementId}
