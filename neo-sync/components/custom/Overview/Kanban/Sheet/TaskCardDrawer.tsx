@@ -4,6 +4,7 @@ import { RequirementDescription } from "./RequirementDescription";
 import { useEffect, useState } from "react";
 import { Estimation } from "@/types/types";
 import { createClient } from '@/utils/supabase/client';
+import { TodoList } from "./TodoList";
 
 interface TaskCardDrawerProps {
   isOpen: boolean;
@@ -55,6 +56,7 @@ export default function TaskCardDrawer({
         {/* Add RequirementDescription at the top */}
         <div className="flex-grow overflow-y-auto space-y-6">
           <RequirementDescription requirementId={requirementId} />
+          <TodoList requirementId={requirementId} />
           
           {/* Chat section */}
           <div className="p-4">
