@@ -1,35 +1,101 @@
-import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Pencil, Eye, Dumbbell, DollarSign, Clock } from "lucide-react"; // Importing lucide-react icons
-import CustomSeparator from "../../CustomSeparator";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Dumbbell, DollarSign, Clock } from "lucide-react";
+import { createClient } from '@/utils/supabase/client';
+import { toast } from "@/hooks/use-toast";
 import { EditableField } from "./EditableField";
+import CustomSeparator from "../../CustomSeparator";
+import { useRouter } from "next/navigation";
 
-export function EstimationsCard() {
-  const [isEditing, setIsEditing] = useState(false); // State to toggle between edit/view
+interface EstimationsCardProps {
+  initialData: {
+    esfuerzo_requerimiento: number | null;
+    tiempo_requerimiento: number | null;
+    costo_requerimiento: number | null;
+  } | null;
+  requirementId: string;
+}
 
-  const toggleEdit = () => {
-    setIsEditing(!isEditing);
+export function EstimationsCard({ initialData, requirementId }: EstimationsCardProps) {
+  const router = useRouter();
+  const [effort, setEffort] = useState(initialData?.esfuerzo_requerimiento ?? 0);
+  const [cost, setCost] = useState(initialData?.costo_requerimiento ?? 0);
+  const [time, setTime] = useState(initialData?.tiempo_requerimiento ?? 0);
+  const [isSaving, setIsSaving] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  useEffect(() => {
+    if (initialData) {
+      setEffort(initialData.esfuerzo_requerimiento ?? 0);
+      setCost(initialData.costo_requerimiento ?? 0);
+      setTime(initialData.tiempo_requerimiento ?? 0);
+    }
+  }, [initialData]);
+
+  const handleEffortChange = (value: number) => {
+    setEffort(value);
+    setHasChanges(true);
   };
 
-  //* Variable that shows effort
-  const [effort, setEffort] = useState(40);
-  const [cost, setCost] = useState(460);
-  const [time, setTime] = useState(2);
+  const handleCostChange = (value: number) => {
+    setCost(value);
+    setHasChanges(true);
+  };
+
+  const handleTimeChange = (value: number) => {
+    setTime(value);
+    setHasChanges(true);
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    console.log('Starting save process for requirement:', requirementId);
+    console.log('Data to save:', {
+      esfuerzo_requerimiento: effort,
+      tiempo_requerimiento: time,
+      costo_requerimiento: cost
+    });
+    
+    try {
+      const response = await fetch(`/api/requirements/${requirementId}/update`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          esfuerzo_requerimiento: effort,
+          tiempo_requerimiento: time,
+          costo_requerimiento: cost
+        }),
+      });
+
+      const result = await response.json();
+      console.log('Response from server:', result);
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to update requirement');
+      }
+
+      toast({
+        title: "Éxito",
+        description: "Estimaciones actualizadas correctamente",
+      });
+      
+      setHasChanges(false);
+      router.refresh();
+
+    } catch (error) {
+      console.error('Error updating estimations:', error);
+      toast({
+        title: "Error",
+        description: "No se pudieron actualizar las estimaciones: " + (error as Error).message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <Card className="w-full">
@@ -44,31 +110,34 @@ export function EstimationsCard() {
             title="Esfuerzo"
             unit="horas"
             numberValue={effort}
-            setNumberValue={setEffort}
+            setNumberValue={handleEffortChange}
           />
           <EditableField
             icon={DollarSign}
             title="Costo"
             unit="USD"
             numberValue={cost}
-            setNumberValue={setCost}
+            setNumberValue={handleCostChange}
           />
           <EditableField
             icon={Clock}
             title="Tiempo"
             unit="días"
             numberValue={time}
-            setNumberValue={setTime}
+            setNumberValue={handleTimeChange}
           />
         </div>
       </CardContent>
-      {isEditing && (
-        <CardFooter className="flex justify-end">
-          <Button variant="outline" onClick={toggleEdit}>
-            Guardar
-          </Button>
-        </CardFooter>
-      )}
+      <CardFooter className="flex justify-end">
+        <Button 
+          variant="outline" 
+          onClick={handleSave}
+          disabled={isSaving || !hasChanges}
+          className={hasChanges ? "bg-blue-500 text-white hover:bg-blue-600" : ""}
+        >
+          {isSaving ? "Guardando..." : "Guardar"}
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

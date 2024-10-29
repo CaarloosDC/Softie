@@ -1,3 +1,4 @@
+// EditableField.tsx
 import {
   Popover,
   PopoverContent,
@@ -7,25 +8,35 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Pencil } from "lucide-react";
-import { IconType } from "react-icons"; // Assuming lucide-react follows a similar pattern
+import { LucideIcon } from "lucide-react";
 
 interface NumberPopoverProps {
   numberValue: number;
   setNumberValue: (value: number) => void;
   label: string;
-  icon: IconType; // Accepting the icon as a prop
+  icon: LucideIcon;
 }
 
 export function NumberPopover({
   numberValue,
   setNumberValue,
   label,
-  icon: Icon, // Destructure the icon
+  icon: Icon,
 }: NumberPopoverProps) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value);
+    // Allow empty string to handle deletion
+    const inputValue = e.target.value;
+    
+    // If input is empty, set to 0 or you could set to empty string
+    if (inputValue === '') {
+      setNumberValue(0);
+      return;
+    }
+
+    // Convert to number only if it's a valid number
+    const value = parseFloat(inputValue);
     if (!isNaN(value)) {
-      setNumberValue(value); // Only set the value if it's a valid number
+      setNumberValue(value);
     }
   };
 
@@ -45,10 +56,16 @@ export function NumberPopover({
           <Label htmlFor="number-input">{label}</Label>
           <Input
             id="number-input"
-            type="number"
+            type="text" // Changed from 'number' to 'text'
             value={numberValue}
             onChange={handleInputChange}
             className="h-8"
+            // Allow only numbers and decimal point
+            onKeyPress={(e) => {
+              if (!/[\d.]/.test(e.key)) {
+                e.preventDefault();
+              }
+            }}
           />
         </div>
       </PopoverContent>
@@ -57,7 +74,7 @@ export function NumberPopover({
 }
 
 interface EditableFieldProps {
-  icon: IconType;
+  icon: LucideIcon;
   title: string;
   unit: string;
   numberValue: number;

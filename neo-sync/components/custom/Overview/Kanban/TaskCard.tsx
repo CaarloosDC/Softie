@@ -79,8 +79,6 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
     if (currentPath === "/projects") {
       // Navigate to /projects/1 if the route is /projects
       router.push("/projects/" + task.id);
-    } else if (currentPath === "/projects" + ) {
-
     } else {
       // Open the RightSideDrawer if the route is /projects/something
       setIsDrawerOpen(true);
@@ -143,11 +141,12 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
         </Card>
       </div>
       {isDrawerOpen && (
-        <TaskCardDrawer
-          isOpen={isDrawerOpen}
-          onClose={() => setIsDrawerOpen(false)}
-        />
-      )}
+  <TaskCardDrawer
+    isOpen={isDrawerOpen}
+    onClose={() => setIsDrawerOpen(false)}
+    requirementId={task.id as string} 
+  />
+)}
     </div>
   );
 }
