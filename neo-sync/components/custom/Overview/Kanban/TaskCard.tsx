@@ -141,11 +141,12 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
         </Card>
       </div>
       {isDrawerOpen && (
-        <TaskCardDrawer
-          isOpen={isDrawerOpen}
-          onClose={() => setIsDrawerOpen(false)}
-        />
-      )}
+  <TaskCardDrawer
+    isOpen={isDrawerOpen}
+    onClose={() => setIsDrawerOpen(false)}
+    requirementId={task.id as string} 
+  />
+)}
     </div>
   );
 }
