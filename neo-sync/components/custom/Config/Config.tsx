@@ -1,149 +1,149 @@
 import { Payment, columns } from "./columns";
 import { DataTable } from "./data-table";
 
-export default async function Config() {
-  const data = await getData();
+export default function Config() {
+  const data = getData();
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="mx-auto">
       <DataTable columns={columns} data={data} />
     </div>
   );
 }
 
-async function getData(): Promise<Payment[]> {
+function getData(): Payment[] {
   // Fetch data from your API here.
   return [
     {
       id: "728ed52f",
-      amount: 100,
-      status: "pending",
+      name: "María Pérez",
+      rol: "administrador",
       email: "m@example.com",
     },
     {
       id: "489e1d42",
-      amount: 125,
-      status: "processing",
+      name: "Juan López",
+      rol: "lider",
       email: "example@gmail.com",
     },
     {
       id: "a12b3c4d",
-      amount: 250,
-      status: "success",
+      name: "Ana Gómez",
+      rol: "usuario",
       email: "user1@yahoo.com",
     },
     {
       id: "b56c7d8e",
-      amount: 75,
-      status: "failed",
+      name: "Carlos Martínez",
+      rol: "usuario",
       email: "customer@outlook.com",
     },
     {
       id: "c90d1e2f",
-      amount: 300,
-      status: "pending",
+      name: "Lucía Fernández",
+      rol: "administrador",
       email: "client@domain.com",
     },
     {
       id: "d34e5f6g",
-      amount: 50,
-      status: "processing",
+      name: "Pedro Sánchez",
+      rol: "lider",
       email: "shopper@market.com",
     },
     {
       id: "e78f9g0h",
-      amount: 150,
-      status: "success",
+      name: "Sofía Ramírez",
+      rol: "usuario",
       email: "buyer@shop.com",
     },
     {
       id: "f12g3h4i",
-      amount: 200,
-      status: "pending",
+      name: "Diego Torres",
+      rol: "administrador",
       email: "subscriber@mail.com",
     },
     {
       id: "g56h7i8j",
-      amount: 175,
-      status: "failed",
+      name: "Laura Díaz",
+      rol: "usuario",
       email: "member@service.com",
     },
     {
       id: "h90i1j2k",
-      amount: 225,
-      status: "processing",
+      name: "Miguel Álvarez",
+      rol: "lider",
       email: "account@website.com",
     },
     {
       id: "i34j5k6l",
-      amount: 80,
-      status: "success",
+      name: "Elena Ruiz",
+      rol: "usuario",
       email: "user2@example.com",
     },
     {
       id: "j78k9l0m",
-      amount: 95,
-      status: "pending",
+      name: "Fernando Morales",
+      rol: "administrador",
       email: "subscriber2@mail.com",
     },
     {
       id: "k12l3m4n",
-      amount: 130,
-      status: "success",
+      name: "Valeria Ortiz",
+      rol: "usuario",
       email: "newuser@domain.com",
     },
     {
       id: "l56m7n8o",
-      amount: 60,
-      status: "failed",
+      name: "Andrés Castillo",
+      rol: "usuario",
       email: "another@example.com",
     },
     {
       id: "m90n1o2p",
-      amount: 210,
-      status: "processing",
+      name: "Carla Mendoza",
+      rol: "lider",
       email: "customer2@outlook.com",
     },
     {
       id: "n34o5p6q",
-      amount: 180,
-      status: "pending",
+      name: "Jorge Silva",
+      rol: "administrador",
       email: "shopuser@market.com",
     },
     {
       id: "o78p9q0r",
-      amount: 140,
-      status: "success",
+      name: "Paula Navarro",
+      rol: "usuario",
       email: "buyer2@shop.com",
     },
     {
       id: "p12q3r4s",
-      amount: 190,
-      status: "failed",
+      name: "Ricardo Vega",
+      rol: "usuario",
       email: "subscriber3@mail.com",
     },
     {
       id: "q56r7s8t",
-      amount: 160,
-      status: "processing",
+      name: "Natalia Romero",
+      rol: "lider",
       email: "member2@service.com",
     },
     {
       id: "r90s1t2u",
-      amount: 220,
-      status: "success",
+      name: "Héctor Guzmán",
+      rol: "administrador",
       email: "account2@website.com",
     },
     {
       id: "s34t5u6v",
-      amount: 85,
-      status: "pending",
+      name: "Isabella Herrera",
+      rol: "usuario",
       email: "user3@example.com",
     },
     {
       id: "t78u9v0w",
-      amount: 105,
-      status: "processing",
+      name: "Luis Fernández",
+      rol: "lider",
       email: "subscriber4@mail.com",
     },
   ];

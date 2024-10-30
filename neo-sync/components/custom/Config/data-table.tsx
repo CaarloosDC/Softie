@@ -74,10 +74,10 @@ export function DataTable<TData, TValue>({
   return (
     <>
       <div>
-        {/* The next div serves for filtering emails using search bar */}
+        {/* The next div serves for filtering emails using search bar and filtering columns */}
         <div className="flex items-center py-4">
           <Input
-            placeholder="Filter emails..."
+            placeholder="Filtrar emails..."
             value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("email")?.setFilterValue(event.target.value)
@@ -89,7 +89,7 @@ export function DataTable<TData, TValue>({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
-                Columns
+                Columnas
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

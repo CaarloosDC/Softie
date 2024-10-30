@@ -20,8 +20,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 //* Defines the type
 export type Payment = {
   id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
+  name: string;
+  rol: "administrador" | "lider" | "usuario";
   email: string;
 };
 
@@ -51,8 +51,8 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "name",
+    header: "Nombre",
   },
   {
     //* Here add a button in the header of the email to sort the emails shown
@@ -71,21 +71,19 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     //* With amount set the text to the right and add format of USD currency
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
+    accessorKey: "rol",
+    header: () => <div className="text-right">Rol</div>,
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
+      const amount: string = row.getValue("rol");
+      const formattedAmount =
+        amount.charAt(0).toUpperCase() + amount.slice(1).toLowerCase();
 
-      return <div className="text-right font-medium">{formatted}</div>;
+      return <div className="text-right font-medium">{formattedAmount}</div>;
     },
   },
   {
     //* We add the column actions without column title (because there is no header). Here shows a button that shows a dropdown menu.
-    id: "actions",
+    id: "Acciones",
     cell: ({ row }) => {
       const payment = row.original;
 
@@ -98,15 +96,16 @@ export const columns: ColumnDef<Payment>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(payment.id)}
             >
-              Copy payment ID
+              Editar rol
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive focus:bg-destructive focus:text-destructive-foreground">
+              Borrar Usuario
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
