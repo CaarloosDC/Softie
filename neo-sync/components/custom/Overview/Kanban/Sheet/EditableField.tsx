@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Pencil } from "lucide-react";
 import { LucideIcon } from "lucide-react";
+import { useState } from "react";
 
 interface NumberPopoverProps {
   numberValue: number;
@@ -23,25 +24,30 @@ export function NumberPopover({
   label,
   icon: Icon,
 }: NumberPopoverProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Allow empty string to handle deletion
     const inputValue = e.target.value;
     
-    // If input is empty, set to 0 or you could set to empty string
     if (inputValue === '') {
       setNumberValue(0);
       return;
     }
 
-    // Convert to number only if it's a valid number
     const value = parseFloat(inputValue);
     if (!isNaN(value)) {
       setNumberValue(value);
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setIsOpen(false);
+    }
+  };
+
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
           className="bg-gray-900 text-white p-2 rounded-lg hover:bg-gray-700 transition-colors"
@@ -56,16 +62,18 @@ export function NumberPopover({
           <Label htmlFor="number-input">{label}</Label>
           <Input
             id="number-input"
-            type="text" // Changed from 'number' to 'text'
+            type="text"
             value={numberValue}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             className="h-8"
-            // Allow only numbers and decimal point
             onKeyPress={(e) => {
               if (!/[\d.]/.test(e.key)) {
                 e.preventDefault();
               }
             }}
+            // Optional: Auto-focus the input when popover opens
+            autoFocus
           />
         </div>
       </PopoverContent>
