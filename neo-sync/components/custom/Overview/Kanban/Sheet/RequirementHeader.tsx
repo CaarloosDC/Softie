@@ -1,7 +1,7 @@
-// RequirementHeader.tsx
 import { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -34,18 +34,29 @@ interface RequirementHeaderProps {
 
 export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [nombre, setNombre] = useState(data.nombre);
   const [tipo, setTipo] = useState(data.tipo);
   const [startDate, setStartDate] = useState<Date | undefined>(
     data.fecha_inicio ? new Date(data.fecha_inicio) : undefined
   );
 
   const handleSave = async () => {
+    if (!nombre.trim()) {
+      toast({
+        title: "Error",
+        description: "El título no puede estar vacío",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const supabase = createClient();
     
     try {
       const { error } = await supabase
         .from('requerimiento')
         .update({
+          nombre: nombre.trim(),
           tipo: tipo,
           fecha_inicio: startDate?.toISOString() || null,
         })
@@ -55,6 +66,7 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
 
       onUpdate({
         ...data,
+        nombre: nombre.trim(),
         tipo: tipo,
         fecha_inicio: startDate?.toISOString() || null,
       });
@@ -75,12 +87,30 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
     }
   };
 
+  const handleCancel = () => {
+    setNombre(data.nombre);
+    setTipo(data.tipo);
+    setStartDate(data.fecha_inicio ? new Date(data.fecha_inicio) : undefined);
+    setIsEditing(false);
+  };
+
   return (
     <Card className="shadow-none border-none">
       <CardContent className="pt-6">
         <div className="space-y-4">
           {/* Title */}
-          <h2 className="text-2xl font-bold">{data.nombre}</h2>
+          <div className="flex items-center justify-between">
+            {isEditing ? (
+              <Input
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                className="text-2xl font-bold h-auto py-1 max-w-xl"
+                placeholder="Nombre del requerimiento"
+              />
+            ) : (
+              <h2 className="text-2xl font-bold">{nombre}</h2>
+            )}
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             {/* Left Column: Type */}
@@ -149,11 +179,7 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => {
-                      setTipo(data.tipo);
-                      setStartDate(data.fecha_inicio ? new Date(data.fecha_inicio) : undefined);
-                      setIsEditing(false);
-                    }}
+                    onClick={handleCancel}
                     className="h-8"
                   >
                     Cancelar
