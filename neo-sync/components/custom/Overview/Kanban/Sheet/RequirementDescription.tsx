@@ -6,6 +6,7 @@ import { createClient } from '@/utils/supabase/client';
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import CustomSeparator from "../../CustomSeparator";
+import { Pencil } from "lucide-react";
 
 interface RequirementDescriptionProps {
   requirementId: string;
@@ -92,13 +93,15 @@ export function RequirementDescription({ requirementId }: RequirementDescription
       <CardHeader className="flex flex-row justify-between items-center pb-2">
         <CardTitle>Descripción</CardTitle>
         {!isEditing ? (
-          <Button 
-            variant="outline"
-            onClick={() => setIsEditing(true)}
-            className="bg-gray-900 text-white hover:bg-gray-700"
-          >
-            Editar
-          </Button>
+                <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setIsEditing(true)}
+                className="h-8"
+              >
+                <Pencil className="h-4 w-4 mr-1" />
+                Editar
+              </Button>
         ) : null}
       </CardHeader>
       <CustomSeparator />

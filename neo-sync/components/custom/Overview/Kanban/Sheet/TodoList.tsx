@@ -9,6 +9,7 @@ import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import CustomSeparator from "../../CustomSeparator";
 import { Plus, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface TodoItem {
   id: number;
@@ -25,6 +26,44 @@ export function TodoList({ requirementId }: TodoListProps) {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [newTodoContent, setNewTodoContent] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+
+  const updateRequirementStatus = async (todosList: TodoItem[]) => {
+    // If there are no todos, status should be 'todo'
+    if (todosList.length === 0) {
+      await updateStatus('todo');
+      return;
+    }
+
+    const totalTodos = todosList.length;
+    const completedTodos = todosList.filter(todo => todo.status === 'done').length;
+
+    // If all todos are done, status should be 'done'
+    if (completedTodos === totalTodos && totalTodos > 0) {
+      await updateStatus('done');
+      return;
+    }
+
+    // If some todos are done but not all, status should be 'in-progress'
+    if (completedTodos > 0) {
+      await updateStatus('in-progress');
+      return;
+    }
+
+    // If no todos are done, status should be 'todo'
+    await updateStatus('todo');
+  };
+
+  const updateStatus = async (status: string) => {
+    const supabase = createClient();
+    const { error } = await supabase
+      .from('requerimiento')
+      .update({ estatus: status })
+      .eq('id', requirementId);
+
+    if (error) {
+      console.error('Error updating requirement status:', error);
+    }
+  };
 
   // Fetch todos
   useEffect(() => {
@@ -47,6 +86,7 @@ export function TodoList({ requirementId }: TodoListProps) {
       }
 
       setTodos(data || []);
+      updateRequirementStatus(data || []);
       setIsLoading(false);
     };
 
@@ -80,7 +120,9 @@ export function TodoList({ requirementId }: TodoListProps) {
       return;
     }
 
-    setTodos([...todos, data]);
+    const newTodos = [...todos, data];
+    setTodos(newTodos);
+    updateRequirementStatus(newTodos);
     setNewTodoContent('');
     toast({
       title: "Éxito",
@@ -108,9 +150,11 @@ export function TodoList({ requirementId }: TodoListProps) {
       return;
     }
 
-    setTodos(todos.map(todo => 
-      todo.id === todoId ? { ...todo, status: newStatus } : todo
-    ));
+    const updatedTodos = todos.map(todo => 
+      todo.id === todoId ? { ...todo, status: newStatus as 'todo' | 'done' } : todo
+    );
+    setTodos(updatedTodos);
+    updateRequirementStatus(updatedTodos);
   };
 
   // Delete todo
@@ -132,7 +176,9 @@ export function TodoList({ requirementId }: TodoListProps) {
       return;
     }
 
-    setTodos(todos.filter(todo => todo.id !== todoId));
+    const updatedTodos = todos.filter(todo => todo.id !== todoId);
+    setTodos(updatedTodos);
+    updateRequirementStatus(updatedTodos);
     toast({
       title: "Éxito",
       description: "Tarea eliminada correctamente",
@@ -156,7 +202,7 @@ export function TodoList({ requirementId }: TodoListProps) {
             placeholder="Nueva tarea..."
             value={newTodoContent}
             onChange={(e) => setNewTodoContent(e.target.value)}
-            onKeyPress={(e) => {
+            onKeyUp={(e) => {
               if (e.key === 'Enter') {
                 handleAddTodo();
               }
@@ -164,7 +210,7 @@ export function TodoList({ requirementId }: TodoListProps) {
           />
           <Button
             onClick={handleAddTodo}
-            className="bg-blue-500 text-white hover:bg-blue-600"
+            className="bg-blue-500 text-white hover:bg-blue-600 flex-shrink-0"
           >
             <Plus className="h-4 w-4" />
           </Button>
@@ -175,15 +221,20 @@ export function TodoList({ requirementId }: TodoListProps) {
           {todos.map((todo) => (
             <div
               key={todo.id}
-              className="flex items-center justify-between p-2 rounded-lg bg-gray-50 hover:bg-gray-100"
+              className="flex items-start justify-between p-2 rounded-lg bg-gray-50 hover:bg-gray-100"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-start gap-2 min-w-0 mr-2 flex-1">
                 <Checkbox
                   checked={todo.status === 'done'}
                   onCheckedChange={() => handleToggleTodo(todo.id, todo.status)}
-                  className="h-4 w-4"
+                  className="h-4 w-4 mt-1 flex-shrink-0"
                 />
-                <span className={todo.status === 'done' ? 'line-through text-gray-500' : ''}>
+                <span 
+                  className={cn(
+                    "break-all pr-2",
+                    todo.status === 'done' ? 'line-through text-gray-500' : ''
+                  )}
+                >
                   {todo.content}
                 </span>
               </div>
@@ -191,7 +242,7 @@ export function TodoList({ requirementId }: TodoListProps) {
                 variant="ghost"
                 size="sm"
                 onClick={() => handleDeleteTodo(todo.id)}
-                className="text-red-500 hover:text-red-700"
+                className="text-red-500 hover:text-red-700 flex-shrink-0 ml-auto"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
