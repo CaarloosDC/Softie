@@ -76,7 +76,7 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
   };
 
   return (
-    <Card>
+    <Card className="shadow-none border-none">
       <CardContent className="pt-6">
         <div className="space-y-4">
           {/* Title */}
