@@ -70,7 +70,7 @@ const menuData: MenuData = {
   ],
   settings: [
     {
-      href: "#",
+      href: "/config",
       icon: GearIcon,
       label: "Configuración",
     },
