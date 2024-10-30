@@ -1,5 +1,12 @@
+import Config from "@/components/custom/Config/Config";
 import React from "react";
 
 export default async function ProjectsPage() {
-  return <div>Hola</div>;
+  return (
+    <>
+      <div className="p-4">
+        <Config />
+      </div>
+    </>
+  );
 }
