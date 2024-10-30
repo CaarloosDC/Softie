@@ -12,7 +12,7 @@ const Container: React.FC<ContainerProps> = ({ children }) => {
   const content = childrenArray.slice(1);
 
   return (
-    <div className="flex flex-col gap-5 p-4 lg:gap-6 lg:p-6 mx-auto">
+    <div className="flex flex-col gap-5 p-4 lg:gap-6 lg:p-6 mx-auto w-full">
       {header}
       <CustomSeparator />
       <div className="flex flex-col gap-3 rounded-lg">{content}</div>

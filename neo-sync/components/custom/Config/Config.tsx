@@ -5,7 +5,7 @@ export default function Config() {
   const data = getData();
 
   return (
-    <div className="mx-auto">
+    <div className="w-full">
       <DataTable columns={columns} data={data} />
     </div>
   );
