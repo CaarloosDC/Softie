@@ -11,6 +11,11 @@ import CustomSeparator from "../../CustomSeparator";
 import { Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+interface TodoCounts {
+  total: number;
+  completed: number;
+}
+
 interface TodoItem {
   id: number;
   content: string;
@@ -19,9 +24,10 @@ interface TodoItem {
 
 interface TodoListProps {
   requirementId: string;
+  onTodoCountsChange?: (counts: TodoCounts) => void;
 }
 
-export function TodoList({ requirementId }: TodoListProps) {
+export function TodoList({ requirementId, onTodoCountsChange }: TodoListProps) {
   const router = useRouter();
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [newTodoContent, setNewTodoContent] = useState('');
@@ -65,6 +71,14 @@ export function TodoList({ requirementId }: TodoListProps) {
     }
   };
 
+  const updateTodoCounts = (todosList: TodoItem[]) => {
+    const total = todosList.length;
+    const completed = todosList.filter(todo => todo.status === 'done').length;
+    if (onTodoCountsChange) {
+      onTodoCountsChange({ total, completed });
+    }
+  };
+
   // Fetch todos
   useEffect(() => {
     const fetchTodos = async () => {
@@ -87,6 +101,7 @@ export function TodoList({ requirementId }: TodoListProps) {
 
       setTodos(data || []);
       updateRequirementStatus(data || []);
+      updateTodoCounts(data || []); // Add this line
       setIsLoading(false);
     };
 
@@ -123,6 +138,7 @@ export function TodoList({ requirementId }: TodoListProps) {
     const newTodos = [...todos, data];
     setTodos(newTodos);
     updateRequirementStatus(newTodos);
+    updateTodoCounts(newTodos); // Add this line
     setNewTodoContent('');
     toast({
       title: "Éxito",
@@ -133,6 +149,7 @@ export function TodoList({ requirementId }: TodoListProps) {
   // Toggle todo status
   const handleToggleTodo = async (todoId: number, currentStatus: 'todo' | 'done') => {
     const newStatus = currentStatus === 'todo' ? 'done' : 'todo';
+    
     const supabase = createClient();
     
     const { error } = await supabase
@@ -155,6 +172,7 @@ export function TodoList({ requirementId }: TodoListProps) {
     );
     setTodos(updatedTodos);
     updateRequirementStatus(updatedTodos);
+    updateTodoCounts(updatedTodos); // Add this line
   };
 
   // Delete todo
@@ -179,6 +197,7 @@ export function TodoList({ requirementId }: TodoListProps) {
     const updatedTodos = todos.filter(todo => todo.id !== todoId);
     setTodos(updatedTodos);
     updateRequirementStatus(updatedTodos);
+    updateTodoCounts(updatedTodos); // Add this line
     toast({
       title: "Éxito",
       description: "Tarea eliminada correctamente",
