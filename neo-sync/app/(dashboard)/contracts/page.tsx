@@ -7,8 +7,33 @@ import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
 import { NewContract } from "@/components/custom/Alerts/NewContract";
 import ContractsList from "@/components/custom/Contracts/ContractsList";
+import Container from "@/components/global/Container/Container";
+import Header from "@/components/global/Container/Header";
 
 export default function ContractsPage() {
+  //* Use parent container to render title and content
+  return (
+    <Container>
+      <Header title="Contratos Marco">
+        <BlueButton text="Nuevo Contrato" icon={<Plus className="h-4 w-4" />}>
+          <NewContract />
+        </BlueButton>
+        <Button
+          variant="outline"
+          className="bg-gray-200 text-gray-700 hover:bg-gray-300 border-gray-300 rounded-md shadow-sm"
+        >
+          <SlidersHorizontal className="mr-2 h-4 w-4" />
+          Filtrar contratos
+          <ChevronDown className="ml-2 h-4 w-4" />
+        </Button>
+      </Header>
+
+      {/* Content */}
+      <ContractsList />
+    </Container>
+  );
+
+  //* Old way of rendering content, without parent container
   return (
     <div className="flex flex-col w-full gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
       {/* Header */}

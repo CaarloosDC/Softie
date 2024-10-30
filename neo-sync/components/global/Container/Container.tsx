@@ -6,7 +6,7 @@ interface ContainerProps {
 
 //* Container that renders header and the child elements.
 const Container: React.FC<ContainerProps> = ({ children }) => {
-  //* Extract the first child as the header and the rest show as content
+  //* Extract the first child as the header and the rest show content
   const childrenArray = React.Children.toArray(children);
   const header = childrenArray[0];
   const content = childrenArray.slice(1);

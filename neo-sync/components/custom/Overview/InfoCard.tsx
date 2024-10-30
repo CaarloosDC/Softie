@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 
-interface ProjectInfo {
+export interface ProjectInfo {
   id: string;
   nombre: string;
   descripcion: string;

@@ -8,6 +8,8 @@ import BlueButton from "@/components/custom/BlueButton";
 import { AddUser } from "@/components/custom/Alerts/AddUser";
 import { UserPlus } from "lucide-react";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
+import Header from "@/components/global/Container/Header";
+import Container from "@/components/global/Container/Container";
 
 export default function ProjectsPage() {
   const handleAddUser = async (userData: any) => {
@@ -47,6 +49,24 @@ export default function ProjectsPage() {
     }
   };
 
+  //* Use parent container to render title and content
+  return (
+    <Container>
+      <Header title="Roles">
+        <BlueButton
+          text="Agregar Usuario"
+          icon={<UserPlus className="h-4 w-4" />}
+        >
+          <AddUser onSubmit={handleAddUser} />
+        </BlueButton>
+      </Header>
+
+      {/* Content */}
+      <Config />
+    </Container>
+  );
+
+  //* Old way of rendering content, without parent container
   return (
     //* Shows main component
     <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">

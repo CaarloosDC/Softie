@@ -64,7 +64,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
   const variants = cva(
     // "h-[500px] max-h-[500px] w-[350px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center",
     // "w-[370px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center border-none",
-    "h-[500px] max-h-[500px] w-[370px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center border-none",
+    "max-h-[500px] w-[370px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center border-none",
 
     {
       variants: {
@@ -123,7 +123,7 @@ export function BoardContainer({ children }: { children: React.ReactNode }) {
       })}
     >
       {/* <div className="flex gap-4 items-center flex-row justify-center"> */}
-      <div className="flex gap-4 items-start justify-center">
+      <div className="flex flex-row flex-wrap gap-4 justify-center">
         {/* Render the columns passed as children. */}
         {children}
       </div>
