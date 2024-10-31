@@ -7,12 +7,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({ message: "Method not allowed" });
     }
 
-    const { query, jsonFormat } = req.body;
+    const { query, jsonFormat, additionalData } = req.body;
 
     try {
         const docs = await retrieveRelevantDocs(query);
         const context = docs.map((doc: { content: any; }) => doc.content).join('\n');
-        const response = await generateAnswer(query, context, jsonFormat);
+        const response = await generateAnswer(query, context, jsonFormat, additionalData);
 
         res.status(200).json({ response });
     } catch (error) {
