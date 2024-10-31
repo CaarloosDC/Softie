@@ -85,6 +85,7 @@ export function NewContract() {
               </label>
               <div className="flex items-center space-x-2">
                 <Button
+                  size={"sm"}
                   variant="outline"
                   onClick={() =>
                     document.getElementById("file-upload")?.click()

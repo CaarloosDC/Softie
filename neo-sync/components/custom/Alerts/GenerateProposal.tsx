@@ -34,7 +34,7 @@ export default function GenerateProposal() {
       {/* Header */}
       <AlertDialogHeader className="text-center">
         <AlertDialogTitle className="text-xl font-bold">
-          Resumen Propuesta
+          Resumen de la propuesta
         </AlertDialogTitle>
       </AlertDialogHeader>
 
@@ -86,6 +86,7 @@ export default function GenerateProposal() {
         </div>
         {/* AI Button */}
         <Button
+          size={"sm"}
           variant="default"
           className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-md"
         >
@@ -99,9 +100,8 @@ export default function GenerateProposal() {
       {/* Footer Section for create/cancel buttons */}
       <AlertDialogFooter className="flex flex-col">
         <AlertDialogCancel className="w-1/2">Cerrar</AlertDialogCancel>
-        <AlertDialogAction className="w-1/2 bg-gray-800 hover:bg-gray-700 text-white rounded-md">
-          <FileText className="w-3 h-3" />
-          Generar propuesta
+        <AlertDialogAction className="w-1/2">
+          <FileText className="w-3 h-3 mr-2" /> Generar propuesta
         </AlertDialogAction>
       </AlertDialogFooter>
     </>

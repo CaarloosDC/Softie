@@ -16,8 +16,8 @@ const BlueButton: React.FC<BlueButtonProps> = ({ text, icon, children }) => {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
+          size={"sm"}
           variant="default"
-          className="bg-gray-800 hover:bg-gray-700 text-white rounded-md px-4 py-2 text-sm font-medium flex items-center"
         >
           {icon && <span className="mr-2">{icon}</span>}
           {text}

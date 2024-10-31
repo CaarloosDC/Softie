@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   AlertDialogHeader,
   AlertDialogTitle,
@@ -25,27 +25,32 @@ interface CreateRequirementProps {
   projectId: number; // Add this prop to receive the project ID
 }
 
-export function CreateRequirement({ onSubmit, projectId }: CreateRequirementProps) {
+export function CreateRequirement({
+  onSubmit,
+  projectId,
+}: CreateRequirementProps) {
   const [formData, setFormData] = useState({
-    nombre: '',
-    descripcion: '',
-    tipo: '',
+    nombre: "",
+    descripcion: "",
+    tipo: "",
     fecha_inicio: undefined as Date | undefined,
-    esfuerzo_requerimiento: '',
-    estatus: 'todo', // Add a default status
+    esfuerzo_requerimiento: "",
+    estatus: "todo", // Add a default status
   });
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target;
-    setFormData(prevData => ({ ...prevData, [name]: value }));
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSelectChange = (value: string) => {
-    setFormData(prevData => ({ ...prevData, tipo: value }));
+    setFormData((prevData) => ({ ...prevData, tipo: value }));
   };
 
   const handleDateChange = (date: Date | undefined) => {
-    setFormData(prevData => ({...prevData, fecha_inicio: date }));
+    setFormData((prevData) => ({ ...prevData, fecha_inicio: date }));
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -53,9 +58,11 @@ export function CreateRequirement({ onSubmit, projectId }: CreateRequirementProp
     const submitData = {
       ...formData,
       proyecto_id: projectId, // Include the project ID
-      fecha_inicio: formData.fecha_inicio ? formData.fecha_inicio.toISOString().split('T')[0] : null,
+      fecha_inicio: formData.fecha_inicio
+        ? formData.fecha_inicio.toISOString().split("T")[0]
+        : null,
     };
-    console.log('Submitting requirement data:', submitData);
+    console.log("Submitting requirement data:", submitData);
     await onSubmit(submitData);
   };
 
@@ -66,7 +73,10 @@ export function CreateRequirement({ onSubmit, projectId }: CreateRequirementProp
         <AlertDialogDescription>
           <div className="space-y-4 mt-4">
             <div>
-              <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="nombre"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Nombre
               </label>
               <Input
@@ -78,7 +88,10 @@ export function CreateRequirement({ onSubmit, projectId }: CreateRequirementProp
               />
             </div>
             <div>
-              <label htmlFor="descripcion" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="descripcion"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Descripción
               </label>
               <Textarea
@@ -91,10 +104,17 @@ export function CreateRequirement({ onSubmit, projectId }: CreateRequirementProp
             </div>
             <div className="flex gap-2">
               <div className="w-1/2">
-                <label htmlFor="tipo" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="tipo"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Tipo de requerimiento
                 </label>
-                <Select name="tipo" value={formData.tipo} onValueChange={handleSelectChange}>
+                <Select
+                  name="tipo"
+                  value={formData.tipo}
+                  onValueChange={handleSelectChange}
+                >
                   <SelectTrigger id="tipo" className="w-full">
                     <SelectValue placeholder="Seleccionar" />
                   </SelectTrigger>
@@ -106,17 +126,23 @@ export function CreateRequirement({ onSubmit, projectId }: CreateRequirementProp
                 </Select>
               </div>
               <div className="w-1/2">
-                <label htmlFor="fecha_inicio" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="fecha_inicio"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Fecha de inicio del proceso
                 </label>
-                <DatePicker 
+                <DatePicker
                   selectedDate={formData.fecha_inicio}
                   onDateChange={handleDateChange}
                 />
               </div>
             </div>
             <div>
-              <label htmlFor="esfuerzo_requerimiento" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="esfuerzo_requerimiento"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Esfuerzo estimado (en horas)
               </label>
               <div className="flex space-x-2">
@@ -128,6 +154,7 @@ export function CreateRequirement({ onSubmit, projectId }: CreateRequirementProp
                   placeholder="Total de horas"
                 />
                 <Button
+                  size={"sm"}
                   type="button"
                   variant="default"
                   className="bg-blue-500 hover:bg-blue-600 text-white rounded-md"
@@ -140,7 +167,9 @@ export function CreateRequirement({ onSubmit, projectId }: CreateRequirementProp
           </div>
           <AlertDialogFooter className="mt-4">
             <AlertDialogCancel className="w-1/2">Cancelar</AlertDialogCancel>
-            <AlertDialogAction type="submit" className="w-1/2 bg-gray-800 hover:bg-gray-700 text-white rounded-md">
+            <AlertDialogAction
+              type="submit" className="w-1/2"
+            >
               Crear
             </AlertDialogAction>
           </AlertDialogFooter>

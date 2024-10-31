@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dumbbell, DollarSign, Clock } from "lucide-react";
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from "@/utils/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { EditableField } from "./EditableField";
 import CustomSeparator from "../../CustomSeparator";
@@ -17,9 +23,14 @@ interface EstimationsCardProps {
   requirementId: string;
 }
 
-export function EstimationsCard({ initialData, requirementId }: EstimationsCardProps) {
+export function EstimationsCard({
+  initialData,
+  requirementId,
+}: EstimationsCardProps) {
   const router = useRouter();
-  const [effort, setEffort] = useState(initialData?.esfuerzo_requerimiento ?? 0);
+  const [effort, setEffort] = useState(
+    initialData?.esfuerzo_requerimiento ?? 0
+  );
   const [cost, setCost] = useState(initialData?.costo_requerimiento ?? 0);
   const [time, setTime] = useState(initialData?.tiempo_requerimiento ?? 0);
   const [isSaving, setIsSaving] = useState(false);
@@ -50,46 +61,50 @@ export function EstimationsCard({ initialData, requirementId }: EstimationsCardP
 
   const handleSave = async () => {
     setIsSaving(true);
-    console.log('Starting save process for requirement:', requirementId);
-    console.log('Data to save:', {
+    console.log("Starting save process for requirement:", requirementId);
+    console.log("Data to save:", {
       esfuerzo_requerimiento: effort,
       tiempo_requerimiento: time,
-      costo_requerimiento: cost
+      costo_requerimiento: cost,
     });
-    
+
     try {
-      const response = await fetch(`/api/requirements/${requirementId}/update`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          esfuerzo_requerimiento: effort,
-          tiempo_requerimiento: time,
-          costo_requerimiento: cost
-        }),
-      });
+      const response = await fetch(
+        `/api/requirements/${requirementId}/update`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            esfuerzo_requerimiento: effort,
+            tiempo_requerimiento: time,
+            costo_requerimiento: cost,
+          }),
+        }
+      );
 
       const result = await response.json();
-      console.log('Response from server:', result);
+      console.log("Response from server:", result);
 
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to update requirement');
+        throw new Error(result.error || "Failed to update requirement");
       }
 
       toast({
         title: "Éxito",
         description: "Estimaciones actualizadas correctamente",
       });
-      
+
       setHasChanges(false);
       router.refresh();
-
     } catch (error) {
-      console.error('Error updating estimations:', error);
+      console.error("Error updating estimations:", error);
       toast({
         title: "Error",
-        description: "No se pudieron actualizar las estimaciones: " + (error as Error).message,
+        description:
+          "No se pudieron actualizar las estimaciones: " +
+          (error as Error).message,
         variant: "destructive",
       });
     } finally {
@@ -129,14 +144,11 @@ export function EstimationsCard({ initialData, requirementId }: EstimationsCardP
         </div>
       </CardContent>
       <CardFooter className="flex justify-end">
-        <Button 
-          variant="outline" 
-          onClick={handleSave}
-          disabled={isSaving || !hasChanges}
-          className={hasChanges ? "bg-blue-500 text-white hover:bg-blue-600" : ""}
-        >
-          {isSaving ? "Guardando..." : "Guardar"}
-        </Button>
+        {hasChanges && (
+          <Button variant="outline" onClick={handleSave} disabled={isSaving}>
+            {isSaving ? "Guardando..." : "Guardar"}
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

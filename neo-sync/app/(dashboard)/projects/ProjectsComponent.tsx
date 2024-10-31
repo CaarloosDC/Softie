@@ -124,7 +124,7 @@ export default function ProjectsComponent({
   return (
     <Container>
       <Header title="Dashboard">
-        <BlueButton text="Nuevo Proyecto" icon={<Plus className="h-4 w-4" />}>
+        <BlueButton text="Nuevo proyecto" icon={<Plus className="h-4 w-4" />}>
           <NewProject onSubmit={handleCreateProject} />
         </BlueButton>
       </Header>
@@ -139,22 +139,23 @@ export default function ProjectsComponent({
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
       <Header title="Dashboard">
-        <BlueButton text="Nuevo Proyecto" icon={<Plus className="h-4 w-4" />}>
+        <BlueButton text="Nuevo proyecto" icon={<Plus className="h-4 w-4" />}>
           <NewProject onSubmit={handleCreateProject} />
         </BlueButton>
         <BlueButton
-          text="Agregar Usuario"
+          text="Agregar usuario"
           icon={<UserPlus className="h-4 w-4" />}
         >
           <AddUser onSubmit={handleAddUser} />
         </BlueButton>
         <BlueButton
-          text="Gestionar Usuarios"
+          text="Gestionar usuarios"
           icon={<Users className="h-4 w-4" />}
         >
           <UserManagement />
         </BlueButton>
         <Button
+          size={"sm"}
           variant="outline"
           className="bg-gray-200 text-gray-700 hover:bg-gray-300 border-gray-300 rounded-md shadow-sm"
         >

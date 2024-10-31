@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,33 +15,32 @@ import {
 import Divider from "@/components/custom/divider";
 import LoginImage from "@/components/custom/login-image";
 import LogoNeoris from "@/components/custom/logo-neoris";
-import { signup } from '../login/actions'
-;
+import { signup } from "../login/actions";
 
 export default function CreateAccountPage() {
   const [formData, setFormData] = useState({
-    name: '',
-    role: '',
-    expertiseLevel: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: ''
+    name: "",
+    role: "",
+    expertiseLevel: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
   });
   const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -53,10 +52,10 @@ export default function CreateAccountPage() {
     }
     try {
       await signup(formData);
-      router.push('/registration-success'); 
+      router.push("/registration-success");
     } catch (error) {
-      console.error('Signup error:', error);
-      alert('An error occurred during signup. Please try again.');
+      console.error("Signup error:", error);
+      alert("An error occurred during signup. Please try again.");
     }
   };
 
@@ -72,12 +71,21 @@ export default function CreateAccountPage() {
           <form onSubmit={handleSubmit} className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="name">Nombre Completo</Label>
-              <Input id="name" name="name" type="text" placeholder="Tu nombre completo" required onChange={handleInputChange} />
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Tu nombre completo"
+                required
+                onChange={handleInputChange}
+              />
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="role">Rol en la empresa</Label>
-              <Select onValueChange={(value) => handleSelectChange('role', value)}>
+              <Select
+                onValueChange={(value) => handleSelectChange("role", value)}
+              >
                 <SelectTrigger id="role" className="w-full">
                   <SelectValue placeholder="Selecciona rol en la empresa" />
                 </SelectTrigger>
@@ -92,7 +100,11 @@ export default function CreateAccountPage() {
 
             <div className="grid gap-2">
               <Label htmlFor="expertiseLevel">Nivel de expertiz</Label>
-              <Select onValueChange={(value) => handleSelectChange('expertiseLevel', value)}>
+              <Select
+                onValueChange={(value) =>
+                  handleSelectChange("expertiseLevel", value)
+                }
+              >
                 <SelectTrigger id="expertiseLevel" className="w-full">
                   <SelectValue placeholder="Selecciona nivel de expertiz" />
                 </SelectTrigger>
@@ -119,28 +131,46 @@ export default function CreateAccountPage() {
                 </div>
                 <div className="w-1/2">
                   <Label htmlFor="phone">Teléfono</Label>
-                  <Input id="phone" name="phone" type="tel" placeholder="+52 123 4567890" onChange={handleInputChange} />
+                  <Input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    placeholder="+52 123 4567890"
+                    onChange={handleInputChange}
+                  />
                 </div>
               </div>
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="password">Contraseña</Label>
-              <Input id="password" name="password" type="password" required onChange={handleInputChange} />
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                required
+                onChange={handleInputChange}
+              />
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="confirmPassword">Confirma tu contraseña</Label>
-              <Input id="confirmPassword" name="confirmPassword" type="password" required onChange={handleInputChange} />
+              <Input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                required
+                onChange={handleInputChange}
+              />
             </div>
 
-            <Button type="submit" className="w-full bg-black">
+            <Button size={"sm"} type="submit" className="w-full bg-black">
               Crear cuenta
             </Button>
 
             <Divider />
 
-            <Button variant="outline" className="w-full">
+            <Button size={"sm"} variant="outline" className="w-full">
               Google
             </Button>
           </form>
