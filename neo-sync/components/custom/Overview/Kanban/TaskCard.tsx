@@ -73,8 +73,13 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
   const currentPath = usePathname();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  // Add function to fetch todo counts
+  // Check if we're in a project's requirements view
+  const isInProjectRequirements = currentPath?.includes('/projects/');
+
+  // Only fetch todo counts if we're in a project's requirements view
   const fetchTodoCounts = async () => {
+    if (!isInProjectRequirements) return;
+
     const supabase = createClient();
     const { data, error } = await supabase
       .from('todo_list')
@@ -91,11 +96,12 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
     setTodoCounts({ total, completed });
   };
 
-  // Add useEffect to fetch counts and setup subscription
+  // Only set up subscription if we're in a project's requirements view
   useEffect(() => {
+    if (!isInProjectRequirements) return;
+
     fetchTodoCounts();
 
-    // Set up real-time subscription
     const supabase = createClient();
     const channel = supabase
       .channel(`todo-changes-${task.id}`)
@@ -109,11 +115,10 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
       })
       .subscribe();
 
-    // Cleanup subscription
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [task.id]);
+  }, [task.id, isInProjectRequirements]);
 
   const handleClick = () => {
     if (currentPath === "/projects") {
@@ -153,12 +158,15 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
                   <LinkIcon className="h-4 w-4" />
                   <span className="text-sm">5</span>
                 </div>
-                <div className="flex items-center space-x-1">
-                  <CheckSquare className="h-4 w-4" />
-                  <span className="text-sm">
-                    {todoCounts.completed}/{todoCounts.total}
-                  </span>
-                </div>
+                {/* Only show todo counter in project requirements view */}
+                {isInProjectRequirements && (
+                  <div className="flex items-center space-x-1">
+                    <CheckSquare className="h-4 w-4" />
+                    <span className="text-sm">
+                      {todoCounts.completed}/{todoCounts.total}
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="flex -space-x-2">
