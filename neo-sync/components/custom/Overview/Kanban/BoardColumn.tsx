@@ -64,7 +64,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
   const variants = cva(
     // "h-[500px] max-h-[500px] w-[350px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center",
     // "w-[370px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center border-none",
-    "max-h-[500px] w-[370px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center border-none",
+    "lg:max-h-[650px] md:max-h-[450] w-[370px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center border-none",
 
     {
       variants: {
