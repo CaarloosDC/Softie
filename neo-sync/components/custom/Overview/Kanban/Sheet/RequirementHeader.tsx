@@ -108,14 +108,14 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
                 placeholder="Nombre del requerimiento"
               />
             ) : (
-              <h2 className="text-2xl font-bold">{nombre}</h2>
+              <h1 className="text-3xl font-bold">{nombre}</h1>
             )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             {/* Left Column: Type */}
             <div className="space-y-1">
-              <p className="text-sm font-medium">Tipo</p>
+              <p className="font-semibold">Tipo de requerimiento</p>
               {isEditing ? (
                 <Select
                   value={tipo}
@@ -128,25 +128,29 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="funcional">Funcional</SelectItem>
-                    <SelectItem value="no funcional">No Funcional</SelectItem>
+                    <SelectItem value="no funcional">No funcional</SelectItem>
                   </SelectContent>
                 </Select>
               ) : (
-                <p className="text-sm capitalize">{tipo}</p>
+                <p className="text-sm text-muted-foreground capitalize">
+                  {tipo}
+                </p>
               )}
             </div>
 
             {/* Right Column: Status */}
             <div className="space-y-1">
-              <p className="text-sm font-medium">Estado</p>
-              <p className="text-sm capitalize">{data.estatus}</p>
+              <p className="font-semibold">Estado</p>
+              <p className="text-sm text-muted-foreground capitalize">
+                {data.estatus}
+              </p>
             </div>
           </div>
 
           {/* Start Date and Edit Button Row */}
           <div className="flex items-center justify-between">
             <div className="space-y-1">
-              <p className="text-sm font-medium">Fecha de inicio</p>
+              <p className="font-semibold">Fecha de inicio</p>
               {isEditing ? (
                 <Popover>
                   <PopoverTrigger asChild>
@@ -174,7 +178,7 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
                   </PopoverContent>
                 </Popover>
               ) : (
-                <p className="text-sm">
+                <p className="text-sm text-muted-foreground capitalize">
                   {startDate ? format(startDate, "PPP") : "No establecida"}
                 </p>
               )}
