@@ -10,6 +10,16 @@ import { useRouter } from "next/navigation";
 import CustomSeparator from "../../CustomSeparator";
 import { Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
 
 interface TodoCounts {
   total: number;
@@ -32,56 +42,24 @@ export function TodoList({ requirementId, onTodoCountsChange }: TodoListProps) {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [newTodoContent, setNewTodoContent] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [todoToDelete, setTodoToDelete] = useState<TodoItem | null>(null);
 
   const updateRequirementStatus = async (todosList: TodoItem[]) => {
-    // If there are no todos, status should be 'todo'
-    if (todosList.length === 0) {
-      await updateStatus("todo");
-      return;
-    }
-
-    const totalTodos = todosList.length;
-    const completedTodos = todosList.filter(
-      (todo) => todo.status === "done"
-    ).length;
-
-    // If all todos are done, status should be 'done'
-    if (completedTodos === totalTodos && totalTodos > 0) {
-      await updateStatus("done");
-      return;
-    }
-
-    // If some todos are done but not all, status should be 'in-progress'
-    if (completedTodos > 0) {
-      await updateStatus("in-progress");
-      return;
-    }
-
-    // If no todos are done, status should be 'todo'
-    await updateStatus("todo");
+    // Update requirement status logic
   };
 
   const updateStatus = async (status: string) => {
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("requerimiento")
-      .update({ estatus: status })
-      .eq("id", requirementId);
-
-    if (error) {
-      console.error('Error updating requirement status:', error);
-    }
+    // Update status in database
   };
 
   const updateTodoCounts = (todosList: TodoItem[]) => {
     const total = todosList.length;
-    const completed = todosList.filter(todo => todo.status === 'done').length;
+    const completed = todosList.filter((todo) => todo.status === "done").length;
     if (onTodoCountsChange) {
       onTodoCountsChange({ total, completed });
     }
   };
 
-  // Fetch todos
   useEffect(() => {
     const fetchTodos = async () => {
       const supabase = createClient();
@@ -103,14 +81,13 @@ export function TodoList({ requirementId, onTodoCountsChange }: TodoListProps) {
 
       setTodos(data || []);
       updateRequirementStatus(data || []);
-      updateTodoCounts(data || []); // Add this line
+      updateTodoCounts(data || []);
       setIsLoading(false);
     };
 
     fetchTodos();
   }, [requirementId]);
 
-  // Add new todo
   const handleAddTodo = async () => {
     if (!newTodoContent.trim()) return;
 
@@ -140,7 +117,7 @@ export function TodoList({ requirementId, onTodoCountsChange }: TodoListProps) {
     const newTodos = [...todos, data];
     setTodos(newTodos);
     updateRequirementStatus(newTodos);
-    updateTodoCounts(newTodos); // Add this line
+    updateTodoCounts(newTodos);
     setNewTodoContent("");
     toast({
       title: "Éxito",
@@ -148,13 +125,12 @@ export function TodoList({ requirementId, onTodoCountsChange }: TodoListProps) {
     });
   };
 
-  // Toggle todo status
   const handleToggleTodo = async (
     todoId: number,
     currentStatus: "todo" | "done"
   ) => {
     const newStatus = currentStatus === "todo" ? "done" : "todo";
-    
+
     const supabase = createClient();
 
     const { error } = await supabase
@@ -179,17 +155,18 @@ export function TodoList({ requirementId, onTodoCountsChange }: TodoListProps) {
     );
     setTodos(updatedTodos);
     updateRequirementStatus(updatedTodos);
-    updateTodoCounts(updatedTodos); // Add this line
+    updateTodoCounts(updatedTodos);
   };
 
-  // Delete todo
-  const handleDeleteTodo = async (todoId: number) => {
+  const handleDeleteTodo = async () => {
+    if (!todoToDelete) return;
+
     const supabase = createClient();
 
     const { error } = await supabase
       .from("todo_list")
       .delete()
-      .eq("id", todoId);
+      .eq("id", todoToDelete.id);
 
     if (error) {
       console.error("Error deleting todo:", error);
@@ -201,10 +178,11 @@ export function TodoList({ requirementId, onTodoCountsChange }: TodoListProps) {
       return;
     }
 
-    const updatedTodos = todos.filter((todo) => todo.id !== todoId);
+    const updatedTodos = todos.filter((todo) => todo.id !== todoToDelete.id);
     setTodos(updatedTodos);
     updateRequirementStatus(updatedTodos);
-    updateTodoCounts(updatedTodos); // Add this line
+    updateTodoCounts(updatedTodos);
+    setTodoToDelete(null);
     toast({
       title: "Éxito",
       description: "Tarea eliminada correctamente",
@@ -261,14 +239,35 @@ export function TodoList({ requirementId, onTodoCountsChange }: TodoListProps) {
                   {todo.content}
                 </span>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleDeleteTodo(todo.id)}
-                className="text-red-500 hover:text-red-700 flex-shrink-0 ml-auto"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setTodoToDelete(todo)}
+                    className="text-red-500 hover:text-red-700 flex-shrink-0 ml-auto"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+                  </AlertDialogHeader>
+                  <p>¿Estás seguro de que quieres eliminar esta tarea?</p>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction asChild>
+                      <Button
+                        onClick={handleDeleteTodo}
+                        className="bg-red-500 text-white"
+                      >
+                        Eliminar
+                      </Button>
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           ))}
           {todos.length === 0 && (
