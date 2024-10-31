@@ -45,11 +45,43 @@ export function TodoList({ requirementId, onTodoCountsChange }: TodoListProps) {
   const [todoToDelete, setTodoToDelete] = useState<TodoItem | null>(null);
 
   const updateRequirementStatus = async (todosList: TodoItem[]) => {
-    // Update requirement status logic
+    // If there are no todos, status should be 'todo'
+    if (todosList.length === 0) {
+      await updateStatus("todo");
+      return;
+    }
+
+    const totalTodos = todosList.length;
+    const completedTodos = todosList.filter(
+      (todo) => todo.status === "done"
+    ).length;
+
+    // If all todos are done, status should be 'done'
+    if (completedTodos === totalTodos && totalTodos > 0) {
+      await updateStatus("done");
+      return;
+    }
+
+    // If some todos are done but not all, status should be 'in-progress'
+    if (completedTodos > 0) {
+      await updateStatus("in-progress");
+      return;
+    }
+
+    // If no todos are done, status should be 'todo'
+    await updateStatus("todo");
   };
 
   const updateStatus = async (status: string) => {
-    // Update status in database
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("requerimiento")
+      .update({ estatus: status })
+      .eq("id", requirementId);
+
+    if (error) {
+      console.error('Error updating requirement status:', error);
+    }
   };
 
   const updateTodoCounts = (todosList: TodoItem[]) => {
