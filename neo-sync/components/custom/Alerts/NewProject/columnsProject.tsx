@@ -18,7 +18,7 @@ import { ArrowUpDown } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
 //* Defines the type
-export type Payment = {
+export type Users = {
   id: string;
   name: string;
   rol: "administrador" | "lider" | "usuario";
@@ -26,7 +26,7 @@ export type Payment = {
 };
 
 //* Here we define the column of the data. Also, each function formatter that want to apply directly to all the column, goes here
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Users>[] = [
   {
     //* Select column which allows to select a row
     id: "select",
@@ -66,48 +66,6 @@ export const columns: ColumnDef<Payment>[] = [
           Email
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      );
-    },
-  },
-  {
-    //* With amount set the text to the right and add format of USD currency
-    accessorKey: "rol",
-    header: () => <div className="text-right">Rol</div>,
-    cell: ({ row }) => {
-      const amount: string = row.getValue("rol");
-      const formattedAmount =
-        amount.charAt(0).toUpperCase() + amount.slice(1).toLowerCase();
-
-      return <div className="text-right font-medium">{formattedAmount}</div>;
-    },
-  },
-  {
-    //* We add the column actions without column title (because there is no header). Here shows a button that shows a dropdown menu.
-    id: "Acciones",
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Editar rol
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:bg-destructive focus:text-destructive-foreground">
-              Borrar Usuario
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       );
     },
   },

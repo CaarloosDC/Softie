@@ -29,6 +29,19 @@ export function NewContract() {
     setFileName(file ? file.name : null);
   };
 
+  //* Logic for date picker
+  const [formData, setFormData] = useState({
+    nombre: "",
+    descripcion: "",
+    transcripcion: "",
+    giro_empresa: "",
+    fecha_inicio: undefined as Date | undefined,
+    estatus: "todo",
+  });
+  const handleDateChange = (date: Date | undefined) => {
+    setFormData((prevData) => ({ ...prevData, fecha_inicio: date }));
+  };
+
   return (
     <>
       <AlertDialogHeader>
@@ -72,7 +85,10 @@ export function NewContract() {
                 >
                   Fecha del contrato
                 </label>
-                <DatePicker />
+                <DatePicker
+                  selectedDate={formData.fecha_inicio}
+                  onDateChange={handleDateChange}
+                />
               </div>
             </div>
             {/* Upload a file from file system */}

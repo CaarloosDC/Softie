@@ -1,17 +1,17 @@
-import { Payment, columns } from "./columns";
-import { DataTable } from "./data-table";
+import { Users, columns } from "./columnsConfig";
+import { DataTable } from "../../global/data-table";
 
 export default function Config() {
   const data = getData();
 
   return (
     <div className="w-full">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={data} rows={10} />
     </div>
   );
 }
 
-function getData(): Payment[] {
+export function getData(): Users[] {
   // Fetch data from your API here.
   return [
     {

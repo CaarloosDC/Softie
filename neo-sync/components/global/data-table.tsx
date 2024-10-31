@@ -37,11 +37,13 @@ import { Input } from "@/components/ui/input";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  rows: number;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  rows,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]); //* Use for the sorting of the emails
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -68,6 +70,12 @@ export function DataTable<TData, TValue>({
       columnFilters,
       columnVisibility,
       rowSelection,
+    },
+    initialState: {
+      pagination: {
+        pageIndex: 0,
+        pageSize: rows,
+      },
     },
   });
 
@@ -170,7 +178,7 @@ export function DataTable<TData, TValue>({
           <div>
             <div className="flex-1 text-sm text-muted-foreground">
               {table.getFilteredSelectedRowModel().rows.length} of{" "}
-              {table.getFilteredRowModel().rows.length} row(s) selected.
+              {table.getFilteredRowModel().rows.length} fila(s) seleccionadas.
             </div>
           </div>
           {/* Buttons for pagination */}
