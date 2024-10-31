@@ -96,7 +96,7 @@ export function DataTable<TData, TValue>({
           {/* The next area inside this div is for managing which column shows */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
+              <Button size={"sm"} variant="outline" className="ml-auto">
                 Columnas
               </Button>
             </DropdownMenuTrigger>

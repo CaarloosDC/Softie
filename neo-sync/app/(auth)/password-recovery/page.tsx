@@ -65,7 +65,7 @@ export default function PasswordRecoveryPage() {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-black">
+            <Button size={"sm"} type="submit" className="w-full bg-black">
               Recuperar contraseña
             </Button>
           </form>

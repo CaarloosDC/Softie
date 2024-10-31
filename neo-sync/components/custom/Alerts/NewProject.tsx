@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   AlertDialogCancel,
   AlertDialogDescription,
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select";
 import { DatePicker } from "@/components/global/DatePicker";
 import { Wand2Icon, PlusIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface NewProjectProps {
   onSubmit: (projectData: any) => Promise<void>;
@@ -24,30 +25,32 @@ interface NewProjectProps {
 
 export function NewProject({ onSubmit }: NewProjectProps) {
   const [formData, setFormData] = useState({
-    nombre: '',
-    descripcion: '',
-    transcripcion: '',
-    giro_empresa: '',
+    nombre: "",
+    descripcion: "",
+    transcripcion: "",
+    giro_empresa: "",
     fecha_inicio: undefined as Date | undefined,
-    estatus: 'todo'
+    estatus: "todo",
   });
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target;
-    setFormData(prevData => ({ ...prevData, [name]: value }));
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSelectChange = (value: string) => {
-    setFormData(prevData => ({ ...prevData, giro_empresa: value }));
+    setFormData((prevData) => ({ ...prevData, giro_empresa: value }));
   };
 
   const handleDateChange = (date: Date | undefined) => {
-    setFormData(prevData => ({...prevData, fecha_inicio: date  }));
+    setFormData((prevData) => ({ ...prevData, fecha_inicio: date }));
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('Submitting project data:', formData);
+    console.log("Submitting project data:", formData);
     await onSubmit(formData);
   };
 
@@ -67,47 +70,59 @@ export function NewProject({ onSubmit }: NewProjectProps) {
         }
       ]
     }`;
-  
+
     const requestBody = {
       query: formData.descripcion,
-      jsonFormat: jsonFormat
+      jsonFormat: jsonFormat,
     };
-  
-    console.log('Request body being sent to /api/generateAIResponse:', JSON.stringify(requestBody, null, 2));
-  
+
+    console.log(
+      "Request body being sent to /api/generateAIResponse:",
+      JSON.stringify(requestBody, null, 2)
+    );
+
     try {
-      const response = await fetch('/api/generateAIResponse', {
-        method: 'POST',
+      const response = await fetch("/api/generateAIResponse", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
       });
-  
+
       if (!response.ok) {
-        console.error('Error response from server:', response.status, response.statusText);
+        console.error(
+          "Error response from server:",
+          response.status,
+          response.statusText
+        );
         const errorText = await response.text();
-        console.error('Error response body:', errorText);
-        throw new Error('Error generating AI response');
+        console.error("Error response body:", errorText);
+        throw new Error("Error generating AI response");
       }
-  
+
       const data = await response.json();
-      console.log("AI-generated project data received:", JSON.stringify(data, null, 2));
-      
+      console.log(
+        "AI-generated project data received:",
+        JSON.stringify(data, null, 2)
+      );
+
       // Update form data with AI-generated content
       const updatedFormData = {
         ...formData,
-        ...data.response
+        ...data.response,
       };
 
-      console.log("Updated form data after AI generation:", JSON.stringify(updatedFormData, null, 2));
+      console.log(
+        "Updated form data after AI generation:",
+        JSON.stringify(updatedFormData, null, 2)
+      );
       setFormData(updatedFormData);
     } catch (error) {
-      console.error('Error in handleGenerateWithAI:', error);
+      console.error("Error in handleGenerateWithAI:", error);
     }
   };
 
-  
   return (
     <form onSubmit={handleSubmit}>
       <AlertDialogHeader>
@@ -115,19 +130,25 @@ export function NewProject({ onSubmit }: NewProjectProps) {
         <AlertDialogDescription>
           <div className="space-y-4 mt-4">
             <div>
-              <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="nombre"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Nombre
               </label>
-              <Input 
-                id="nombre" 
-                name="nombre" 
+              <Input
+                id="nombre"
+                name="nombre"
                 value={formData.nombre}
                 onChange={handleInputChange}
-                placeholder="Nombre del proyecto" 
+                placeholder="Nombre del proyecto"
               />
             </div>
             <div>
-              <label htmlFor="descripcion" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="descripcion"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Descripción del proyecto
               </label>
               <Textarea
@@ -139,7 +160,10 @@ export function NewProject({ onSubmit }: NewProjectProps) {
               />
             </div>
             <div>
-              <label htmlFor="transcripcion" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="transcripcion"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Transcripción de la reunión con el cliente (opcional)
               </label>
               <Textarea
@@ -152,11 +176,14 @@ export function NewProject({ onSubmit }: NewProjectProps) {
             </div>
             <div className="flex space-x-4">
               <div className="flex-1">
-                <label htmlFor="giro_empresa" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="giro_empresa"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Giro de la empresa
                 </label>
-                <Select 
-                  name="giro_empresa" 
+                <Select
+                  name="giro_empresa"
                   value={formData.giro_empresa}
                   onValueChange={handleSelectChange}
                 >
@@ -171,10 +198,13 @@ export function NewProject({ onSubmit }: NewProjectProps) {
                 </Select>
               </div>
               <div className="flex-1">
-                <label htmlFor="fecha_inicio" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="fecha_inicio"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Fecha de inicio del proyecto
                 </label>
-                <DatePicker 
+                <DatePicker
                   selectedDate={formData.fecha_inicio}
                   onDateChange={handleDateChange}
                 />
@@ -182,23 +212,36 @@ export function NewProject({ onSubmit }: NewProjectProps) {
             </div>
           </div>
           <div className="space-y-4 mt-4">
-            <div className="flex gap-1">
-              <AlertDialogAction 
-                className="bg-blue-500 hover:bg-blue-600 text-white rounded-md" 
-                onClick={handleGenerateWithAI}
-              >
-                <Wand2Icon className="w-4 mr-1" />
-                Generar con inteligencia artificial
+            <div className="flex gap-2">
+              <AlertDialogAction asChild>
+                <Button
+                  size="sm"
+                  variant="default"
+                  onClick={handleGenerateWithAI}
+                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-white flex items-center"
+                >
+                  <Wand2Icon className="w-4 h-4 mr-1" />
+                  Generar con IA
+                </Button>
               </AlertDialogAction>
-              <AlertDialogAction 
-                type="submit" 
-                className="bg-gray-900 hover:bg-gray-800 text-white rounded-md flex-row justify-between"
-              >
-                <PlusIcon className="w-4 mr-1" />
-                <span className="text-sm">Generar desde cero</span>
+
+              <AlertDialogAction asChild>
+                <Button
+                  size="sm"
+                  variant="default"
+                  type="submit"
+                  className="flex-1 flex items-center"
+                >
+                  <PlusIcon className="w-4 h-4 mr-1" />
+                  <span>Generar desde cero</span>
+                </Button>
               </AlertDialogAction>
             </div>
-            <AlertDialogCancel className="w-full">Cancelar</AlertDialogCancel>
+            <AlertDialogCancel asChild>
+              <Button size="sm" variant="outline" className="w-full">
+                Cancelar
+              </Button>
+            </AlertDialogCancel>
           </div>
         </AlertDialogDescription>
       </AlertDialogHeader>

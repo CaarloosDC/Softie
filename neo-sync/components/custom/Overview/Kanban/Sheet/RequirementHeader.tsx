@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from "@/utils/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { CalendarIcon, Pencil } from "lucide-react";
@@ -51,16 +51,16 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
     }
 
     const supabase = createClient();
-    
+
     try {
       const { error } = await supabase
-        .from('requerimiento')
+        .from("requerimiento")
         .update({
           nombre: nombre.trim(),
           tipo: tipo,
           fecha_inicio: startDate?.toISOString() || null,
         })
-        .eq('id', data.id);
+        .eq("id", data.id);
 
       if (error) throw error;
 
@@ -75,10 +75,10 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
         title: "Éxito",
         description: "Requerimiento actualizado correctamente",
       });
-      
+
       setIsEditing(false);
     } catch (error) {
-      console.error('Error updating requirement:', error);
+      console.error("Error updating requirement:", error);
       toast({
         title: "Error",
         description: "No se pudo actualizar el requerimiento",
@@ -117,7 +117,12 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
             <div className="space-y-1">
               <p className="text-sm font-medium">Tipo</p>
               {isEditing ? (
-                <Select value={tipo} onValueChange={(value) => setTipo(value as "funcional" | "no funcional")}>
+                <Select
+                  value={tipo}
+                  onValueChange={(value) =>
+                    setTipo(value as "funcional" | "no funcional")
+                  }
+                >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Seleccionar tipo" />
                   </SelectTrigger>
@@ -146,6 +151,7 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
+                      size={"sm"}
                       variant={"outline"}
                       className={cn(
                         "w-[200px] h-8 justify-start text-left font-normal",
@@ -153,7 +159,9 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {startDate ? format(startDate, "PPP") : "Seleccionar fecha"}
+                      {startDate
+                        ? format(startDate, "PPP")
+                        : "Seleccionar fecha"}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
@@ -177,30 +185,24 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
               {isEditing ? (
                 <>
                   <Button
-                    variant="outline"
                     size="sm"
+                    variant="outline"
                     onClick={handleCancel}
                     className="h-8"
                   >
                     Cancelar
                   </Button>
-                  <Button
-                    size="sm"
-                    onClick={handleSave}
-                    className="h-8 bg-blue-500 text-white hover:bg-blue-600"
-                  >
+                  <Button size="sm" onClick={handleSave}>
                     Guardar
                   </Button>
                 </>
               ) : (
                 <Button
-                  size="sm"
-                  variant="outline"
+                  size="icon"
                   onClick={() => setIsEditing(true)}
                   className="h-8"
                 >
-                  <Pencil className="h-4 w-4 mr-1" />
-                  Editar
+                  <Pencil className="h-4 w-4" />
                 </Button>
               )}
             </div>

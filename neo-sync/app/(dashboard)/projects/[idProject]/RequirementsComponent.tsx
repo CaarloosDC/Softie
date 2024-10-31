@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Calendar, SlidersHorizontal } from "lucide-react";
+import { Plus, Calendar, SlidersHorizontal, FileText } from "lucide-react";
 import InfoCard from "@/components/custom/Overview/InfoCard";
 import SearchBar from "@/components/custom/Overview/SearchBar";
 import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
@@ -120,7 +120,7 @@ export default function RequirementsComponent({
         projectInfo={projectInfo}
       >
         <BlueButton
-          text="Agregar Requerimiento"
+          text="Agregar requerimiento"
           icon={<Plus className="h-4 w-4" />}
         >
           <CreateRequirement
@@ -129,12 +129,13 @@ export default function RequirementsComponent({
           />
         </BlueButton>
         <BlueButton
-          text="Generar Propuesta"
-          icon={<Calendar className="h-4 w-4" />}
+          text="Generar propuesta"
+          icon={<FileText className="h-4 w-4" />}
         >
           <GenerateProposal />
         </BlueButton>
         <Button
+          size={"sm"}
           variant="outline"
           className="bg-red-600 hover:bg-red-700 text-white hover:text-white rounded-md px-4 py-2 text-sm font-medium flex items-center"
         >
@@ -158,7 +159,7 @@ export default function RequirementsComponent({
         </h1>
         <div className="flex flex-row justify-between gap-3">
           <BlueButton
-            text="Agregar Requerimiento"
+            text="Agregar requerimiento"
             icon={<Plus className="h-4 w-4" />}
           >
             <CreateRequirement
@@ -168,11 +169,12 @@ export default function RequirementsComponent({
           </BlueButton>
           <BlueButton
             text="Generar Propuesta"
-            icon={<Calendar className="h-4 w-4" />}
+            icon={<FileText className="h-4 w-4" />}
           >
             <GenerateProposal />
           </BlueButton>
           <Button
+            size={"sm"}
             variant="outline"
             className="bg-red-600 hover:bg-red-700 text-white hover:text-white rounded-md px-4 py-2 text-sm font-medium flex items-center"
           >

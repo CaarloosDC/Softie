@@ -101,7 +101,7 @@ export function AddUser({ onSubmit }: AddUserProps) {
               </label>
               <div className="flex space-x-2">
                 <Input id="password" name="password" type="text" value={password} readOnly required />
-                <Button type="button" onClick={generatePassword} className="flex-shrink-0">
+                <Button size={"sm"} type="button" onClick={generatePassword} className="flex-shrink-0">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Generar
                 </Button>
@@ -111,7 +111,7 @@ export function AddUser({ onSubmit }: AddUserProps) {
           <div className="space-y-4 mt-4">
             <AlertDialogAction type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white">
               <UserPlus className="w-4 h-4 mr-2" />
-              Agregar Usuario
+              Agregar usuario
             </AlertDialogAction>
             <AlertDialogCancel className="w-full">Cancelar</AlertDialogCancel>
           </div>

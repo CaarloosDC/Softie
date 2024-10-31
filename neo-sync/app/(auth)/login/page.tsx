@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import Divider from "@/components/custom/divider";
 import LoginImage from "@/components/custom/login-image";
 import LogoNeoris from "@/components/custom/logo-neoris";
-import { login, googleLogin} from "./actions";
+import { login, googleLogin } from "./actions";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -35,7 +35,7 @@ export default function LoginPage() {
       console.log("Initiating Google login...");
       const result = await googleLogin();
       console.log("Google login result:", result);
-      
+
       if (result?.url) {
         // Redirect the user to the URL provided by Supabase
         window.location.href = result.url;
@@ -45,10 +45,11 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.error("Google login error:", error);
-      alert("An error occurred during Google login. Please check the console for details.");
+      alert(
+        "An error occurred during Google login. Please check the console for details."
+      );
     }
   };
-
 
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
@@ -90,17 +91,18 @@ export default function LoginPage() {
               />
             </div>
 
-            <Button type="submit" className="w-full">
+            <Button size={"sm"} type="submit" className="w-full">
               Iniciar sesión
             </Button>
           </form>
 
           <Divider />
 
-          <Button 
+          <Button
+            size={"sm"}
             type="button"
-            variant="outline" 
-            className="w-full" 
+            variant="outline"
+            className="w-full"
             onClick={handleGoogleLogin}
           >
             Iniciar sesión con Google

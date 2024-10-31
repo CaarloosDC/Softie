@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from "@/utils/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import CustomSeparator from "../../CustomSeparator";
@@ -12,7 +12,9 @@ interface RequirementDescriptionProps {
   requirementId: string;
 }
 
-export function RequirementDescription({ requirementId }: RequirementDescriptionProps) {
+export function RequirementDescription({
+  requirementId,
+}: RequirementDescriptionProps) {
   const router = useRouter();
   const [description, setDescription] = useState<string>("");
   const [isEditing, setIsEditing] = useState(false);
@@ -23,13 +25,13 @@ export function RequirementDescription({ requirementId }: RequirementDescription
     const fetchDescription = async () => {
       const supabase = createClient();
       const { data, error } = await supabase
-        .from('requerimiento')
-        .select('descripcion')
-        .eq('id', requirementId)
+        .from("requerimiento")
+        .select("descripcion")
+        .eq("id", requirementId)
         .single();
 
       if (error) {
-        console.error('Error fetching description:', error);
+        console.error("Error fetching description:", error);
         toast({
           title: "Error",
           description: "No se pudo cargar la descripción",
@@ -38,8 +40,8 @@ export function RequirementDescription({ requirementId }: RequirementDescription
         return;
       }
 
-      setDescription(data.descripcion || '');
-      setOriginalDescription(data.descripcion || '');
+      setDescription(data.descripcion || "");
+      setOriginalDescription(data.descripcion || "");
     };
 
     fetchDescription();
@@ -56,9 +58,9 @@ export function RequirementDescription({ requirementId }: RequirementDescription
 
     try {
       const { error } = await supabase
-        .from('requerimiento')
+        .from("requerimiento")
         .update({ descripcion: description })
-        .eq('id', requirementId);
+        .eq("id", requirementId);
 
       if (error) throw error;
 
@@ -66,13 +68,12 @@ export function RequirementDescription({ requirementId }: RequirementDescription
         title: "Éxito",
         description: "Descripción actualizada correctamente",
       });
-      
+
       setOriginalDescription(description);
       setIsEditing(false);
       router.refresh();
-
     } catch (error) {
-      console.error('Error updating description:', error);
+      console.error("Error updating description:", error);
       toast({
         title: "Error",
         description: "No se pudo actualizar la descripción",
@@ -91,17 +92,11 @@ export function RequirementDescription({ requirementId }: RequirementDescription
   return (
     <Card className="w-full">
       <CardHeader className="flex flex-row justify-between items-center pb-2">
-        <CardTitle>Descripción</CardTitle>
+        <CardTitle>Descripción del requerimiento</CardTitle>
         {!isEditing ? (
-                <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setIsEditing(true)}
-                className="h-8"
-              >
-                <Pencil className="h-4 w-4 mr-1" />
-                Editar
-              </Button>
+          <Button size="icon" onClick={() => setIsEditing(true)}>
+            <Pencil className="h-4 w-4" />
+          </Button>
         ) : null}
       </CardHeader>
       <CustomSeparator />
@@ -115,18 +110,10 @@ export function RequirementDescription({ requirementId }: RequirementDescription
               placeholder="Escriba la descripción del requerimiento..."
             />
             <div className="flex justify-end space-x-2">
-              <Button
-                variant="outline"
-                onClick={handleCancel}
-                disabled={isSaving}
-              >
+              <Button size="sm" variant={"outline"} onClick={handleCancel} disabled={isSaving}>
                 Cancelar
               </Button>
-              <Button
-                onClick={handleSave}
-                disabled={isSaving}
-                className="bg-blue-500 text-white hover:bg-blue-600"
-              >
+              <Button size="sm" onClick={handleSave} disabled={isSaving}>
                 {isSaving ? "Guardando..." : "Guardar"}
               </Button>
             </div>

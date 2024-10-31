@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
-import { type Task } from "../../../../components/custom/Overview/Kanban/TaskCard";
+import { type Task } from "@/components/custom/Overview/Kanban/TaskCard";
 
 export async function getRequirements(projectId: string) {
   const supabase = createClient();
