@@ -20,14 +20,23 @@ import {
   DollarSign,
 } from "lucide-react";
 import { ReactNode } from "react";
+import { useRouter, useParams } from "next/navigation";
 
 export default function GenerateProposal() {
+  const router = useRouter();
+  const params = useParams();
+  const projectId = params?.idProject as string;
+
   const alerts = [
     "Insuficientes recursos para cumplir la meta establecida.",
     "El presupuesto actual rebasa el límite establecido por el cliente.",
     "El desarrollador Sebastian tendrá vacaciones durante el proyecto.",
     "Debes de asignar un project manager al proyecto.",
   ];
+
+  const handleGenerateProposal = () => {
+    router.push(`/projects/${projectId}/proposal`);
+  };
 
   return (
     <>
@@ -100,7 +109,7 @@ export default function GenerateProposal() {
       {/* Footer Section for create/cancel buttons */}
       <AlertDialogFooter className="flex flex-col">
         <AlertDialogCancel className="w-1/2">Cerrar</AlertDialogCancel>
-        <AlertDialogAction className="w-1/2">
+        <AlertDialogAction className="w-1/2" onClick={handleGenerateProposal}>
           <FileText className="w-3 h-3 mr-2" /> Generar propuesta
         </AlertDialogAction>
       </AlertDialogFooter>
