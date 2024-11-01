@@ -33,11 +33,17 @@ export function NewProject({ onSubmit }: NewProjectProps) {
     estatus: "todo",
   });
 
+  const [errors, setErrors] = useState({
+    nombre: false,
+    descripcion: false,
+  });
+
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: value === "" }));
   };
 
   const handleSelectChange = (value: string) => {
@@ -50,13 +56,28 @@ export function NewProject({ onSubmit }: NewProjectProps) {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (formData.nombre === "" || formData.descripcion === "") {
+      setErrors({
+        nombre: formData.nombre === "",
+        descripcion: formData.descripcion === "",
+      });
+      return;
+    }
     console.log("Submitting project data:", formData);
     await onSubmit(formData);
   };
 
   const handleGenerateWithAI = async () => {
+    if (formData.nombre === "" || formData.descripcion === "") {
+      setErrors({
+        nombre: formData.nombre === "",
+        descripcion: formData.descripcion === "",
+      });
+      return;
+    }
+
     const jsonFormat = `{
-      "nombre": "string",
+      "nombre": "string" -> este debe de ser el n0mbre del proyecto: ${formData.nombre},
       "descripcion": "string",
       "costo": "number",
       "transcripcion": "string",
@@ -73,6 +94,7 @@ export function NewProject({ onSubmit }: NewProjectProps) {
 
     const requestBody = {
       query: formData.descripcion,
+      additionalData: formData.transcripcion,
       jsonFormat: jsonFormat,
     };
 
@@ -123,6 +145,8 @@ export function NewProject({ onSubmit }: NewProjectProps) {
     }
   };
 
+  const isFormValid = formData.nombre !== "" && formData.descripcion !== "";
+
   return (
     <form onSubmit={handleSubmit}>
       <AlertDialogHeader>
@@ -142,7 +166,15 @@ export function NewProject({ onSubmit }: NewProjectProps) {
                 value={formData.nombre}
                 onChange={handleInputChange}
                 placeholder="Nombre del proyecto"
+                className={`${
+                  errors.nombre ? "border-red-500" : ""
+                }`}
               />
+              {errors.nombre && (
+                <p className="text-red-500 text-xs mt-1">
+                  El campo Nombre es obligatorio.
+                </p>
+              )}
             </div>
             <div>
               <label
@@ -157,7 +189,15 @@ export function NewProject({ onSubmit }: NewProjectProps) {
                 value={formData.descripcion}
                 onChange={handleInputChange}
                 placeholder="Escribe aquí a grandes rasgos las necesidades del cliente"
+                className={`${
+                  errors.descripcion ? "border-red-500" : ""
+                }`}
               />
+              {errors.descripcion && (
+                <p className="text-red-500 text-xs mt-1">
+                  El campo Descripción es obligatorio.
+                </p>
+              )}
             </div>
             <div>
               <label
@@ -219,6 +259,7 @@ export function NewProject({ onSubmit }: NewProjectProps) {
                   variant="default"
                   onClick={handleGenerateWithAI}
                   className="flex-1 bg-blue-500 hover:bg-blue-600 text-white flex items-center"
+                  disabled={!isFormValid}
                 >
                   <Wand2Icon className="w-4 h-4 mr-1" />
                   Generar con IA
@@ -231,6 +272,7 @@ export function NewProject({ onSubmit }: NewProjectProps) {
                   variant="default"
                   type="submit"
                   className="flex-1 flex items-center"
+                  disabled={!isFormValid}
                 >
                   <PlusIcon className="w-4 h-4 mr-1" />
                   <span>Generar desde cero</span>

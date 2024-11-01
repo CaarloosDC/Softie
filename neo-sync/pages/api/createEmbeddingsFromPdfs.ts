@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { filePath } = req.body;
 
     try {
-        const response = await storePDFEmbeddings('rfc2119.pdf');
+        const response = await storePDFEmbeddings('Neoris.pdf');
         res.status(200).json({ response });
     } catch (error) {
         console.error('Error generating embeddings:', error);
