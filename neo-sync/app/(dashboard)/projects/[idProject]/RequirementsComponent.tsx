@@ -132,7 +132,7 @@ export default function RequirementsComponent({
           text="Generar propuesta"
           icon={<FileText className="h-4 w-4" />}
         >
-          <GenerateProposal projectId={""} />
+          <GenerateProposal />
         </BlueButton>
         <Button
           size={"sm"}

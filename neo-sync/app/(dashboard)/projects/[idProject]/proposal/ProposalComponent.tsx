@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import Container from "@/components/global/Container/Container";
 import Header from "@/components/global/Container/Header";
 import { Card, CardContent } from "@/components/ui/card";
+import SaveProposal from "./SaveProposal";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ProjectInfo {
   nombre: string;
@@ -115,14 +115,6 @@ Fechas Importantes:
 `;
   };
 
-  const handleSaveProposal = async () => {
-    // Here you could add logic to save the proposal text to your database
-    toast({
-      title: "Success",
-      description: "Proposal saved successfully",
-    });
-  };
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -130,7 +122,11 @@ Fechas Importantes:
   return (
     <Container>
       <Header title={`Propuesta de Proyecto: ${projectInfo?.nombre || ''}`}>
-        <Button onClick={handleSaveProposal}>Guardar Propuesta</Button>
+        <SaveProposal 
+          proposalText={proposalText}
+          projectId={projectId}
+          projectName={projectInfo?.nombre || ''}
+        />
       </Header>
 
       <Card className="mt-4">
