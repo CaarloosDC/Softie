@@ -7,7 +7,7 @@ import { toast } from "@/hooks/use-toast";
 import Container from "@/components/global/Container/Container";
 import Header from "@/components/global/Container/Header";
 import { Card, CardContent } from "@/components/ui/card";
-import SaveProposal from "./SaveProposal";
+import DownloadProposal from "./DownloadProposal";
 import { Textarea } from "@/components/ui/textarea";
 
 interface ProjectInfo {
@@ -122,9 +122,8 @@ Fechas Importantes:
   return (
     <Container>
       <Header title={`Propuesta de Proyecto: ${projectInfo?.nombre || ''}`}>
-        <SaveProposal 
+        <DownloadProposal 
           proposalText={proposalText}
-          projectId={projectId}
           projectName={projectInfo?.nombre || ''}
         />
       </Header>
@@ -134,7 +133,7 @@ Fechas Importantes:
           <Textarea
             value={proposalText}
             onChange={(e) => setProposalText(e.target.value)}
-            className="min-h-[800px] w-1/2 font-sans"
+            className="min-h-[600px] w-1/2 font-sans"
             placeholder="Propuesta del proyecto..."
           />
         </CardContent>
