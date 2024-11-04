@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import {
   AlertDialogHeader,
@@ -17,12 +19,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Wand2Icon } from "lucide-react";
+import { Wand2Icon, Loader2 } from "lucide-react";
 import { DatePicker } from "@/components/global/DatePicker";
+import { toast } from "@/hooks/use-toast";
+import { estimateRequirementEffort } from "@/app/services/aiEstimationReq";
 
 interface CreateRequirementProps {
   onSubmit: (requirementData: any) => Promise<void>;
-  projectId: number; // Add this prop to receive the project ID
+  projectId: number;
 }
 
 export function CreateRequirement({
@@ -35,8 +39,10 @@ export function CreateRequirement({
     tipo: "",
     fecha_inicio: undefined as Date | undefined,
     esfuerzo_requerimiento: "",
-    estatus: "todo", // Add a default status
+    estatus: "todo",
   });
+
+  const [isEstimating, setIsEstimating] = useState(false);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -53,11 +59,68 @@ export function CreateRequirement({
     setFormData((prevData) => ({ ...prevData, fecha_inicio: date }));
   };
 
+  const handleEstimateClick = async () => {
+    if (!formData.nombre || !formData.descripcion) {
+      toast({
+        title: "Error",
+        description: "Por favor, complete el nombre y la descripción del requerimiento antes de estimar.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setIsEstimating(true);
+
+      const estimation = await estimateRequirementEffort({
+        nombre: formData.nombre,
+        descripcion: formData.descripcion,
+        tipo: formData.tipo
+      });
+
+      // Update form with total hours
+      setFormData(prev => ({
+        ...prev,
+        esfuerzo_requerimiento: estimation.horas_totales.toString()
+      }));
+
+      // Show detailed toast with breakdown
+      toast({
+        title: "Estimación completada",
+        description: (
+          <div className="space-y-2">
+            <p><strong>Tiempo total estimado:</strong> {estimation.horas_totales} horas</p>
+            <p><strong>Desglose:</strong></p>
+            <ul className="list-disc pl-4">
+              <li>Análisis: {estimation.desglose.analisis} horas</li>
+              <li>Desarrollo: {estimation.desglose.desarrollo} horas</li>
+              <li>Pruebas: {estimation.desglose.pruebas} horas</li>
+              <li>Documentación: {estimation.desglose.documentacion} horas</li>
+            </ul>
+            <p><strong>Nivel de confianza:</strong> {estimation.nivel_confianza}</p>
+            <p><strong>Justificación:</strong> {estimation.justificacion}</p>
+          </div>
+        ),
+        duration: 10000,
+      });
+
+    } catch (error) {
+      console.error("Error en la estimación:", error);
+      toast({
+        title: "Error en la estimación",
+        description: "No se pudo completar la estimación. Por favor, intente nuevamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsEstimating(false);
+    }
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const submitData = {
       ...formData,
-      proyecto_id: projectId, // Include the project ID
+      proyecto_id: projectId,
       fecha_inicio: formData.fecha_inicio
         ? formData.fecha_inicio.toISOString().split("T")[0]
         : null,
@@ -154,13 +217,19 @@ export function CreateRequirement({
                   placeholder="Total de horas"
                 />
                 <Button
-                  size={"sm"}
+                  size="sm"
                   type="button"
                   variant="default"
                   className="bg-blue-500 hover:bg-blue-600 text-white rounded-md"
+                  onClick={handleEstimateClick}
+                  disabled={isEstimating}
                 >
-                  <Wand2Icon className="w-4 mr-1" />
-                  Estimar con IA
+                  {isEstimating ? (
+                    <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                  ) : (
+                    <Wand2Icon className="w-4 mr-1" />
+                  )}
+                  {isEstimating ? 'Estimando...' : 'Estimar con IA'}
                 </Button>
               </div>
             </div>
@@ -168,7 +237,8 @@ export function CreateRequirement({
           <AlertDialogFooter className="mt-4">
             <AlertDialogCancel className="w-1/2">Cancelar</AlertDialogCancel>
             <AlertDialogAction
-              type="submit" className="w-1/2"
+              type="submit" 
+              className="w-1/2"
             >
               Crear
             </AlertDialogAction>

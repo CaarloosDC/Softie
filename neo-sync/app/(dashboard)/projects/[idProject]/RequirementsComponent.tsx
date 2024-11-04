@@ -151,45 +151,5 @@ export default function RequirementsComponent({
   );
 
   //* Old way of rendering content, without parent container
-  return (
-    <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
-      <div className="flex justify-between">
-        <h1 className="text-lg font-semibold md:text-2xl">
-          Project: {projectInfo?.nombre || projectId}
-        </h1>
-        <div className="flex flex-row justify-between gap-3">
-          <BlueButton
-            text="Agregar requerimiento"
-            icon={<Plus className="h-4 w-4" />}
-          >
-            <CreateRequirement
-              onSubmit={handleCreateRequirement}
-              projectId={parseInt(projectId, 10)}
-            />
-          </BlueButton>
-          <BlueButton
-            text="Generar Propuesta"
-            icon={<FileText className="h-4 w-4" />}
-          >
-            <GenerateProposal />
-          </BlueButton>
-          <Button
-            size={"sm"}
-            variant="outline"
-            className="bg-red-600 hover:bg-red-700 text-white hover:text-white rounded-md px-4 py-2 text-sm font-medium flex items-center"
-          >
-            <SlidersHorizontal className="mr-2 h-4 w-4" />
-            Eliminar
-          </Button>
-        </div>
-      </div>
 
-      <div className="flex flex-col gap-3 rounded-lg shadow-sm">
-        {/* {projectInfo && <InfoCard projectInfo={projectInfo} />} */}
-        <CustomSeparator />
-        <SearchBar onSearch={handleSearch} />
-        <KanbanBoard data={filteredRequirements} />
-      </div>
-    </div>
-  );
 }
