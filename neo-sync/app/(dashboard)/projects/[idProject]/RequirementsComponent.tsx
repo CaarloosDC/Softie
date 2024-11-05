@@ -17,6 +17,7 @@ import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import Container from "@/components/global/Container/Container";
 import Header from "@/components/global/Container/Header";
+import DeleteProject from "@/app/(dashboard)/projects/[idProject]/DeleteProject"
 
 interface RequirementsComponentProps {
   requirements: Task[];
@@ -134,14 +135,7 @@ export default function RequirementsComponent({
         >
           <GenerateProposal />
         </BlueButton>
-        <Button
-          size={"sm"}
-          variant="outline"
-          className="bg-red-600 hover:bg-red-700 text-white hover:text-white rounded-md px-4 py-2 text-sm font-medium flex items-center"
-        >
-          <SlidersHorizontal className="mr-2 h-4 w-4" />
-          Eliminar
-        </Button>
+        <DeleteProject projectId={projectId} />
       </Header>
 
       {/* Content */}
