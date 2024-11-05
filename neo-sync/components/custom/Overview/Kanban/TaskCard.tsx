@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { cva } from "class-variance-authority";
 import { GripVertical } from "lucide-react";
 import { ColumnId } from "./KanbanBoard";
-import { MessageCircle, Link as LinkIcon } from "lucide-react";
+import { MessageCircle, Link as LinkIcon, Clock } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import TaskCardDrawer from "./Sheet/TaskCardDrawer";
@@ -21,6 +21,7 @@ export interface Task {
   columnId: ColumnId;
   title: string;
   content: string;
+  fecha_inicio?: string;
 }
 
 interface TaskCardProps {
@@ -128,6 +129,35 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
     }
   };
 
+  const calculateDaysSinceStart = () => {
+    if (!task.fecha_inicio) return 0;
+    
+    const startDate = new Date(task.fecha_inicio);
+    const today = new Date();
+    const diffTime = Math.abs(today.getTime() - startDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const renderProgressIndicator = () => {
+    const days = calculateDaysSinceStart();
+    return (
+      <div className="flex items-center space-x-1" title={`Days since start: ${days}`}>
+        <Clock className="h-4 w-4" />
+        <span className="text-sm">{days}/5</span>
+        <div className="w-12 h-1.5 bg-gray-200 rounded-full">
+          <div 
+            className="h-full bg-blue-500 rounded-full transition-all duration-300"
+            style={{ 
+              width: `${Math.min(100, (days / 5) * 100)}%`,
+              backgroundColor: days > 5 ? '#ef4444' : '#3b82f6'
+            }}
+          />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div>
       <div onClick={handleClick}>
@@ -158,7 +188,6 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
                   <LinkIcon className="h-4 w-4" />
                   <span className="text-sm">5</span>
                 </div>
-                {/* Only show todo counter in project requirements view */}
                 {isInProjectRequirements && (
                   <div className="flex items-center space-x-1">
                     <CheckSquare className="h-4 w-4" />
@@ -167,6 +196,7 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
                     </span>
                   </div>
                 )}
+                {task.fecha_inicio && renderProgressIndicator()}
               </div>
 
               <div className="flex -space-x-2">
