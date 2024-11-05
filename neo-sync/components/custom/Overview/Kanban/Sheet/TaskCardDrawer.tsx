@@ -107,6 +107,7 @@ export default function TaskCardDrawer({
           {requirementData && (
             <RequirementHeader
               data={requirementData}
+              onClose={onClose}  // Add this line
               onUpdate={(updatedData) => setRequirementData(updatedData)}
             />
           )}

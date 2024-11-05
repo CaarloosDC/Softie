@@ -20,6 +20,7 @@ import { toast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { CalendarIcon, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
+import DeleteRequirement from "./DeleteRequirement";
 
 interface RequirementHeaderProps {
   data: {
@@ -30,9 +31,10 @@ interface RequirementHeaderProps {
     estatus: string;
   };
   onUpdate: (updatedData: any) => void;
+  onClose?: () => void;  // Add this prop
 }
 
-export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
+export function RequirementHeader({ data, onUpdate, onClose }: RequirementHeaderProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [nombre, setNombre] = useState(data.nombre);
   const [tipo, setTipo] = useState(data.tipo);
@@ -201,6 +203,7 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
                   </Button>
                 </>
               ) : (
+                <>
                 <Button
                   size="icon"
                   onClick={() => setIsEditing(true)}
@@ -208,7 +211,12 @@ export function RequirementHeader({ data, onUpdate }: RequirementHeaderProps) {
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
-              )}
+                <DeleteRequirement 
+                  requirementId={data.id}
+                  onDelete={onClose}
+                />
+              </>
+            )}
             </div>
           </div>
         </div>
