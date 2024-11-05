@@ -59,56 +59,43 @@ export function CreateRequirement({
     setFormData((prevData) => ({ ...prevData, fecha_inicio: date }));
   };
 
-  const handleEstimateClick = async () => {
-    if (!formData.nombre || !formData.descripcion) {
-      toast({
-        title: "Error",
-        description: "Por favor, complete el nombre y la descripción del requerimiento antes de estimar.",
-        variant: "destructive",
-      });
-      return;
-    }
-
+  const handleEstimateEffort = async () => {
+    setIsEstimating(true);
     try {
-      setIsEstimating(true);
-
-      const estimation = await estimateRequirementEffort({
-        nombre: formData.nombre,
-        descripcion: formData.descripcion,
-        tipo: formData.tipo
+      const response = await fetch("/api/generateTimeEstimation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nombre: formData.nombre,
+          descripcion: formData.descripcion,
+          tipo: formData.tipo,
+        }),
       });
 
-      // Update form with total hours
-      setFormData(prev => ({
-        ...prev,
-        esfuerzo_requerimiento: estimation.horas_totales.toString()
+      if (!response.ok) {
+        throw new Error("Error estimating requirement effort");
+      }
+
+      const data = await response.json();
+      console.log("Estimation response:", data);
+
+      // Actualizar el formulario con la respuesta de la estimación
+      setFormData((prevData) => ({
+        ...prevData,
+        ...data,
       }));
 
-      // Show detailed toast with breakdown
       toast({
         title: "Estimación completada",
-        description: (
-          <div className="space-y-2">
-            <p><strong>Tiempo total estimado:</strong> {estimation.horas_totales} horas</p>
-            <p><strong>Desglose:</strong></p>
-            <ul className="list-disc pl-4">
-              <li>Análisis: {estimation.desglose.analisis} horas</li>
-              <li>Desarrollo: {estimation.desglose.desarrollo} horas</li>
-              <li>Pruebas: {estimation.desglose.pruebas} horas</li>
-              <li>Documentación: {estimation.desglose.documentacion} horas</li>
-            </ul>
-            <p><strong>Nivel de confianza:</strong> {estimation.nivel_confianza}</p>
-            <p><strong>Justificación:</strong> {estimation.justificacion}</p>
-          </div>
-        ),
-        duration: 10000,
+        description: "La estimación del esfuerzo se ha completado con éxito.",
       });
-
     } catch (error) {
-      console.error("Error en la estimación:", error);
+      console.error("Estimation error:", error);
       toast({
         title: "Error en la estimación",
-        description: "No se pudo completar la estimación. Por favor, intente nuevamente.",
+        description: "Hubo un error al estimar el esfuerzo del requerimiento.",
         variant: "destructive",
       });
     } finally {
@@ -221,7 +208,7 @@ export function CreateRequirement({
                   type="button"
                   variant="default"
                   className="bg-blue-500 hover:bg-blue-600 text-white rounded-md"
-                  onClick={handleEstimateClick}
+                  onClick={handleEstimateEffort}
                   disabled={isEstimating}
                 >
                   {isEstimating ? (
