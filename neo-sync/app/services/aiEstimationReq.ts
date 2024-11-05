@@ -1,9 +1,5 @@
-import OpenAI from 'openai';
+import { ollamaClient } from '@/lib/ollama/client/ollamaClient';
 
-const openai = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true
-});
 
 interface EstimationResponse {
   horas_totales: number;
@@ -35,21 +31,19 @@ Tipo: ${tipo || 'No especificado'}
 Considera la complejidad específica del requerimiento. NO uses estimaciones genéricas.
 La estimación debe variar según el alcance y complejidad real del requerimiento.
 
-Responde en JSON:
+Responde en JSON, no incluyas explicaciones adicionales, solamente el JSON con la estimación:
 {
-  "horas_totales": [total realista basado en complejidad],
+  "tiempo_requerimiento": [total realista basado en complejidad],
   "desglose": {
     "analisis": [horas],
     "desarrollo": [horas],
     "pruebas": [horas],
     "documentacion": [horas]
-  },
-  "justificacion": "explicación breve basada en la complejidad específica",
-  "nivel_confianza": "alto/medio/bajo"
+  }
 }`;
 
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await ollamaClient.chat({
       messages: [
         { 
           role: "system", 
@@ -57,13 +51,11 @@ Responde en JSON:
         },
         { role: "user", content: prompt }
       ],
-      model: "gpt-4o-mini",
-      temperature: 0.7, // Increased for more variation
-      response_format: { type: "json_object" }
+      model: "llama3.1",
     });
 
-    console.log("AI Response:", completion.choices[0].message.content);
-    return JSON.parse(completion.choices[0].message.content || "{}") as EstimationResponse;
+    console.log("AI Response:", completion.message.content);
+    return JSON.parse(completion.message.content) as EstimationResponse;
   } catch (error) {
     console.error("Estimation error:", error);
     throw error;
