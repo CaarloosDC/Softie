@@ -32,20 +32,9 @@ export default function ProjectsPage() {
 
       const newUser = await response.json();
       console.log("New user added:", newUser);
-
-      toast({
-        title: "User added",
-        description: "The new user has been successfully added.",
-      });
+      console.log("User added:", newUser);
     } catch (error) {
       console.error("Error adding user:", error);
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error
-            ? error.message
-            : "There was a problem adding the user.",
-      });
     }
   };
 
@@ -90,6 +79,3 @@ export default function ProjectsPage() {
   );
 }
 
-function toast(arg0: { title: string; description: string }) {
-  throw new Error("Function not implemented.");
-}
