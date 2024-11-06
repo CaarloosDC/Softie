@@ -64,22 +64,11 @@ export default function ProjectsComponent({
 
       setFilteredProjects((prevProjects) => [...prevProjects, newProject]);
 
-      toast({
-        title: "Project created",
-        description: "Your new project has been successfully created.",
-      });
+      
       router.refresh();
 
-      // Here you might want to update your local state or refetch projects
     } catch (error) {
       console.error("Error creating project:", error);
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error
-            ? error.message
-            : "There was a problem creating your project.",
-      });
     }
   };
 
@@ -103,20 +92,9 @@ export default function ProjectsComponent({
 
       const newUser = await response.json();
       console.log("New user added:", newUser);
-
-      toast({
-        title: "User added",
-        description: "The new user has been successfully added.",
-      });
+      console.log("User added:", newUser);
     } catch (error) {
       console.error("Error adding user:", error);
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error
-            ? error.message
-            : "There was a problem adding the user.",
-      });
     }
   };
 
@@ -174,6 +152,4 @@ export default function ProjectsComponent({
   );
 }
 
-function toast(arg0: { title: string; description: string }) {
-  throw new Error("Function not implemented.");
-}
+
