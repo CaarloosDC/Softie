@@ -16,7 +16,7 @@ interface ProjectInfo {
   fecha_inicio?: string;
   fecha_fin?: string;
 }
-
+//llamada a la api de requerimientos
 interface Requirement {
   id: string;
   nombre: string;
