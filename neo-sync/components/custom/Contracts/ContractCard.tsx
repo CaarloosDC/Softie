@@ -28,20 +28,31 @@ import BlueButton from "../BlueButton";
 import { useRouter } from "next/navigation";
 import CustomSeparator from "../Overview/CustomSeparator";
 
-export default function ContractCard() {
+interface ContractCardProps {
+  title: string;
+  contractId: string;
+  previewUrl: string | null;
+  createdAt: string;
+}
+
+export default function ContractCard({title, contractId, previewUrl, createdAt}: ContractCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   //* Handle the click when going to specific contracts page
   const router = useRouter();
 
   const handleEdit = () => {
-    router.push("/contracts/1"); // Navigates to /contracts/1
+    if (previewUrl) {
+      router.push(`/contracts/${contractId}?url=${encodeURIComponent(previewUrl)}`); // Navigates to /contracts/1
+    } else {
+      router.push(`/contracts/${contractId}`); // Navigates to /contracts/1 without URL
+    }
   };
 
   return (
     <Card className="w-[300px] bg-white shadow-lg">
       <CardHeader className="flex flex-row justify-between items-center px-4 py-3">
-        <CardTitle className="text-xl font-bold">CEMEX</CardTitle>
+        <CardTitle className="text-xl font-bold">{title}</CardTitle>
         <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <DropdownMenuTrigger asChild>
             <Button size={"sm"} variant="ghost" className="h-8 w-8 p-0">
@@ -76,7 +87,7 @@ export default function ContractCard() {
       <CardFooter className="flex justify-between items-center px-4 py-3">
         <div className="flex items-center text-sm text-gray-500">
           <Calendar className="mr-2 h-4 w-4" />
-          <span>4/09/2024</span>
+          <span>{createdAt}</span>
         </div>
         {/* <BlueButton text="Descargar" icon={<Download className="h-3 w-3" />} /> */}
       </CardFooter>
