@@ -2,8 +2,11 @@
 
 import PDFViewer from "@/components/custom/Contracts/PDFViewer";
 import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
+import { useSearchParams } from "next/navigation";
 
 export default function PDFPage() {
+  const searchParams = useSearchParams();
+  const previewUrl = searchParams ? searchParams.get("url") : null;
   return (
     <div className="flex flex-col w-full h-full p-4 lg:gap-6 lg:p-6 mx-auto">
       {/* Header */}
@@ -15,7 +18,7 @@ export default function PDFPage() {
       <div className="flex-grow flex flex-col gap-3 rounded-lg shadow-sm">
         <CustomSeparator />
         <div className="flex-grow">
-          <PDFViewer pdfPath="/prueba.pdf" />
+          <PDFViewer pdfPath={previewUrl || "/prueba.pdf"} />
         </div>
       </div>
     </div>
