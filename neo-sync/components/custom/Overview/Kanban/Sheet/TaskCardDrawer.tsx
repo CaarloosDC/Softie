@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { Estimation } from "@/types/types";
 import { createClient } from "@/utils/supabase/client";
 import { TodoList } from "./TodoList";
+import TeamsChatWrapper from "@/components/teams-chat/TeamsChatWrapper";
+
 
 interface RequirementData {
   id: string;
@@ -120,7 +122,7 @@ export default function TaskCardDrawer({
           {/* Chat section */}
           <div className="p-4">
             <h2 className="text-lg font-semibold mb-2">Chat</h2>
-            <p>Teams.</p>
+            <TeamsChatWrapper />
           </div>
 
           {/* Estimations section */}
