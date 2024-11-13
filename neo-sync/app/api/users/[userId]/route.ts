@@ -10,17 +10,49 @@ export async function PATCH(
   try {
     const { newRole } = await request.json();
     
+    // First verify the user exists
+    const { data: existingUser, error: checkError } = await supabase
+      .from('usuario_servicio')
+      .select()
+      .eq('id', params.userId)
+      .single();
+
+    if (checkError) {
+      if (checkError.code === 'PGRST116') {
+        return NextResponse.json({ 
+          error: 'User not found',
+          message: 'The specified user does not exist'
+        }, { status: 404 });
+      }
+      throw checkError;
+    }
+
+    // Then update the role
     const { data, error } = await supabase
       .from('usuario_servicio')
       .update({ rol_sistema: newRole })
       .eq('id', params.userId)
-      .select()
-      .single();
+      .select();
 
-    if (error) throw error;
+    if (error) {
+      console.log('Supabase API Error:', {
+        action: 'PATCH /api/users/[userId]',
+        userId: params.userId,
+        newRole,
+        error
+      });
+      throw error;
+    }
+
+    console.log('API Role Update Success:', {
+      action: 'PATCH /api/users/[userId]',
+      userId: params.userId,
+      newRole,
+      updatedUser: data[0]
+    });
 
     return NextResponse.json({ 
-      user: data, 
+      user: data[0], 
       message: 'User role updated successfully' 
     }, { status: 200 });
   } catch (error) {

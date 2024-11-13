@@ -19,7 +19,7 @@ export async function addUser(userData: UserInput) {
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: userData.email,
       password: userData.password,
-      email_confirm: true // This automatically confirms the email
+      email_confirm: true
     });
 
     if (authError) {
@@ -32,6 +32,7 @@ export async function addUser(userData: UserInput) {
     }
 
     // Insert additional user data into the usuario_servicio table
+    // Now including the email field
     const { data, error: insertError } = await supabaseAdmin
       .from('usuario_servicio')
       .insert({
@@ -39,6 +40,7 @@ export async function addUser(userData: UserInput) {
         nombre: userData.name,
         rol_sistema: userData.role,
         telefono: userData.phone,
+        email: authData.user.email
       })
       .select()
       .single();

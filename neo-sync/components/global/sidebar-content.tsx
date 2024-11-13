@@ -9,6 +9,7 @@ import {
   ChevronRight,
   ChevronDown,
   CircleChevronLeft,
+  UserIcon,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Divider from "@/components/custom/divider";
@@ -71,8 +72,8 @@ const menuData: MenuData = {
   settings: [
     {
       href: "/config",
-      icon: GearIcon,
-      label: "Configuración",
+      icon: UserIcon,
+      label: "Usuarios",
     },
   ],
 };

@@ -7,7 +7,7 @@ export async function fetchUsers() {
   try {
     const { data, error } = await supabase
       .from('usuario_servicio')
-      .select('id, email, nombre, rol_sistema, telefono');
+      .select('id, email, nombre, rol_sistema');
 
     if (error) {
       console.error('Fetch error:', error);

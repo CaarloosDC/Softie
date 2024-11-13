@@ -16,12 +16,20 @@ import {
 import { ArrowUpDown } from "lucide-react";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast, useToast } from "@/hooks/use-toast";
 
 //* Defines the type
 export type Users = {
   id: string;
   name: string;
-  rol: "administrador" | "lider" | "usuario";
+  rol: string;
   email: string;
 };
 
@@ -75,11 +83,49 @@ export const columns: ColumnDef<Users>[] = [
     accessorKey: "rol",
     header: () => <div className="text-right">Rol</div>,
     cell: ({ row }) => {
-      const amount: string = row.getValue("rol");
-      const formattedAmount =
-        amount.charAt(0).toUpperCase() + amount.slice(1).toLowerCase();
+      const user = row.original;
+      
+      const handleRoleChange = async (newRole: string) => {
+        try {
+          const response = await fetch(`/api/users/${user.id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ newRole }),
+          });
 
-      return <div className="text-right font-medium">{formattedAmount}</div>;
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.message);
+
+          // Update will happen through table refresh
+          toast({
+            title: "Success",
+            description: "User role updated successfully",
+          });
+        } catch (error) {
+          toast({
+            title: "Error",
+            description: "Failed to update user role",
+            variant: "destructive",
+          });
+        }
+      };
+
+      return (
+        <div className="text-right">
+          <Select defaultValue={user.rol} onValueChange={handleRoleChange}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Select role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="usuario">Usuario</SelectItem>
+              <SelectItem value="administrador">Administrador</SelectItem>
+              <SelectItem value="gerente">Gerente</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      );
     },
   },
   {
