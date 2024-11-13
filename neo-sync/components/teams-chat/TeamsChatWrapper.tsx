@@ -1,3 +1,4 @@
+// components/teams-chat/TeamsChatWrapper.tsx
 "use client"
 
 import { MsalProvider } from "@azure/msal-react";

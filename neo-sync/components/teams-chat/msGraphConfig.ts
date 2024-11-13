@@ -1,3 +1,4 @@
+// components/teams-chat/msGraphConfig.ts
 import { Configuration, PopupRequest } from "@azure/msal-browser";
 
 export const msalConfig: Configuration = {

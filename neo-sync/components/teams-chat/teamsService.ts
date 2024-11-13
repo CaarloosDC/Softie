@@ -1,3 +1,4 @@
+// components/teams-chat/teamsService.ts
 import { Client } from "@microsoft/microsoft-graph-client";
 import { AccountInfo, PublicClientApplication } from "@azure/msal-browser";
 
@@ -42,23 +43,16 @@ export class TeamsService {
       const response = await this.graphClient
         .api(`/chats/${chatId}/messages`)
         .query({
-          $orderby: 'createdDateTime desc',
           $top: 50
         })
         .get();
 
       const messages = response.value || [];
-      const latestMessageId = messages[0]?.id;
-      const hasNewMessages = latestMessageId !== this.lastKnownMessageId;
-      
-      if (hasNewMessages) {
-        this.lastKnownMessageId = latestMessageId;
-      }
+      console.log('Fetched messages:', messages);
 
-      return {
-        messages,
-        hasNewMessages
-      };
+      return messages.sort((a, b) => 
+        new Date(a.createdDateTime).getTime() - new Date(b.createdDateTime).getTime()
+      );
     } catch (error) {
       console.error('Error fetching messages:', error);
       throw error;
