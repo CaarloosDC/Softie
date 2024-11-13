@@ -28,8 +28,21 @@ export async function changeUserRole({ userId, newRole }: RoleChangeInput) {
       .select();
 
     if (error) {
+      console.log('Supabase Error:', {
+        action: 'changeUserRole',
+        userId,
+        newRole,
+        error
+      });
       throw error;
     }
+
+    console.log('Role Updated Successfully:', {
+      action: 'changeUserRole',
+      userId,
+      newRole,
+      updatedUser: data[0]
+    });
 
     return data[0]; // Return the first (and only) updated record
   } catch (error) {

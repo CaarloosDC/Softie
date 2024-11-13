@@ -34,7 +34,22 @@ export async function PATCH(
       .eq('id', params.userId)
       .select();
 
-    if (error) throw error;
+    if (error) {
+      console.log('Supabase API Error:', {
+        action: 'PATCH /api/users/[userId]',
+        userId: params.userId,
+        newRole,
+        error
+      });
+      throw error;
+    }
+
+    console.log('API Role Update Success:', {
+      action: 'PATCH /api/users/[userId]',
+      userId: params.userId,
+      newRole,
+      updatedUser: data[0]
+    });
 
     return NextResponse.json({ 
       user: data[0], 
