@@ -266,14 +266,7 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
           <CardContent className="px-3 pt-3 pb-6 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex space-x-4">
-                <div className="flex items-center space-x-1">
-                  <MessageCircle className="h-4 w-4" />
-                  <span className="text-sm">20</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <LinkIcon className="h-4 w-4" />
-                  <span className="text-sm">5</span>
-                </div>
+               
                 {isInProjectRequirements && (
                   <div className="flex items-center space-x-1">
                     <CheckSquare className="h-4 w-4" />
