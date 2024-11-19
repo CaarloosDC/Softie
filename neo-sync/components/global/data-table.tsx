@@ -53,6 +53,12 @@ export function DataTable<TData, TValue>({
     React.useState<VisibilityState>({}); //* Manage visibility of each column
   const [rowSelection, setRowSelection] = React.useState({}); //* Allows for selecting a row
 
+  React.useEffect(() => {
+    setSorting([]);
+    setColumnFilters([]);
+    setRowSelection({});
+  }, [data]);
+
   //* Use to display the table and all its methods needed for rendering
   const table = useReactTable({
     data,
