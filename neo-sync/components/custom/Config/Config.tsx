@@ -7,13 +7,13 @@ import { Toaster } from "@/components/ui/toaster";
 export default async function Config() {
   // Fetch users directly in the server component
   const users = await fetchUsers();
-  
+
   // Transform the data to match the Users type
   const transformedUsers: Users[] = users.map((user: any) => ({
     id: user.id,
     name: user.nombre,
     rol: user.rol_sistema,
-    email: user.email,
+    email: user.email ? user.email : "",
   }));
 
   return (

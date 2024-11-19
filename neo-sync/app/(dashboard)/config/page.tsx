@@ -54,28 +54,4 @@ export default function ProjectsPage() {
       <Config />
     </Container>
   );
-
-  //* Old way of rendering content, without parent container
-  return (
-    //* Shows main component
-    <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-      {/* This is the header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold md:text-2xl">Dashboard</h1>
-
-        <BlueButton
-          text="Agregar Usuario"
-          icon={<UserPlus className="h-4 w-4" />}
-        >
-          <AddUser onSubmit={handleAddUser} />
-        </BlueButton>
-      </div>
-      <CustomSeparator />
-      {/* This shows the config */}
-      <div>
-        <Config />
-      </div>
-    </div>
-  );
 }
-
