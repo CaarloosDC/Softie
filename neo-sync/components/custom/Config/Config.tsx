@@ -1,12 +1,9 @@
-"use client";
-
 import { Users, columns } from "./columnsConfig";
 import { DataTable, TableSkeleton } from "../../global/data-table";
 import { fetchUsers } from "@/app/(dashboard)/projects/fetchUser";
 import { Toaster } from "@/components/ui/toaster";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Config() {
   const [users, setUsers] = useState<Users[]>([]);

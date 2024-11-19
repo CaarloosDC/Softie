@@ -1,5 +1,8 @@
+"use client";
+
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -12,13 +15,21 @@ interface BlueButtonProps {
 }
 
 const BlueButton: React.FC<BlueButtonProps> = ({ text, icon, children }) => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <AlertDialog>
+    <AlertDialog
+      open={open}
+      onOpenChange={(newOpen) => {
+        if (open && !newOpen) {
+          setOpen(false);
+        } else if (!open && newOpen) {
+          setOpen(true);
+        }
+      }}
+    >
       <AlertDialogTrigger asChild>
-        <Button
-          size={"sm"}
-          variant="default"
-        >
+        <Button size={"sm"} variant="default">
           {icon && <span className="mr-2">{icon}</span>}
           {text}
         </Button>
@@ -26,7 +37,9 @@ const BlueButton: React.FC<BlueButtonProps> = ({ text, icon, children }) => {
       {/* Only render AlertDialogContent if children are passed */}
       {children && (
         <AlertDialogContent className="overflow-auto">
-          {children} {/* Content to render */}
+          {React.cloneElement(children as React.ReactElement, {
+            onClose: () => setOpen(false),
+          })}
         </AlertDialogContent>
       )}
     </AlertDialog>
