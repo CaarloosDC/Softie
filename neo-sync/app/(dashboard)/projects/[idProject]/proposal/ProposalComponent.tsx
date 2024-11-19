@@ -216,16 +216,16 @@ ${formatTeamSection(teamSummary)}`;
   return (
     <Container>
       <Header title={`Propuesta de Proyecto: ${projectInfo?.nombre || ''}`}>
-        <DownloadProposal 
+        {/* <DownloadProposal 
           proposalText={proposalText}
           projectName={projectInfo?.nombre || ''}
-        />
+        /> */}
       </Header>
 
       <Card className="mt-4">
         <CardContent className="p-4">
           <Editor
-            apiKey="i0xli55fr9yjmusuxratzlvv2g06vs2jhq8o3ohi0qotcj7l" // Get this from TinyMCE Cloud
+            apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
             initialValue={proposalText}
             init={{
               height: 600,
@@ -233,50 +233,20 @@ ${formatTeamSection(teamSummary)}`;
               plugins: [
                 'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
                 'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount',
+                'exportpdf'
               ],
               toolbar: 'undo redo | formatselect | ' +
                 'bold italic forecolor | alignleft aligncenter ' +
                 'alignright alignjustify | bullist numlist outdent indent | ' +
-                'removeformat | help',
-              content_style: `
-                body { 
-                  font-family: Helvetica, Arial, sans-serif; 
-                  font-size: 14px; 
-                  line-height: 1.6;
-                  padding: 20px;
-                }
-                h2 { 
-                  font-size: 24px; 
-                  margin-bottom: 20px;
-                  color: #333;
-                }
-                h3 { 
-                  font-size: 18px; 
-                  margin-top: 25px;
-                  margin-bottom: 15px;
-                  color: #444;
-                }
-                p { 
-                  margin-bottom: 15px; 
-                }
-                .requirement {
-                  margin-bottom: 20px;
-                  padding-left: 20px;
-                }
-                strong {
-                  color: #555;
-                }
-              `,
-              formats: {
-                bold: { inline: 'strong' },
-                italic: { inline: 'em' }
-              },
-              forced_root_block: 'p',
-              remove_trailing_brs: true,
-              paste_as_text: false,
-              paste_enable_default_filters: true,
-              browser_spellcheck: true
+                'removeformat | exportpdf | help',
+              exportpdf_converter_options: {
+                format: 'Letter',
+                margin_top: '1in',
+                margin_right: '1in',
+                margin_bottom: '1in',
+                margin_left: '1in'
+              }
             }}
             onEditorChange={(content) => setProposalText(content)}
           />
