@@ -12,7 +12,7 @@ export default async function Config() {
   const transformedUsers: Users[] = users.map((user: any) => ({
     id: user.id,
     name: user.nombre,
-    rol: user.rol_usuario,
+    rol: user.rol_sistema,
     email: user.email ? user.email : "",
   }));
 

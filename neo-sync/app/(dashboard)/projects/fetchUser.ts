@@ -7,14 +7,13 @@ export async function fetchUsers() {
   try {
     const { data, error } = await supabase
       .from("usuario_servicio")
-      .select("id, email, nombre, rol_usuario");
+      .select("id, email, nombre, rol_sistema");
 
     if (error) {
       console.error("Fetch error:", error);
       throw error;
     }
 
-    console.log(data);
     return data;
   } catch (error) {
     console.error("Error in fetchUsers:", error);
