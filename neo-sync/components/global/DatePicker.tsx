@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
-import { PopoverContent } from "@/components/ui/popoverDialog";
+import { PopoverContent } from "@/components/ui/popover";
 
 interface DatePickerProps {
   selectedDate: Date | undefined;
@@ -35,7 +35,12 @@ export function DatePicker({ selectedDate, onDateChange }: DatePickerProps) {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent 
+        align="start"
+        className="w-auto p-0" 
+        style={{ zIndex: 99999 }}
+        side="bottom"
+      >
         <Calendar
           mode="single"
           selected={selectedDate}

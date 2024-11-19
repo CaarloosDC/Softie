@@ -28,10 +28,11 @@ interface RequirementHeaderProps {
     nombre: string;
     tipo: "funcional" | "no funcional";
     fecha_inicio: string | null;
+    fecha_fin: string | null;
     estatus: string;
   };
   onUpdate: (updatedData: any) => void;
-  onClose?: () => void;  // Add this prop
+  onClose?: () => void;
 }
 
 export function RequirementHeader({ data, onUpdate, onClose }: RequirementHeaderProps) {
@@ -40,6 +41,9 @@ export function RequirementHeader({ data, onUpdate, onClose }: RequirementHeader
   const [tipo, setTipo] = useState(data.tipo);
   const [startDate, setStartDate] = useState<Date | undefined>(
     data.fecha_inicio ? new Date(data.fecha_inicio) : undefined
+  );
+  const [endDate, setEndDate] = useState<Date | undefined>(
+    data.fecha_fin ? new Date(data.fecha_fin) : undefined
   );
 
   const handleSave = async () => {
@@ -61,6 +65,7 @@ export function RequirementHeader({ data, onUpdate, onClose }: RequirementHeader
           nombre: nombre.trim(),
           tipo: tipo,
           fecha_inicio: startDate?.toISOString() || null,
+          fecha_fin: endDate?.toISOString() || null,
         })
         .eq("id", data.id);
 
@@ -71,6 +76,7 @@ export function RequirementHeader({ data, onUpdate, onClose }: RequirementHeader
         nombre: nombre.trim(),
         tipo: tipo,
         fecha_inicio: startDate?.toISOString() || null,
+        fecha_fin: endDate?.toISOString() || null,
       });
 
       toast({
@@ -93,6 +99,7 @@ export function RequirementHeader({ data, onUpdate, onClose }: RequirementHeader
     setNombre(data.nombre);
     setTipo(data.tipo);
     setStartDate(data.fecha_inicio ? new Date(data.fecha_inicio) : undefined);
+    setEndDate(data.fecha_fin ? new Date(data.fecha_fin) : undefined);
     setIsEditing(false);
   };
 
@@ -114,96 +121,134 @@ export function RequirementHeader({ data, onUpdate, onClose }: RequirementHeader
             )}
           </div>
 
+          {/* Reorganize the grid layout */}
           <div className="grid grid-cols-2 gap-4">
-            {/* Left Column: Type */}
-            <div className="space-y-1">
-              <p className="font-semibold">Tipo de requerimiento</p>
-              {isEditing ? (
-                <Select
-                  value={tipo}
-                  onValueChange={(value) =>
-                    setTipo(value as "funcional" | "no funcional")
-                  }
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Seleccionar tipo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="funcional">Funcional</SelectItem>
-                    <SelectItem value="no funcional">No funcional</SelectItem>
-                  </SelectContent>
-                </Select>
-              ) : (
-                <p className="text-sm text-muted-foreground capitalize">
-                  {tipo}
-                </p>
-              )}
+            {/* Left Column: Type and Start Date */}
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <p className="font-semibold">Tipo de requerimiento</p>
+                {isEditing ? (
+                  <Select
+                    value={tipo}
+                    onValueChange={(value) =>
+                      setTipo(value as "funcional" | "no funcional")
+                    }
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Seleccionar tipo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="funcional">Funcional</SelectItem>
+                      <SelectItem value="no funcional">No funcional</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <p className="text-sm text-muted-foreground capitalize">
+                    {tipo}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-1">
+                <p className="font-semibold">Fecha de inicio</p>
+                {isEditing ? (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        size={"sm"}
+                        variant={"outline"}
+                        className={cn(
+                          "w-[200px] h-8 justify-start text-left font-normal",
+                          !startDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {startDate
+                          ? format(startDate, "PPP")
+                          : "Seleccionar fecha"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={startDate}
+                        onSelect={setStartDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    {startDate ? format(startDate, "PPP") : "No establecida"}
+                  </p>
+                )}
+              </div>
             </div>
 
-            {/* Right Column: Status */}
-            <div className="space-y-1">
-              <p className="font-semibold">Estado</p>
-              <p className="text-sm text-muted-foreground capitalize">
-                {data.estatus}
-              </p>
+            {/* Right Column: Status and End Date */}
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <p className="font-semibold">Estado</p>
+                <p className="text-sm text-muted-foreground capitalize">
+                  {data.estatus}
+                </p>
+              </div>
+
+              <div className="space-y-1">
+                <p className="font-semibold">Fecha de finalización</p>
+                {isEditing ? (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        size={"sm"}
+                        variant={"outline"}
+                        className={cn(
+                          "w-[200px] h-8 justify-start text-left font-normal",
+                          !endDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {endDate
+                          ? format(endDate, "PPP")
+                          : "Seleccionar fecha"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={endDate}
+                        onSelect={setEndDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    {endDate ? format(endDate, "PPP") : "No establecida"}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Start Date and Edit Button Row */}
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <p className="font-semibold">Fecha de inicio</p>
-              {isEditing ? (
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      size={"sm"}
-                      variant={"outline"}
-                      className={cn(
-                        "w-[200px] h-8 justify-start text-left font-normal",
-                        !startDate && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {startDate
-                        ? format(startDate, "PPP")
-                        : "Seleccionar fecha"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={startDate}
-                      onSelect={setStartDate}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              ) : (
-                <p className="text-sm text-muted-foreground capitalize">
-                  {startDate ? format(startDate, "PPP") : "No establecida"}
-                </p>
-              )}
-            </div>
-
-            {/* Edit/Save Buttons */}
-            <div className="flex space-x-2">
-              {isEditing ? (
-                <>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={handleCancel}
-                    className="h-8"
-                  >
-                    Cancelar
-                  </Button>
-                  <Button size="sm" onClick={handleSave}>
-                    Guardar
-                  </Button>
-                </>
-              ) : (
-                <>
+          {/* Edit/Save Buttons */}
+          <div className="flex justify-end space-x-2">
+            {isEditing ? (
+              <>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleCancel}
+                  className="h-8"
+                >
+                  Cancelar
+                </Button>
+                <Button size="sm" onClick={handleSave}>
+                  Guardar
+                </Button>
+              </>
+            ) : (
+              <>
                 <Button
                   size="icon"
                   onClick={() => setIsEditing(true)}
@@ -217,7 +262,6 @@ export function RequirementHeader({ data, onUpdate, onClose }: RequirementHeader
                 />
               </>
             )}
-            </div>
           </div>
         </div>
       </CardContent>

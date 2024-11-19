@@ -9,6 +9,7 @@ import Header from "@/components/global/Container/Header";
 import { Card, CardContent } from "@/components/ui/card";
 import DownloadProposal from "./DownloadProposal";
 import { Textarea } from "@/components/ui/textarea";
+import { Loader2 } from "lucide-react";
 
 interface ProjectInfo {
   nombre: string;
@@ -116,7 +117,19 @@ Fechas Importantes:
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Container>
+        <Header title="Cargando propuesta...">
+          {/* Empty header while loading */}
+        </Header>
+        <Card className="mt-4">
+          <CardContent className="min-h-[600px] flex flex-col items-center justify-center space-y-4">
+            <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+            <p className="text-sm text-gray-400">Cargando propuesta del proyecto...</p>
+          </CardContent>
+        </Card>
+      </Container>
+    );
   }
 
   return (

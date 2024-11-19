@@ -15,6 +15,7 @@ interface RequirementData {
   nombre: string;
   tipo: "funcional" | "no funcional";
   fecha_inicio: string | null;
+  fecha_fin: string | null;
   estatus: string;
 }
 
@@ -49,7 +50,7 @@ export default function TaskCardDrawer({
           .single(),
         supabase
           .from("requerimiento")
-          .select("id, nombre, tipo, fecha_inicio, estatus")
+          .select("id, nombre, tipo, fecha_inicio, fecha_fin, estatus")
           .eq("id", requirementId)
           .single(),
       ]);
