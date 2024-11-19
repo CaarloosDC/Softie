@@ -59,13 +59,20 @@ export function RequirementHeader({ data, onUpdate, onClose }: RequirementHeader
     const supabase = createClient();
 
     try {
+      const adjustedStartDate = startDate 
+        ? new Date(startDate.getTime() - startDate.getTimezoneOffset() * 60000).toISOString()
+        : null;
+      const adjustedEndDate = endDate 
+        ? new Date(endDate.getTime() - endDate.getTimezoneOffset() * 60000).toISOString()
+        : null;
+
       const { error } = await supabase
         .from("requerimiento")
         .update({
           nombre: nombre.trim(),
           tipo: tipo,
-          fecha_inicio: startDate?.toISOString() || null,
-          fecha_fin: endDate?.toISOString() || null,
+          fecha_inicio: adjustedStartDate,
+          fecha_fin: adjustedEndDate,
         })
         .eq("id", data.id);
 
@@ -75,8 +82,8 @@ export function RequirementHeader({ data, onUpdate, onClose }: RequirementHeader
         ...data,
         nombre: nombre.trim(),
         tipo: tipo,
-        fecha_inicio: startDate?.toISOString() || null,
-        fecha_fin: endDate?.toISOString() || null,
+        fecha_inicio: adjustedStartDate,
+        fecha_fin: adjustedEndDate,
       });
 
       toast({

@@ -8,8 +8,9 @@ import Container from "@/components/global/Container/Container";
 import Header from "@/components/global/Container/Header";
 import { Card, CardContent } from "@/components/ui/card";
 import DownloadProposal from "./DownloadProposal";
-import { Textarea } from "@/components/ui/textarea";
+import { Editor } from '@tinymce/tinymce-react';
 import { Loader2 } from "lucide-react";
+import Cronogram from './Cronogram';
 
 interface ProjectInfo {
   nombre: string;
@@ -25,6 +26,20 @@ interface Requirement {
   esfuerzo_requerimiento?: number;
   tiempo_requerimiento?: number;
   costo_requerimiento?: number;
+  fecha_inicio?: string;
+  fecha_fin?: string;
+}
+
+interface TeamMember {
+  id: number;
+  rol: string;
+  experiencia: string;
+}
+
+// Add this interface for TypeScript
+interface EditorProps {
+  initialValue: string;
+  onChange: (content: string) => void;
 }
 
 export default function ProposalComponent() {
@@ -35,17 +50,21 @@ export default function ProposalComponent() {
   const [requirements, setRequirements] = useState<Requirement[]>([]);
   const [proposalText, setProposalText] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const supabase = createClient();
       
-      // Fetch project info
-      const { data: projectData, error: projectError } = await supabase
-        .from("proyecto")
-        .select("*")
-        .eq("id", projectId)
-        .single();
+      const [
+        { data: projectData, error: projectError },
+        { data: requirementsData, error: requirementsError },
+        { data: teamData, error: teamError }
+      ] = await Promise.all([
+        supabase.from("proyecto").select("*").eq("id", projectId).single(),
+        supabase.from("requerimiento").select("*").eq("proyecto_id", projectId),
+        supabase.from("equipo_proyecto").select("*").eq("proyecto_id", projectId)
+      ]);
 
       if (projectError) {
         console.error("Error fetching project:", projectError);
@@ -57,12 +76,6 @@ export default function ProposalComponent() {
         return;
       }
 
-      // Fetch requirements
-      const { data: requirementsData, error: requirementsError } = await supabase
-        .from("requerimiento")
-        .select("*")
-        .eq("proyecto_id", projectId);
-
       if (requirementsError) {
         console.error("Error fetching requirements:", requirementsError);
         toast({
@@ -73,11 +86,21 @@ export default function ProposalComponent() {
         return;
       }
 
-      setProjectInfo(projectData);
-      setRequirements(requirementsData);
+      if (teamError) {
+        console.error("Error fetching team:", teamError);
+        toast({
+          title: "Error",
+          description: "Failed to fetch team information",
+          variant: "destructive",
+        });
+        return;
+      }
 
-      // Generate initial proposal text
-      const initialProposal = generateProposalText(projectData, requirementsData);
+      setProjectInfo(projectData);
+      setRequirements(requirementsData || []);
+      setTeamMembers(teamData || []);
+
+      const initialProposal = generateProposalText(projectData, requirementsData || [], teamData || []);
       setProposalText(initialProposal);
       setIsLoading(false);
     };
@@ -85,35 +108,94 @@ export default function ProposalComponent() {
     fetchData();
   }, [projectId]);
 
-  const generateProposalText = (project: ProjectInfo, reqs: Requirement[]) => {
+  const generateProposalText = (project: ProjectInfo, reqs: Requirement[], team: TeamMember[]) => {
     const totalCost = reqs.reduce((sum, req) => sum + (req.costo_requerimiento || 0), 0);
     const totalEffort = reqs.reduce((sum, req) => sum + (req.esfuerzo_requerimiento || 0), 0);
     const totalTime = reqs.reduce((sum, req) => sum + (req.tiempo_requerimiento || 0), 0);
 
+    const sortedReqs = [...reqs].sort((a, b) => {
+      const dateA = a.fecha_inicio ? new Date(a.fecha_inicio).getTime() : 0;
+      const dateB = b.fecha_inicio ? new Date(b.fecha_inicio).getTime() : 0;
+      return dateA - dateB;
+    });
+
+    const projectStartDate = sortedReqs[0]?.fecha_inicio;
+    const projectEndDate = sortedReqs[sortedReqs.length - 1]?.fecha_fin;
+
+    const formatDate = (dateString?: string) => {
+      if (!dateString) return 'Por definir';
+      return new Date(dateString).toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    };
+
+    const formatTeamSection = (teamSummary: Record<string, { jr: number; mid: number; sr: number }>) => {
+      return Object.entries(teamSummary)
+        .map(([role, counts]) => {
+          const levels = [
+            counts.sr > 0 ? `${counts.sr} Senior` : '',
+            counts.mid > 0 ? `${counts.mid} Mid-level` : '',
+            counts.jr > 0 ? `${counts.jr} Junior` : ''
+          ].filter(Boolean);
+          
+          return levels.length > 0
+            ? `<p><strong>${role}:</strong><br/>
+               ${levels.map(level => `&bull; ${level}`).join('<br/>')}</p>`
+            : '';
+        })
+        .filter(Boolean)
+        .join('\n');
+    };
+
+    const teamSummary = team.reduce((acc, member) => {
+      const role = member.rol === 'developer' ? 'Desarrolladores' :
+                   member.rol === 'ui_ux' ? 'UI/UX' :
+                   member.rol === 'scrum_master' ? 'Scrum Masters' :
+                   member.rol === 'qa' ? 'QA' : 'Otros';
+      
+      const exp = member.experiencia === 'senior' ? 'Sr' :
+                  member.experiencia === 'mid' ? 'Mid' :
+                  member.experiencia === 'junior' ? 'Jr' : '';
+      
+      acc[role] = acc[role] || { jr: 0, mid: 0, sr: 0 };
+      if (exp === 'Sr') acc[role].sr++;
+      if (exp === 'Mid') acc[role].mid++;
+      if (exp === 'Jr') acc[role].jr++;
+      
+      return acc;
+    }, {} as Record<string, { jr: number; mid: number; sr: number }>);
+
     return `
-Propuesta de Proyecto: ${project.nombre}
+<h2>Propuesta de Proyecto: ${project.nombre}</h2>
 
-Descripción del Proyecto:
-${project.descripcion}
+<h3>Descripción del Proyecto:</h3>
+<p>${project.descripcion}</p>
 
-Requerimientos:
-${reqs.map((req, index) => `
-${index + 1}. ${req.nombre}
-   Descripción: ${req.descripcion}
-   Esfuerzo estimado: ${req.esfuerzo_requerimiento || 0} horas
-   Tiempo estimado: ${req.tiempo_requerimiento || 0} días
-   Costo estimado: $${req.costo_requerimiento || 0} USD
-`).join('\n')}
+<h3>Cronograma de Requerimientos:</h3>
+${sortedReqs.map((req, index) => `
+<div style="margin-bottom: 20px;">
+  <p><strong>${index + 1}. ${req.nombre}</strong><br/>
+  <strong>Descripción:</strong> ${req.descripcion}<br/>
+  <strong>Fecha inicio:</strong> ${formatDate(req.fecha_inicio)}<br/>
+  <strong>Fecha fin:</strong> ${formatDate(req.fecha_fin)}<br/>
+  <strong>Esfuerzo estimado:</strong> ${req.esfuerzo_requerimiento || 0} horas<br/>
+  <strong>Tiempo estimado:</strong> ${req.tiempo_requerimiento || 0} días<br/>
+  <strong>Costo estimado:</strong> $${req.costo_requerimiento?.toLocaleString() || 0} USD</p>
+</div>`).join('')}
 
-Resumen de Estimaciones:
-- Esfuerzo total: ${totalEffort} horas
-- Tiempo total estimado: ${totalTime} días
-- Costo total del proyecto: $${totalCost} USD
+<h3>Resumen de Estimaciones:</h3>
+<p>&bull; Esfuerzo total: ${totalEffort} horas<br/>
+&bull; Tiempo total estimado: ${totalTime} días<br/>
+&bull; Costo total del proyecto: $${totalCost.toLocaleString()} USD</p>
 
-Fechas Importantes:
-- Fecha de inicio propuesta: ${project.fecha_inicio || 'Por definir'}
-- Fecha de finalización estimada: ${project.fecha_fin || 'Por definir'}
-`;
+<h3>Fechas Importantes:</h3>
+<p>&bull; Fecha de inicio propuesta: ${formatDate(projectStartDate)}<br/>
+&bull; Fecha de finalización estimada: ${formatDate(projectEndDate)}</p>
+
+<h3>Equipo del Proyecto:</h3>
+${formatTeamSection(teamSummary)}`;
   };
 
   if (isLoading) {
@@ -135,22 +217,40 @@ Fechas Importantes:
   return (
     <Container>
       <Header title={`Propuesta de Proyecto: ${projectInfo?.nombre || ''}`}>
-        <DownloadProposal 
+        {/* <DownloadProposal 
           proposalText={proposalText}
           projectName={projectInfo?.nombre || ''}
-        />
+        /> */}
       </Header>
 
       <Card className="mt-4">
         <CardContent className="p-4">
-          <Textarea
+          <Editor
+            apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
             value={proposalText}
-            onChange={(e) => setProposalText(e.target.value)}
-            className="min-h-[600px] w-1/2 font-sans"
-            placeholder="Propuesta del proyecto..."
+            init={{
+              height: 600,
+              menubar: true,
+              plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount',
+                'exportpdf'
+              ],
+              toolbar: 'undo redo | formatselect | ' +
+                'bold italic forecolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'removeformat | exportpdf | help',
+              content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 14px; }',
+              paste_data_images: true,
+              browser_spellcheck: true
+            }}
+            onEditorChange={(content) => setProposalText(content)}
           />
         </CardContent>
       </Card>
+
+      <Cronogram projectId={projectId} />
     </Container>
   );
 }
