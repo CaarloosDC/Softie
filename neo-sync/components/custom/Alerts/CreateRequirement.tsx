@@ -38,6 +38,7 @@ export function CreateRequirement({
     descripcion: "",
     tipo: "",
     fecha_inicio: undefined as Date | undefined,
+    fecha_fin: undefined as Date | undefined,
     esfuerzo_requerimiento: "",
     estatus: "todo",
   });
@@ -111,6 +112,9 @@ export function CreateRequirement({
       fecha_inicio: formData.fecha_inicio
         ? formData.fecha_inicio.toISOString().split("T")[0]
         : null,
+      fecha_fin: formData.fecha_fin
+        ? formData.fecha_fin.toISOString().split("T")[0]
+        : null,
     };
     console.log("Submitting requirement data:", submitData);
     await onSubmit(submitData);
@@ -120,7 +124,7 @@ export function CreateRequirement({
     <form onSubmit={handleSubmit}>
       <AlertDialogHeader>
         <AlertDialogTitle>Crear nuevo requerimiento</AlertDialogTitle>
-        <AlertDialogDescription>
+        <AlertDialogDescription className="overflow-visible">
           <div className="space-y-4 mt-4">
             <div>
               <label
@@ -152,39 +156,53 @@ export function CreateRequirement({
                 placeholder="Describe los detalles del requerimiento del proyecto"
               />
             </div>
-            <div className="flex gap-2">
-              <div className="w-1/2">
-                <label
-                  htmlFor="tipo"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Tipo de requerimiento
-                </label>
-                <Select
-                  name="tipo"
-                  value={formData.tipo}
-                  onValueChange={handleSelectChange}
-                >
-                  <SelectTrigger id="tipo" className="w-full">
-                    <SelectValue placeholder="Seleccionar" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="RF">Funcional</SelectItem>
-                    <SelectItem value="RNF">No Funcional</SelectItem>
-                    <SelectItem value="otro">Otro</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div>
+              <label
+                htmlFor="tipo"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Tipo de requerimiento
+              </label>
+              <Select
+                name="tipo"
+                value={formData.tipo}
+                onValueChange={handleSelectChange}
+              >
+                <SelectTrigger id="tipo" className="w-full">
+                  <SelectValue placeholder="Seleccionar" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="RF">Funcional</SelectItem>
+                  <SelectItem value="RNF">No Funcional</SelectItem>
+                  <SelectItem value="otro">Otro</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex gap-4">
               <div className="w-1/2">
                 <label
                   htmlFor="fecha_inicio"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Fecha de inicio del proceso
+                  Fecha de inicio
                 </label>
                 <DatePicker
                   selectedDate={formData.fecha_inicio}
                   onDateChange={handleDateChange}
+                />
+              </div>
+              <div className="w-1/2">
+                <label
+                  htmlFor="fecha_fin"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Fecha de finalización
+                </label>
+                <DatePicker
+                  selectedDate={formData.fecha_fin}
+                  onDateChange={(date) => 
+                    setFormData(prev => ({ ...prev, fecha_fin: date }))
+                  }
                 />
               </div>
             </div>
