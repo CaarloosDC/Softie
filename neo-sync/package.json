@@ -33,7 +33,6 @@
     "@radix-ui/react-toast": "^1.2.2",
     "@supabase/ssr": "^0.5.1",
     "@supabase/supabase-js": "^2.45.4",
-    "@syncfusion/ej2-react-gantt": "^27.2.2",
     "@tanstack/react-table": "^8.20.5",
     "@tinymce/tinymce-react": "^5.1.1",
     "ai": "2.2.16",
