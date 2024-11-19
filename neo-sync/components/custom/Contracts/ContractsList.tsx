@@ -16,7 +16,9 @@ export default function ContractsList() {
   // Obtener los contratos del bucket de Supabase
   useEffect(() => {
     const fetchContracts = async () => {
-      const { data, error } = await supabase.storage.from("contratosMarco").list();
+      const { data, error } = await supabase.storage
+        .from("contratosMarco")
+        .list();
 
       if (error) {
         console.error("Error fetching contracts:", error);
@@ -33,9 +35,10 @@ export default function ContractsList() {
       // Para cada documento, obtener la URL firmada
       const documentsWithPreview = await Promise.all(
         data.map(async (doc) => {
-          const { data: signedUrlData, error: urlError } = await supabase.storage
-            .from("contratosMarco")
-            .createSignedUrl(doc.name, 60);
+          const { data: signedUrlData, error: urlError } =
+            await supabase.storage
+              .from("contratosMarco")
+              .createSignedUrl(doc.name, 60);
 
           if (urlError) {
             console.error("Error fetching preview URL:", urlError);
@@ -52,19 +55,31 @@ export default function ContractsList() {
     fetchContracts();
   }, []);
 
+  const handleDelete = async (fileName: string) => {
+    const { error } = await supabase.storage
+      .from("contratosMarco")
+      .remove([fileName]);
+
+    if (error) {
+      console.error("Error deleting file:", error);
+      return;
+    }
+
+    setDocuments(documents.filter((doc) => doc.name !== fileName));
+  };
+
   return (
     <div className="flex flex-wrap gap-2 w-full">
-      { documents.map((doc) => (
+      {documents.map((doc) => (
         <ContractCard
           key={doc.name}
           title={doc.name}
           contractId={doc.id}
           previewUrl={doc.previewUrl || ""}
           createdAt={format(new Date(doc.created_at), "dd/MM/yyyy")}
+          onDelete={() => handleDelete(doc.name)}
         />
-      ))
-      }
+      ))}
     </div>
   );
 }
-
