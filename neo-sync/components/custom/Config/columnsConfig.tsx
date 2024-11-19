@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast, useToast } from "@/hooks/use-toast";
+import { deleteRol } from "@/app/(dashboard)/config/deleteRol";
 
 //* Defines the type
 export type Users = {
@@ -84,13 +85,13 @@ export const columns: ColumnDef<Users>[] = [
     header: () => <div className="text-right">Rol</div>,
     cell: ({ row }) => {
       const user = row.original;
-      
+
       const handleRoleChange = async (newRole: string) => {
         try {
           const response = await fetch(`/api/users/${user.id}`, {
-            method: 'PATCH',
+            method: "PATCH",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({ newRole }),
           });
@@ -132,8 +133,6 @@ export const columns: ColumnDef<Users>[] = [
     //* We add the column actions without column title (because there is no header). Here shows a button that shows a dropdown menu.
     id: "Acciones",
     cell: ({ row }) => {
-      const user = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -144,13 +143,11 @@ export const columns: ColumnDef<Users>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(user.id)}
-            >
-              Editar rol
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:bg-destructive focus:text-destructive-foreground">
+            <DropdownMenuItem
+              className="text-destructive focus:bg-destructive focus:text-destructive-foreground"
+              onClick={() => deleteRol(parseInt(row.original.id))} // Call function to delete the rol selected
+            >
               Borrar Usuario
             </DropdownMenuItem>
           </DropdownMenuContent>
