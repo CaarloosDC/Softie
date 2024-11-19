@@ -8,7 +8,7 @@ import Container from "@/components/global/Container/Container";
 import Header from "@/components/global/Container/Header";
 import { Card, CardContent } from "@/components/ui/card";
 import DownloadProposal from "./DownloadProposal";
-import { Textarea } from "@/components/ui/textarea";
+import { Editor } from '@tinymce/tinymce-react';
 import { Loader2 } from "lucide-react";
 
 interface ProjectInfo {
@@ -33,6 +33,12 @@ interface TeamMember {
   id: number;
   rol: string;
   experiencia: string;
+}
+
+// Add this interface for TypeScript
+interface EditorProps {
+  initialValue: string;
+  onChange: (content: string) => void;
 }
 
 export default function ProposalComponent() {
@@ -124,6 +130,24 @@ export default function ProposalComponent() {
       });
     };
 
+    const formatTeamSection = (teamSummary: Record<string, { jr: number; mid: number; sr: number }>) => {
+      return Object.entries(teamSummary)
+        .map(([role, counts]) => {
+          const levels = [
+            counts.sr > 0 ? `${counts.sr} Senior` : '',
+            counts.mid > 0 ? `${counts.mid} Mid-level` : '',
+            counts.jr > 0 ? `${counts.jr} Junior` : ''
+          ].filter(Boolean);
+          
+          return levels.length > 0
+            ? `<p><strong>${role}:</strong><br/>
+               ${levels.map(level => `&bull; ${level}`).join('<br/>')}</p>`
+            : '';
+        })
+        .filter(Boolean)
+        .join('\n');
+    };
+
     const teamSummary = team.reduce((acc, member) => {
       const role = member.rol === 'developer' ? 'Desarrolladores' :
                    member.rol === 'ui_ux' ? 'UI/UX' :
@@ -142,49 +166,34 @@ export default function ProposalComponent() {
       return acc;
     }, {} as Record<string, { jr: number; mid: number; sr: number }>);
 
-    const formatTeamSection = (teamSummary: Record<string, { jr: number; mid: number; sr: number }>) => {
-      return Object.entries(teamSummary)
-        .map(([role, counts]) => {
-          const levels = [
-            counts.sr > 0 ? `${counts.sr} Senior` : '',
-            counts.mid > 0 ? `${counts.mid} Mid-level` : '',
-            counts.jr > 0 ? `${counts.jr} Junior` : ''
-          ].filter(Boolean);
-          
-          return levels.length > 0
-            ? `${role}:\n- ${levels.join('\n- ')}`
-            : '';
-        })
-        .filter(Boolean)
-        .join('\n\n');
-    };
-
     return `
-Propuesta de Proyecto: ${project.nombre}
+<h2>Propuesta de Proyecto: ${project.nombre}</h2>
 
-Descripción del Proyecto:
-${project.descripcion}
+<h3>Descripción del Proyecto:</h3>
+<p>${project.descripcion}</p>
 
-Cronograma de Requerimientos:
+<h3>Cronograma de Requerimientos:</h3>
 ${sortedReqs.map((req, index) => `
-${index + 1}. ${req.nombre}
-   Descripción: ${req.descripcion}
-   Fecha inicio: ${formatDate(req.fecha_inicio)}
-   Fecha fin: ${formatDate(req.fecha_fin)}
-   Esfuerzo estimado: ${req.esfuerzo_requerimiento || 0} horas
-   Tiempo estimado: ${req.tiempo_requerimiento || 0} días
-   Costo estimado: $${req.costo_requerimiento?.toLocaleString() || 0} USD`).join('\n')}
+<div style="margin-bottom: 20px;">
+  <p><strong>${index + 1}. ${req.nombre}</strong><br/>
+  <strong>Descripción:</strong> ${req.descripcion}<br/>
+  <strong>Fecha inicio:</strong> ${formatDate(req.fecha_inicio)}<br/>
+  <strong>Fecha fin:</strong> ${formatDate(req.fecha_fin)}<br/>
+  <strong>Esfuerzo estimado:</strong> ${req.esfuerzo_requerimiento || 0} horas<br/>
+  <strong>Tiempo estimado:</strong> ${req.tiempo_requerimiento || 0} días<br/>
+  <strong>Costo estimado:</strong> $${req.costo_requerimiento?.toLocaleString() || 0} USD</p>
+</div>`).join('')}
 
-Resumen de Estimaciones:
-- Esfuerzo total: ${totalEffort} horas
-- Tiempo total estimado: ${totalTime} días
-- Costo total del proyecto: $${totalCost.toLocaleString()} USD
+<h3>Resumen de Estimaciones:</h3>
+<p>&bull; Esfuerzo total: ${totalEffort} horas<br/>
+&bull; Tiempo total estimado: ${totalTime} días<br/>
+&bull; Costo total del proyecto: $${totalCost.toLocaleString()} USD</p>
 
-Fechas Importantes:
-- Fecha de inicio propuesta: ${formatDate(projectStartDate)}
-- Fecha de finalización estimada: ${formatDate(projectEndDate)}
+<h3>Fechas Importantes:</h3>
+<p>&bull; Fecha de inicio propuesta: ${formatDate(projectStartDate)}<br/>
+&bull; Fecha de finalización estimada: ${formatDate(projectEndDate)}</p>
 
-Equipo del Proyecto:
+<h3>Equipo del Proyecto:</h3>
 ${formatTeamSection(teamSummary)}`;
   };
 
@@ -215,11 +224,61 @@ ${formatTeamSection(teamSummary)}`;
 
       <Card className="mt-4">
         <CardContent className="p-4">
-          <Textarea
-            value={proposalText}
-            onChange={(e) => setProposalText(e.target.value)}
-            className="min-h-[600px] w-1/2 font-sans"
-            placeholder="Propuesta del proyecto..."
+          <Editor
+            apiKey="i0xli55fr9yjmusuxratzlvv2g06vs2jhq8o3ohi0qotcj7l" // Get this from TinyMCE Cloud
+            initialValue={proposalText}
+            init={{
+              height: 600,
+              menubar: true,
+              plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+              ],
+              toolbar: 'undo redo | formatselect | ' +
+                'bold italic forecolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'removeformat | help',
+              content_style: `
+                body { 
+                  font-family: Helvetica, Arial, sans-serif; 
+                  font-size: 14px; 
+                  line-height: 1.6;
+                  padding: 20px;
+                }
+                h2 { 
+                  font-size: 24px; 
+                  margin-bottom: 20px;
+                  color: #333;
+                }
+                h3 { 
+                  font-size: 18px; 
+                  margin-top: 25px;
+                  margin-bottom: 15px;
+                  color: #444;
+                }
+                p { 
+                  margin-bottom: 15px; 
+                }
+                .requirement {
+                  margin-bottom: 20px;
+                  padding-left: 20px;
+                }
+                strong {
+                  color: #555;
+                }
+              `,
+              formats: {
+                bold: { inline: 'strong' },
+                italic: { inline: 'em' }
+              },
+              forced_root_block: 'p',
+              remove_trailing_brs: true,
+              paste_as_text: false,
+              paste_enable_default_filters: true,
+              browser_spellcheck: true
+            }}
+            onEditorChange={(content) => setProposalText(content)}
           />
         </CardContent>
       </Card>
