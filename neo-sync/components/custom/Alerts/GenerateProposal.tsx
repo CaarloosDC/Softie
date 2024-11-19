@@ -18,6 +18,12 @@ import {
   Target,
   Hourglass,
   DollarSign,
+  Code2,
+  Paintbrush,
+  ScrollText,
+  TestTubes,
+  Users2,
+  Loader2,
 } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -124,8 +130,39 @@ export default function GenerateProposal() {
     router.push(`/projects/${projectId}/proposal`);
   };
 
+  // Add role icons mapping
+  const roleIcons = {
+    'Desarrolladores': <Code2 className="w-3 h-3" />,
+    'UI/UX': <Paintbrush className="w-3 h-3" />,
+    'Scrum Masters': <ScrollText className="w-3 h-3" />,
+    'QA': <TestTubes className="w-3 h-3" />,
+    'Otros': <Users2 className="w-3 h-3" />
+  };
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <AlertDialogHeader className="text-center">
+          <AlertDialogTitle className="text-xl font-bold">
+            Resumen de la propuesta
+          </AlertDialogTitle>
+        </AlertDialogHeader>
+
+        <AlertDialogDescription className="min-h-[300px] flex flex-col items-center justify-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+          <p className="text-sm text-gray-400">Cargando resumen del proyecto...</p>
+        </AlertDialogDescription>
+
+        <Separator />
+
+        <AlertDialogFooter className="flex flex-col">
+          <AlertDialogCancel className="w-1/2" disabled>Cerrar</AlertDialogCancel>
+          <AlertDialogAction className="w-1/2" disabled>
+            <FileText className="w-3 h-3 mr-2" /> Generar propuesta
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </>
+    );
   }
 
   return (
@@ -170,8 +207,11 @@ export default function GenerateProposal() {
           <div className="grid grid-cols-2 gap-2 text-xs">
             {Object.entries(teamSummary).map(([role, counts]) => (
               <div key={role} className="bg-gray-100 p-2 rounded-md">
-                <div className="font-medium">{role}</div>
-                <div className="text-gray-600">
+                <div className="font-medium flex items-center gap-1">
+                  {roleIcons[role as keyof typeof roleIcons]}
+                  <span>{role}</span>
+                </div>
+                <div className="text-gray-600 ml-4">
                   {counts.sr > 0 && `${counts.sr} Sr `}
                   {counts.mid > 0 && `${counts.mid} Mid `}
                   {counts.jr > 0 && `${counts.jr} Jr`}
