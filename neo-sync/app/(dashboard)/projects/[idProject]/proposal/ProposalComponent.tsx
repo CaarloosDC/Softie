@@ -25,6 +25,14 @@ interface Requirement {
   esfuerzo_requerimiento?: number;
   tiempo_requerimiento?: number;
   costo_requerimiento?: number;
+  fecha_inicio?: string;
+  fecha_fin?: string;
+}
+
+interface TeamMember {
+  id: number;
+  rol: string;
+  experiencia: string;
 }
 
 export default function ProposalComponent() {
@@ -35,17 +43,21 @@ export default function ProposalComponent() {
   const [requirements, setRequirements] = useState<Requirement[]>([]);
   const [proposalText, setProposalText] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const supabase = createClient();
       
-      // Fetch project info
-      const { data: projectData, error: projectError } = await supabase
-        .from("proyecto")
-        .select("*")
-        .eq("id", projectId)
-        .single();
+      const [
+        { data: projectData, error: projectError },
+        { data: requirementsData, error: requirementsError },
+        { data: teamData, error: teamError }
+      ] = await Promise.all([
+        supabase.from("proyecto").select("*").eq("id", projectId).single(),
+        supabase.from("requerimiento").select("*").eq("proyecto_id", projectId),
+        supabase.from("equipo_proyecto").select("*").eq("proyecto_id", projectId)
+      ]);
 
       if (projectError) {
         console.error("Error fetching project:", projectError);
@@ -57,12 +69,6 @@ export default function ProposalComponent() {
         return;
       }
 
-      // Fetch requirements
-      const { data: requirementsData, error: requirementsError } = await supabase
-        .from("requerimiento")
-        .select("*")
-        .eq("proyecto_id", projectId);
-
       if (requirementsError) {
         console.error("Error fetching requirements:", requirementsError);
         toast({
@@ -73,11 +79,21 @@ export default function ProposalComponent() {
         return;
       }
 
-      setProjectInfo(projectData);
-      setRequirements(requirementsData);
+      if (teamError) {
+        console.error("Error fetching team:", teamError);
+        toast({
+          title: "Error",
+          description: "Failed to fetch team information",
+          variant: "destructive",
+        });
+        return;
+      }
 
-      // Generate initial proposal text
-      const initialProposal = generateProposalText(projectData, requirementsData);
+      setProjectInfo(projectData);
+      setRequirements(requirementsData || []);
+      setTeamMembers(teamData || []);
+
+      const initialProposal = generateProposalText(projectData, requirementsData || [], teamData || []);
       setProposalText(initialProposal);
       setIsLoading(false);
     };
@@ -85,10 +101,63 @@ export default function ProposalComponent() {
     fetchData();
   }, [projectId]);
 
-  const generateProposalText = (project: ProjectInfo, reqs: Requirement[]) => {
+  const generateProposalText = (project: ProjectInfo, reqs: Requirement[], team: TeamMember[]) => {
     const totalCost = reqs.reduce((sum, req) => sum + (req.costo_requerimiento || 0), 0);
     const totalEffort = reqs.reduce((sum, req) => sum + (req.esfuerzo_requerimiento || 0), 0);
     const totalTime = reqs.reduce((sum, req) => sum + (req.tiempo_requerimiento || 0), 0);
+
+    const sortedReqs = [...reqs].sort((a, b) => {
+      const dateA = a.fecha_inicio ? new Date(a.fecha_inicio).getTime() : 0;
+      const dateB = b.fecha_inicio ? new Date(b.fecha_inicio).getTime() : 0;
+      return dateA - dateB;
+    });
+
+    const projectStartDate = sortedReqs[0]?.fecha_inicio;
+    const projectEndDate = sortedReqs[sortedReqs.length - 1]?.fecha_fin;
+
+    const formatDate = (dateString?: string) => {
+      if (!dateString) return 'Por definir';
+      return new Date(dateString).toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    };
+
+    const teamSummary = team.reduce((acc, member) => {
+      const role = member.rol === 'developer' ? 'Desarrolladores' :
+                   member.rol === 'ui_ux' ? 'UI/UX' :
+                   member.rol === 'scrum_master' ? 'Scrum Masters' :
+                   member.rol === 'qa' ? 'QA' : 'Otros';
+      
+      const exp = member.experiencia === 'senior' ? 'Sr' :
+                  member.experiencia === 'mid' ? 'Mid' :
+                  member.experiencia === 'junior' ? 'Jr' : '';
+      
+      acc[role] = acc[role] || { jr: 0, mid: 0, sr: 0 };
+      if (exp === 'Sr') acc[role].sr++;
+      if (exp === 'Mid') acc[role].mid++;
+      if (exp === 'Jr') acc[role].jr++;
+      
+      return acc;
+    }, {} as Record<string, { jr: number; mid: number; sr: number }>);
+
+    const formatTeamSection = (teamSummary: Record<string, { jr: number; mid: number; sr: number }>) => {
+      return Object.entries(teamSummary)
+        .map(([role, counts]) => {
+          const levels = [
+            counts.sr > 0 ? `${counts.sr} Senior` : '',
+            counts.mid > 0 ? `${counts.mid} Mid-level` : '',
+            counts.jr > 0 ? `${counts.jr} Junior` : ''
+          ].filter(Boolean);
+          
+          return levels.length > 0
+            ? `${role}:\n- ${levels.join('\n- ')}`
+            : '';
+        })
+        .filter(Boolean)
+        .join('\n\n');
+    };
 
     return `
 Propuesta de Proyecto: ${project.nombre}
@@ -96,24 +165,27 @@ Propuesta de Proyecto: ${project.nombre}
 Descripción del Proyecto:
 ${project.descripcion}
 
-Requerimientos:
-${reqs.map((req, index) => `
+Cronograma de Requerimientos:
+${sortedReqs.map((req, index) => `
 ${index + 1}. ${req.nombre}
    Descripción: ${req.descripcion}
+   Fecha inicio: ${formatDate(req.fecha_inicio)}
+   Fecha fin: ${formatDate(req.fecha_fin)}
    Esfuerzo estimado: ${req.esfuerzo_requerimiento || 0} horas
    Tiempo estimado: ${req.tiempo_requerimiento || 0} días
-   Costo estimado: $${req.costo_requerimiento || 0} USD
-`).join('\n')}
+   Costo estimado: $${req.costo_requerimiento?.toLocaleString() || 0} USD`).join('\n')}
 
 Resumen de Estimaciones:
 - Esfuerzo total: ${totalEffort} horas
 - Tiempo total estimado: ${totalTime} días
-- Costo total del proyecto: $${totalCost} USD
+- Costo total del proyecto: $${totalCost.toLocaleString()} USD
 
 Fechas Importantes:
-- Fecha de inicio propuesta: ${project.fecha_inicio || 'Por definir'}
-- Fecha de finalización estimada: ${project.fecha_fin || 'Por definir'}
-`;
+- Fecha de inicio propuesta: ${formatDate(projectStartDate)}
+- Fecha de finalización estimada: ${formatDate(projectEndDate)}
+
+Equipo del Proyecto:
+${formatTeamSection(teamSummary)}`;
   };
 
   if (isLoading) {
