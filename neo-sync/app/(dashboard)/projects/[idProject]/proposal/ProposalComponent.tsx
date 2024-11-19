@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import DownloadProposal from "./DownloadProposal";
 import { Editor } from '@tinymce/tinymce-react';
 import { Loader2 } from "lucide-react";
+import Cronogram from './Cronogram';
 
 interface ProjectInfo {
   nombre: string;
@@ -226,7 +227,7 @@ ${formatTeamSection(teamSummary)}`;
         <CardContent className="p-4">
           <Editor
             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
-            initialValue={proposalText}
+            value={proposalText}
             init={{
               height: 600,
               menubar: true,
@@ -240,18 +241,16 @@ ${formatTeamSection(teamSummary)}`;
                 'bold italic forecolor | alignleft aligncenter ' +
                 'alignright alignjustify | bullist numlist outdent indent | ' +
                 'removeformat | exportpdf | help',
-              exportpdf_converter_options: {
-                format: 'Letter',
-                margin_top: '1in',
-                margin_right: '1in',
-                margin_bottom: '1in',
-                margin_left: '1in'
-              }
+              content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 14px; }',
+              paste_data_images: true,
+              browser_spellcheck: true
             }}
             onEditorChange={(content) => setProposalText(content)}
           />
         </CardContent>
       </Card>
+
+      <Cronogram projectId={projectId} />
     </Container>
   );
 }

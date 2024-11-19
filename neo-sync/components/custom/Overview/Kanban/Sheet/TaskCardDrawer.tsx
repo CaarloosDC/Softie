@@ -74,7 +74,16 @@ export default function TaskCardDrawer({
           requirementResponse.error
         );
       } else {
-        setRequirementData(requirementResponse.data);
+        const data = requirementResponse.data;
+        if (data.fecha_inicio) {
+          const date = new Date(data.fecha_inicio);
+          data.fecha_inicio = new Date(date.getTime() + date.getTimezoneOffset() * 60000).toISOString();
+        }
+        if (data.fecha_fin) {
+          const date = new Date(data.fecha_fin);
+          data.fecha_fin = new Date(date.getTime() + date.getTimezoneOffset() * 60000).toISOString();
+        }
+        setRequirementData(data);
       }
 
       setIsLoading(false);
