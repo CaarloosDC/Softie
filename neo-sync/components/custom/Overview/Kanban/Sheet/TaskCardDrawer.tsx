@@ -8,6 +8,7 @@ import { Estimation } from "@/types/types";
 import { createClient } from "@/utils/supabase/client";
 import { TodoList } from "./TodoList";
 import TeamsChatWrapper from "@/components/teams-chat/TeamsChatWrapper";
+import { Loader2 } from "lucide-react";
 
 
 interface RequirementData {
@@ -92,7 +93,9 @@ export default function TaskCardDrawer({
         <SheetContent
           side="right"
           className="w-full max-w-[100vw] sm:max-w-[100vw] lg:max-w-[50vw] p-2">
-          <div>Loading...</div>
+          <div className="flex items-center justify-center h-full">
+            <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+          </div>
         </SheetContent>
       </Sheet>
     );
