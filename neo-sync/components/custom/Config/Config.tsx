@@ -1,21 +1,26 @@
 "use client";
 
 import { Users, columns } from "./columnsConfig";
-import { DataTable } from "../../global/data-table";
+import { DataTable, TableSkeleton } from "../../global/data-table";
 import { fetchUsers } from "@/app/(dashboard)/projects/fetchUser";
 import { Toaster } from "@/components/ui/toaster";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Config() {
   const [users, setUsers] = useState<Users[]>([]);
   const [tableKey, setTableKey] = useState(0); // Add this to force table rerenders
   const supabase = createClientComponentClient();
+  const [isLoading, setIsLoading] = useState(true);
 
+  //* Function to subscribe to real-time changes on supabase
   useEffect(() => {
     const loadInitialUsers = async () => {
       try {
+        setIsLoading(true);
         const initialUsers = await fetchUsers();
+        //* Give structure to data to show it in data-table
         const transformed = initialUsers.map((user: any) => ({
           id: user.id,
           name: user.nombre,
@@ -25,11 +30,14 @@ export default function Config() {
         setUsers(transformed);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     loadInitialUsers();
 
+    //* Create real-time subscription to supabase
     const channel = supabase
       .channel("usuario_servicio_changes")
       .on(
@@ -39,6 +47,7 @@ export default function Config() {
           schema: "public",
           table: "usuario_servicio",
         },
+        //* Perform different actions depending on the type of change the table on supabase had
         async (payload) => {
           try {
             switch (payload.eventType) {
@@ -81,7 +90,7 @@ export default function Config() {
               default:
             }
           } catch (error) {
-            console.error("Error handling real-time update:", error);
+            console.error("Error handling:", error);
           }
         }
       )
@@ -91,6 +100,10 @@ export default function Config() {
       channel.unsubscribe();
     };
   }, []);
+
+  if (isLoading) {
+    return <TableSkeleton />;
+  }
 
   return (
     <div className="w-full">
