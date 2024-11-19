@@ -18,14 +18,106 @@ import {
   Target,
   Hourglass,
   DollarSign,
+  Code2,
+  Paintbrush,
+  ScrollText,
+  TestTubes,
+  Users2,
+  Loader2,
 } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
+
+interface Requirement {
+  id: string;
+  nombre: string;
+  descripcion: string;
+  esfuerzo_requerimiento?: number;
+  tiempo_requerimiento?: number;
+  costo_requerimiento?: number;
+}
+
+interface TeamMember {
+  id: number;
+  rol: string;
+  experiencia: string;
+}
 
 export default function GenerateProposal() {
   const router = useRouter();
   const params = useParams();
   const projectId = params?.idProject as string;
+  const [requirements, setRequirements] = useState<Requirement[]>([]);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const supabase = createClient();
+      
+      const [requirementsResponse, teamResponse] = await Promise.all([
+        supabase
+          .from("requerimiento")
+          .select("*")
+          .eq("proyecto_id", projectId),
+        supabase
+          .from("equipo_proyecto")
+          .select("*")
+          .eq("proyecto_id", projectId)
+      ]);
+
+      if (requirementsResponse.error) {
+        console.error("Error fetching requirements:", requirementsResponse.error);
+      } else {
+        setRequirements(requirementsResponse.data || []);
+      }
+
+      if (teamResponse.error) {
+        console.error("Error fetching team:", teamResponse.error);
+      } else {
+        setTeamMembers(teamResponse.data || []);
+      }
+
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, [projectId]);
+
+  // Calculate totals
+  const totalRequirements = requirements.length;
+  const totalEffort = requirements.reduce(
+    (sum, req) => sum + (req.esfuerzo_requerimiento || 0),
+    0
+  );
+  const totalCost = requirements.reduce(
+    (sum, req) => sum + (req.costo_requerimiento || 0),
+    0
+  );
+  const totalTime = requirements.reduce(
+    (sum, req) => sum + (req.tiempo_requerimiento || 0),
+    0
+  );
+
+  // Calculate team summary
+  const teamSummary = teamMembers.reduce((acc, member) => {
+    const role = member.rol === 'developer' ? 'Desarrolladores' :
+                 member.rol === 'ui_ux' ? 'UI/UX' :
+                 member.rol === 'scrum_master' ? 'Scrum Masters' :
+                 member.rol === 'qa' ? 'QA' : 'Otros';
+    
+    const exp = member.experiencia === 'senior' ? 'Sr' :
+                member.experiencia === 'mid' ? 'Mid' :
+                member.experiencia === 'junior' ? 'Jr' : '';
+    
+    acc[role] = acc[role] || { jr: 0, mid: 0, sr: 0 };
+    if (exp === 'Sr') acc[role].sr++;
+    if (exp === 'Mid') acc[role].mid++;
+    if (exp === 'Jr') acc[role].jr++;
+    
+    return acc;
+  }, {} as Record<string, { jr: number; mid: number; sr: number }>);
 
   const alerts = [
     "Insuficientes recursos para cumplir la meta establecida.",
@@ -38,18 +130,50 @@ export default function GenerateProposal() {
     router.push(`/projects/${projectId}/proposal`);
   };
 
+  // Add role icons mapping
+  const roleIcons = {
+    'Desarrolladores': <Code2 className="w-3 h-3" />,
+    'UI/UX': <Paintbrush className="w-3 h-3" />,
+    'Scrum Masters': <ScrollText className="w-3 h-3" />,
+    'QA': <TestTubes className="w-3 h-3" />,
+    'Otros': <Users2 className="w-3 h-3" />
+  };
+
+  if (isLoading) {
+    return (
+      <>
+        <AlertDialogHeader className="text-center">
+          <AlertDialogTitle className="text-xl font-bold">
+            Resumen de la propuesta
+          </AlertDialogTitle>
+        </AlertDialogHeader>
+
+        <AlertDialogDescription className="min-h-[300px] flex flex-col items-center justify-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+          <p className="text-sm text-gray-400">Cargando resumen del proyecto...</p>
+        </AlertDialogDescription>
+
+        <Separator />
+
+        <AlertDialogFooter className="flex flex-col">
+          <AlertDialogCancel className="w-1/2" disabled>Cerrar</AlertDialogCancel>
+          <AlertDialogAction className="w-1/2" disabled>
+            <FileText className="w-3 h-3 mr-2" /> Generar propuesta
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </>
+    );
+  }
+
   return (
     <>
-      {/* Header */}
       <AlertDialogHeader className="text-center">
         <AlertDialogTitle className="text-xl font-bold">
           Resumen de la propuesta
         </AlertDialogTitle>
       </AlertDialogHeader>
 
-      {/* Content */}
       <AlertDialogDescription className="space-y-2 mt-1">
-        {/* Summary Section */}
         <div className="space-y-2">
           <AlertDialogTitle className="text-xl font-bold">
             Resumen
@@ -57,27 +181,48 @@ export default function GenerateProposal() {
           <SummaryItem
             icon={<List className="w-3 h-3" />}
             title="Requerimientos totales:"
-            content="120"
+            content={totalRequirements}
           />
           <SummaryItem
             icon={<Target className="w-3 h-3" />}
             title="Estimación de esfuerzo:"
-            content="360 puntos"
+            content={`${totalEffort} horas`}
           />
           <SummaryItem
             icon={<Hourglass className="w-3 h-3" />}
             title="Tiempo estimado:"
-            content="6 meses"
+            content={`${totalTime} días`}
           />
           <SummaryItem
             icon={<DollarSign className="w-3 h-3" />}
             title="Costo estimado:"
-            content="$1,350,980.00 MXN"
+            content={`$${totalCost.toLocaleString()} USD`}
           />
         </div>
         <Separator />
+        <div className="space-y-2 mt-4">
+          <AlertDialogTitle className="text-sm font-bold">
+            Equipo del Proyecto ({teamMembers.length} miembros)
+          </AlertDialogTitle>
+          <div className="grid grid-cols-2 gap-2 text-xs">
+            {Object.entries(teamSummary).map(([role, counts]) => (
+              <div key={role} className="bg-gray-100 p-2 rounded-md">
+                <div className="font-medium flex items-center gap-1">
+                  {roleIcons[role as keyof typeof roleIcons]}
+                  <span>{role}</span>
+                </div>
+                <div className="text-gray-600 ml-4">
+                  {counts.sr > 0 && `${counts.sr} Sr `}
+                  {counts.mid > 0 && `${counts.mid} Mid `}
+                  {counts.jr > 0 && `${counts.jr} Jr`}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <Separator />
         {/* Alerts Section */}
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <AlertDialogTitle className="text-xl font-bold text-red-500">
             Alertas
           </AlertDialogTitle>
@@ -92,16 +237,16 @@ export default function GenerateProposal() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
         {/* AI Button */}
-        <Button
+        {/* <Button
           size={"sm"}
           variant="default"
           className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-md"
         >
           <Wand2Icon className="w-4 mr-1" />
           Solucionar con inteligencia artificial
-        </Button>
+        </Button> */}
       </AlertDialogDescription>
 
       <Separator />
