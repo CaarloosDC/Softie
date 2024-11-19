@@ -32,10 +32,11 @@ export default function ProjectsPage() {
 
       const newUser = await response.json();
       console.log("New user added:", newUser);
-      console.log("User added:", newUser);
+      return true;
     } catch (error) {
-      console.error("Error adding user:", error);
+      throw error;
     }
+    return false;
   };
 
   //* Use parent container to render title and content

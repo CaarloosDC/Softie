@@ -33,6 +33,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "../ui/skeleton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -52,6 +53,12 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({}); //* Manage visibility of each column
   const [rowSelection, setRowSelection] = React.useState({}); //* Allows for selecting a row
+
+  React.useEffect(() => {
+    setSorting([]);
+    setColumnFilters([]);
+    setRowSelection({});
+  }, [data]);
 
   //* Use to display the table and all its methods needed for rendering
   const table = useReactTable({
@@ -203,5 +210,44 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
     </>
+  );
+}
+
+export function TableSkeleton() {
+  return (
+    <div className="w-full space-y-4">
+      {/* Search and columns skeleton */}
+      <div className="flex items-center py-4">
+        <Skeleton className="h-8 w-[150px]" />
+        <Skeleton className="ml-auto h-8 w-[70px]" />
+      </div>
+
+      {/* Table skeleton */}
+      <div className="rounded-md border">
+        <div className="border-b">
+          <div className="flex h-10 items-center gap-4 px-4">
+            {[...Array(4)].map((_, i) => (
+              <Skeleton key={i} className="h-4 w-[100px]" />
+            ))}
+          </div>
+        </div>
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="flex items-center gap-4 border-b p-4">
+            {[...Array(4)].map((_, j) => (
+              <Skeleton key={j} className="h-4 w-[100px]" />
+            ))}
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination skeleton */}
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Skeleton className="h-8 w-[100px]" />
+        <div className="space-x-2">
+          <Skeleton className="h-8 w-[70px] inline-block" />
+          <Skeleton className="h-8 w-[70px] inline-block" />
+        </div>
+      </div>
+    </div>
   );
 }

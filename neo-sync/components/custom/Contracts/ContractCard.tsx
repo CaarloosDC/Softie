@@ -33,9 +33,16 @@ interface ContractCardProps {
   contractId: string;
   previewUrl: string | null;
   createdAt: string;
+  onDelete: () => void;
 }
 
-export default function ContractCard({title, contractId, previewUrl, createdAt}: ContractCardProps) {
+export default function ContractCard({
+  title,
+  contractId,
+  previewUrl,
+  createdAt,
+  onDelete,
+}: ContractCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   //* Handle the click when going to specific contracts page
@@ -43,7 +50,9 @@ export default function ContractCard({title, contractId, previewUrl, createdAt}:
 
   const handleEdit = () => {
     if (previewUrl) {
-      router.push(`/contracts/${contractId}?url=${encodeURIComponent(previewUrl)}`); // Navigates to /contracts/1
+      router.push(
+        `/contracts/${contractId}?url=${encodeURIComponent(previewUrl)}`
+      ); // Navigates to /contracts/1
     } else {
       router.push(`/contracts/${contractId}`); // Navigates to /contracts/1 without URL
     }
@@ -64,9 +73,12 @@ export default function ContractCard({title, contractId, previewUrl, createdAt}:
               <Eye className="mr-2 h-4 w-4" />
               <span>View</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-100">
+            <DropdownMenuItem
+              className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-100"
+              onClick={onDelete}
+            >
               <Trash2 className="mr-2 h-4 w-4" />
-              <span>Delete</span>
+              <span>Borrar</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
