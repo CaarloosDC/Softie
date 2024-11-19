@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import Container from "@/components/global/Container/Container";
 import Header from "@/components/global/Container/Header";
 import DeleteProject from "@/app/(dashboard)/projects/[idProject]/DeleteProject"
+import { TeamMembersTable } from "@/components/custom/Alerts/ProjectTeam/TeamMembersTable";
 
 interface RequirementsComponentProps {
   requirements: Task[];
@@ -135,6 +136,7 @@ export default function RequirementsComponent({
         >
           <GenerateProposal />
         </BlueButton>
+        <TeamMembersTable projectId={projectId} />
         <DeleteProject projectId={projectId} />
       </Header>
 

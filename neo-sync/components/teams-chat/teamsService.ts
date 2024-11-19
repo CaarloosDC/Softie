@@ -50,7 +50,7 @@ export class TeamsService {
       const messages = response.value || [];
       console.log('Fetched messages:', messages);
 
-      return messages.sort((a, b) => 
+      return messages.sort((a: { createdDateTime: string | number | Date; }, b: { createdDateTime: string | number | Date; }) => 
         new Date(a.createdDateTime).getTime() - new Date(b.createdDateTime).getTime()
       );
     } catch (error) {

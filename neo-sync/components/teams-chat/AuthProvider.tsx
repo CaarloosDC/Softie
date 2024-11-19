@@ -2,7 +2,7 @@
 "use client"
 import { MsalProvider } from "@azure/msal-react";
 import { PublicClientApplication } from "@azure/msal-browser";
-import { msalConfig } from "@/lib/msGraphConfig";
+import { msalConfig } from "@/components/teams-chat/msGraphConfig";
 import { useEffect, useState } from "react";
 
 const msalInstance = new PublicClientApplication(msalConfig);
