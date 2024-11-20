@@ -2,13 +2,16 @@ import { Users, columns } from "./columnsConfig";
 import { DataTable, TableSkeleton } from "../../global/data-table";
 import { fetchUsers } from "@/app/(dashboard)/projects/fetchUser";
 import { Toaster } from "@/components/ui/toaster";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from '@supabase/ssr'
 import { useEffect, useState } from "react";
 
 export default function Config() {
   const [users, setUsers] = useState<Users[]>([]);
   const [tableKey, setTableKey] = useState(0); // Add this to force table rerenders
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   //* Function to subscribe to real-time changes on supabase
