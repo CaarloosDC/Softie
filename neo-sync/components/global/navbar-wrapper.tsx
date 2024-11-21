@@ -8,6 +8,7 @@ export async function NavbarWrapper() {
 
   let name = user?.user_metadata?.full_name || 'User'
   let email = user?.email || ''
+  let avatarUrl = user?.user_metadata?.avatar_url || ''
 
   // If you need more detailed user info from usuario_servicio table
   if (user) {
@@ -23,5 +24,5 @@ export async function NavbarWrapper() {
     }
   }
 
-  return <Navbar userName={name} userEmail={email} />
+  return <Navbar userName={name} userEmail={email} avatarUrl={avatarUrl} />
 }
