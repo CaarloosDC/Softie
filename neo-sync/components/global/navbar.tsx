@@ -97,16 +97,13 @@ const handleLogout = async () => {
         {/* Menú desplegable */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-              {avatarUrl ? (
-                <img
-                  src={avatarUrl}
-                  alt={userName}
-                  className="h-8 w-8 rounded-full object-cover"
-                />
-              ) : (
-                <PersonIcon className="h-4 w-4" />
-              )}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="relative h-8 w-8 rounded-full hover:bg-muted flex items-center justify-center dark:text-white text-black"
+            >
+              <MoreVertical className="h-5 w-5" />
+              <span className="sr-only">Open menu</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
