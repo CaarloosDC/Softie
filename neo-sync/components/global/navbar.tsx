@@ -24,9 +24,10 @@ import { SidebarContent } from "./sidebar-content";
 interface NavbarProps {
   userName: string;
   userEmail: string;
+  avatarUrl: string;
 }
 
-export function Navbar({ userName, userEmail }: NavbarProps) {
+export function Navbar({ userName, userEmail, avatarUrl }: NavbarProps) {
   const router = useRouter();
   const supabase = createClient();
 
@@ -75,7 +76,15 @@ const handleLogout = async () => {
         {/* Avatar y detalles del usuario */}
         <div className="flex items-center gap-3 hidden md:flex">
           <div className="bg-gray-300 dark:bg-gray-700 rounded-full w-8 h-8 flex justify-center items-center">
-            <PersonIcon className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+            {avatarUrl ? (
+              <img
+                src={avatarUrl}
+                alt={userName}
+                className="h-8 w-8 rounded-full object-cover"
+              />
+            ) : (
+              <PersonIcon className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+            )}
           </div>
           <div>
             <p className="text-sm font-medium dark:text-white">{userName}</p>
@@ -88,8 +97,16 @@ const handleLogout = async () => {
         {/* Menú desplegable */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="ml-2">
-              <MoreVertical className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt={userName}
+                  className="h-8 w-8 rounded-full object-cover"
+                />
+              ) : (
+                <PersonIcon className="h-4 w-4" />
+              )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
