@@ -28,6 +28,9 @@ import {
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
+import SelectContract from "./SelectContract";
+import { supabase } from "@/lib/db";
+import { Contract } from "./SelectContract";
 
 interface Requirement {
   id: string;
@@ -51,24 +54,49 @@ export default function GenerateProposal() {
   const [requirements, setRequirements] = useState<Requirement[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [contracts, setContracts] = useState<Contract[]>([
+    {
+      name: ".",
+      url: ".",
+    },
+  ]);
+
+  const supabase = createClient();
+
+  const add_url_to_proyect = async (name: string) => {
+    try {
+      const { error } = await supabase
+        .from("proyecto")
+        .update({
+          contrato_marco_url: name,
+        })
+        .eq("id", projectId);
+
+      if (error) {
+        console.error("Error updating contract:", error);
+        throw error;
+      }
+    } catch (error) {
+      console.error("Error in add_url_to_proyect:", error);
+      throw error; // Re-throw to be handled by the select component
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const supabase = createClient();
-      
       const [requirementsResponse, teamResponse] = await Promise.all([
-        supabase
-          .from("requerimiento")
-          .select("*")
-          .eq("proyecto_id", projectId),
+        supabase.from("requerimiento").select("*").eq("proyecto_id", projectId),
         supabase
           .from("equipo_proyecto")
           .select("*")
-          .eq("proyecto_id", projectId)
+          .eq("proyecto_id", projectId),
       ]);
 
       if (requirementsResponse.error) {
-        console.error("Error fetching requirements:", requirementsResponse.error);
+        console.error(
+          "Error fetching requirements:",
+          requirementsResponse.error
+        );
       } else {
         setRequirements(requirementsResponse.data || []);
       }
@@ -81,7 +109,48 @@ export default function GenerateProposal() {
 
       setIsLoading(false);
     };
+    const fetchContracts = async () => {
+      const { data, error } = await supabase.storage
+        .from("contratosMarco")
+        .list();
 
+      if (error) {
+        console.error("Error fetching contracts:", error);
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        console.log("No contracts found in the bucket.");
+        return;
+      }
+
+      console.log("Fetching contracts:", data);
+
+      // Para cada documento, obtener la URL firmada
+      const documentsWithPreview = await Promise.all(
+        data.map(async (doc) => {
+          const { data: signedUrlData, error: urlError } =
+            await supabase.storage
+              .from("contratosMarco")
+              .createSignedUrl(doc.name, 60);
+
+          if (urlError) {
+            console.error("Error fetching preview URL:", urlError);
+            return { ...doc, previewUrl: null };
+          }
+
+          return { ...doc, previewUrl: signedUrlData?.signedUrl };
+        })
+      );
+
+      setContracts(
+        documentsWithPreview.map((doc) => {
+          return { name: doc.name, url: doc.previewUrl || "." };
+        })
+      );
+    };
+
+    fetchContracts();
     fetchData();
   }, [projectId]);
 
@@ -102,20 +171,31 @@ export default function GenerateProposal() {
 
   // Calculate team summary
   const teamSummary = teamMembers.reduce((acc, member) => {
-    const role = member.rol === 'developer' ? 'Desarrolladores' :
-                 member.rol === 'ui_ux' ? 'UI/UX' :
-                 member.rol === 'scrum_master' ? 'Scrum Masters' :
-                 member.rol === 'qa' ? 'QA' : 'Otros';
-    
-    const exp = member.experiencia === 'senior' ? 'Sr' :
-                member.experiencia === 'mid' ? 'Mid' :
-                member.experiencia === 'junior' ? 'Jr' : '';
-    
+    const role =
+      member.rol === "developer"
+        ? "Desarrolladores"
+        : member.rol === "ui_ux"
+        ? "UI/UX"
+        : member.rol === "scrum_master"
+        ? "Scrum Masters"
+        : member.rol === "qa"
+        ? "QA"
+        : "Otros";
+
+    const exp =
+      member.experiencia === "senior"
+        ? "Sr"
+        : member.experiencia === "mid"
+        ? "Mid"
+        : member.experiencia === "junior"
+        ? "Jr"
+        : "";
+
     acc[role] = acc[role] || { jr: 0, mid: 0, sr: 0 };
-    if (exp === 'Sr') acc[role].sr++;
-    if (exp === 'Mid') acc[role].mid++;
-    if (exp === 'Jr') acc[role].jr++;
-    
+    if (exp === "Sr") acc[role].sr++;
+    if (exp === "Mid") acc[role].mid++;
+    if (exp === "Jr") acc[role].jr++;
+
     return acc;
   }, {} as Record<string, { jr: number; mid: number; sr: number }>);
 
@@ -132,11 +212,11 @@ export default function GenerateProposal() {
 
   // Add role icons mapping
   const roleIcons = {
-    'Desarrolladores': <Code2 className="w-3 h-3" />,
-    'UI/UX': <Paintbrush className="w-3 h-3" />,
-    'Scrum Masters': <ScrollText className="w-3 h-3" />,
-    'QA': <TestTubes className="w-3 h-3" />,
-    'Otros': <Users2 className="w-3 h-3" />
+    Desarrolladores: <Code2 className="w-3 h-3" />,
+    "UI/UX": <Paintbrush className="w-3 h-3" />,
+    "Scrum Masters": <ScrollText className="w-3 h-3" />,
+    QA: <TestTubes className="w-3 h-3" />,
+    Otros: <Users2 className="w-3 h-3" />,
   };
 
   if (isLoading) {
@@ -150,13 +230,17 @@ export default function GenerateProposal() {
 
         <AlertDialogDescription className="min-h-[300px] flex flex-col items-center justify-center space-y-4">
           <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
-          <p className="text-sm text-gray-400">Cargando resumen del proyecto...</p>
+          <p className="text-sm text-gray-400">
+            Cargando resumen del proyecto...
+          </p>
         </AlertDialogDescription>
 
         <Separator />
 
         <AlertDialogFooter className="flex flex-col">
-          <AlertDialogCancel className="w-1/2" disabled>Cerrar</AlertDialogCancel>
+          <AlertDialogCancel className="w-1/2" disabled>
+            Cerrar
+          </AlertDialogCancel>
           <AlertDialogAction className="w-1/2" disabled>
             <FileText className="w-3 h-3 mr-2" /> Generar propuesta
           </AlertDialogAction>
@@ -221,6 +305,11 @@ export default function GenerateProposal() {
           </div>
         </div>
         <Separator />
+
+        <SelectContract
+          contracts={contracts}
+          onSelectionUpdate={add_url_to_proyect}
+        />
         {/* Alerts Section */}
         {/* <div className="space-y-2">
           <AlertDialogTitle className="text-xl font-bold text-red-500">
