@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAutoScroller } from "@dnd-kit/core/dist/hooks/utilities";
 
 export interface Contract {
   name: string;
@@ -18,11 +19,13 @@ export interface Contract {
 interface SelectContractsProps {
   contracts: Contract[];
   onSelectionUpdate: (selectedValue: string) => Promise<void>;
+  url: string;
 }
 
 export default function SelectContract({
   contracts,
   onSelectionUpdate,
+  url,
 }: SelectContractsProps) {
   const handleValueChange = async (value: string) => {
     try {
@@ -33,19 +36,16 @@ export default function SelectContract({
   };
 
   return (
-    <Select onValueChange={handleValueChange}>
+    <Select value={url} onValueChange={handleValueChange}>
       <SelectTrigger className="">
         <SelectValue placeholder="Selecciona un contrato" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Selecciona un contrato</SelectLabel>
-          {contracts.map((contract, index) => (
-            <SelectItem
-              key={index}
-              value={contract.url} // Use URL as the value
-            >
-              {contract.name} {/* Display the name */}
+          {contracts.map((contract) => (
+            <SelectItem key={contract.url} value={contract.name}>
+              {contract.name}
             </SelectItem>
           ))}
         </SelectGroup>

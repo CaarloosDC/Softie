@@ -63,6 +63,7 @@ export default function GenerateProposal() {
 
   const supabase = createClient();
 
+  const [selectedName, setSelectedName] = useState<string>("");
   const add_url_to_proyect = async (name: string) => {
     try {
       const { error } = await supabase
@@ -76,6 +77,7 @@ export default function GenerateProposal() {
         console.error("Error updating contract:", error);
         throw error;
       }
+      setSelectedName(name);
     } catch (error) {
       console.error("Error in add_url_to_proyect:", error);
       throw error; // Re-throw to be handled by the select component
@@ -124,7 +126,7 @@ export default function GenerateProposal() {
         return;
       }
 
-      console.log("Fetching contracts:", data);
+      // console.log("Fetching contracts:", data);
 
       // Para cada documento, obtener la URL firmada
       const documentsWithPreview = await Promise.all(
@@ -145,7 +147,7 @@ export default function GenerateProposal() {
 
       setContracts(
         documentsWithPreview.map((doc) => {
-          return { name: doc.name, url: doc.previewUrl || "." };
+          return { name: doc.name, url: doc.previewUrl || "-" };
         })
       );
     };
@@ -153,6 +155,20 @@ export default function GenerateProposal() {
     fetchContracts();
     fetchData();
   }, [projectId]);
+
+  useEffect(() => {
+    const fetchSelectedContract = async () => {
+      const { data: projectData, error: projectError } = await supabase
+        .from("proyecto")
+        .select("contrato_marco_url")
+        .eq("id", projectId)
+        .single();
+
+      setSelectedName(projectData?.contrato_marco_url);
+    };
+
+    fetchSelectedContract();
+  }, [contracts]);
 
   // Calculate totals
   const totalRequirements = requirements.length;
@@ -309,6 +325,7 @@ export default function GenerateProposal() {
         <SelectContract
           contracts={contracts}
           onSelectionUpdate={add_url_to_proyect}
+          url={selectedName}
         />
         {/* Alerts Section */}
         {/* <div className="space-y-2">
