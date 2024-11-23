@@ -19,7 +19,7 @@ export interface Contract {
 interface SelectContractsProps {
   contracts: Contract[];
   onSelectionUpdate: (selectedValue: string) => Promise<void>;
-  url: string;
+  url: string | null;
 }
 
 export default function SelectContract({
@@ -36,7 +36,7 @@ export default function SelectContract({
   };
 
   return (
-    <Select value={url} onValueChange={handleValueChange}>
+    <Select value={url || undefined} onValueChange={handleValueChange}>
       <SelectTrigger className="">
         <SelectValue placeholder="Selecciona un contrato" />
       </SelectTrigger>

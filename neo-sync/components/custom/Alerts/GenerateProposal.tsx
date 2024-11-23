@@ -63,7 +63,7 @@ export default function GenerateProposal() {
 
   const supabase = createClient();
 
-  const [selectedName, setSelectedName] = useState<string>("");
+  const [selectedName, setSelectedName] = useState<string | null>(null);
   const add_url_to_proyect = async (name: string) => {
     try {
       const { error } = await supabase
