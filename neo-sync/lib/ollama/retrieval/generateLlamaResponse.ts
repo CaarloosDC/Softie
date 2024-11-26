@@ -1,4 +1,4 @@
-import { supabaseClient } from "@/supabase/client";
+import { supabase } from "@/lib/db";
 import { ollamaClient } from "../client/ollamaClient";
 import { createAndStoreEmbeddings } from "./generateEmbeddings";
 import { SupabaseClient } from "@supabase/supabase-js";
@@ -25,7 +25,7 @@ export async function generateAnswer(question: string, context: string, jsonForm
   // Convertir objeto a json para poder acceder a los valores
   const jsonResponse = JSON.parse(response.message.content);
 
-  const { data, error } = await supabaseClient.from("proyecto").insert([{
+  const { data, error } = await supabase.from("proyecto").insert([{
     nombre: jsonResponse.nombre,
     descripcion: jsonResponse.descripcion,
     costo: jsonResponse.costo,
@@ -45,7 +45,7 @@ export async function generateAnswer(question: string, context: string, jsonForm
     proyecto_id: projectID
   }))
 
-  const { error: reqError } = await supabaseClient.from("requerimiento").insert(requerimientos);
+  const { error: reqError } = await supabase.from("requerimiento").insert(requerimientos);
 
   if (reqError) {
     console.error('Error storing requirements:', reqError);

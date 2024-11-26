@@ -1,6 +1,6 @@
 import { fetchAndParsePDF } from "./pdfParser";
-import { supabaseClient } from "@/supabase/client";
 import { ollamaEmbeddingClient } from "../client/ollamaEmbeddingClient";
+import { supabase } from "@/lib/db";
 
 function splitText(text: string, maxLength: number): string[] {
     const regex = new RegExp(`(.|[\r\n]){1,${maxLength}}`, 'g');
@@ -29,7 +29,7 @@ export async function storePDFEmbeddings(filePath: string) {
         return acc.map((val, idx) => val + curr[idx]);
     }, new Array(384).fill(0)).map(val => val / embeddings.length);
 
-    const { data, error } = await supabaseClient.from("embeddings").insert([{
+    const { data, error } = await supabase.from("embeddings").insert([{
         content: pdfText,
         embedding: averagedEmbedding,
         metadata: { type: 'pdf', filePath: filePath }

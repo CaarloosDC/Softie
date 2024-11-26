@@ -1,4 +1,4 @@
-import { supabaseClient } from "@/supabase/client";
+import { supabase } from "@/lib/db";
 import { ollamaEmbeddingClient } from "../client/ollamaEmbeddingClient";
 
 export async function retrieveRelevantDocs(query: string) {
@@ -7,7 +7,7 @@ export async function retrieveRelevantDocs(query: string) {
   const queryEmbedding = await ollamaEmbeddingClient.embedQuery(query);
 
   // Perform similarity search in Supabase using pgvector
-  const { data, error } = await supabaseClient.rpc('match_documents', {
+  const { data, error } = await supabase.rpc('match_documents', {
     query_embedding: queryEmbedding,
     // similarity_threshold: 0.7,  // Customize the threshold for relevance
     match_count: 5, // Limit to top 5 matches,
