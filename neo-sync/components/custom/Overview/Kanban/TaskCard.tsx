@@ -226,7 +226,7 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
         <span className="text-sm">
           {isStarted 
             ? `Dia ${daysToShow + 1}` 
-            : daysToShow === 1 ? `Empieza en ${daysToShow} dia` : `Empieza en ${daysToShow} dias`
+            : daysToShow === 1 ? `Empieza en ${daysToShow} día` : `Empieza en ${daysToShow} días`
           }
         </span>
         {isStarted && (
@@ -275,7 +275,7 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
                     </span>
                   </div>
                 )}
-                {isInProjects && renderProgressIndicator()}
+                {/* {isInProjects && renderProgressIndicator()} */}
               </div>
 
               <div className="flex -space-x-2">

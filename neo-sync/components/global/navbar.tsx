@@ -54,7 +54,7 @@ const handleLogout = async () => {
       </Sheet>
 
       <div className="flex-1">
-        <form>
+        {/* <form>
           <div className="relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground dark:text-gray-300" />
             <Input
@@ -63,7 +63,7 @@ const handleLogout = async () => {
               className="w-full appearance-none bg-background pl-8 shadow-none border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 md:w-2/3 lg:w-1/3"
             />
           </div>
-        </form>
+        </form> */}
       </div>
 
       {/* Theme toggle de la página */}

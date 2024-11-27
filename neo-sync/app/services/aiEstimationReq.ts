@@ -51,7 +51,7 @@ Responde en JSON, no incluyas explicaciones adicionales, solamente el JSON con l
         },
         { role: "user", content: prompt }
       ],
-      model: "llama3.1",
+      model: process.env.OLLAMA_MODEL || 'llama3.1',
     });
 
     console.log("AI Response:", completion.message.content);

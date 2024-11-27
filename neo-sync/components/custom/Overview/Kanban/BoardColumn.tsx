@@ -64,7 +64,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
   const variants = cva(
     // "h-[500px] max-h-[500px] w-[350px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center",
     // "w-[370px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center border-none",
-    "lg:max-h-[650px] md:max-h-[450] w-[370px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center border-none",
+    "lg:max-h-[650px] md:max-h-[450] bg-primary-foreground flex flex-col flex-shrink-0 snap-center border-none",
 
     {
       variants: {
@@ -77,7 +77,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
     }
   );
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-1/3">
       <ColumnHeader column={column} />
       <div
         ref={setNodeRef} // Ref for the sortable column (so dnd-kit can control the DOM node).
@@ -118,12 +118,13 @@ export function BoardContainer({ children }: { children: React.ReactNode }) {
 
   return (
     <ScrollArea
-      className={variations({
-        dragging: dndContext.active ? "active" : "default", // Change scrolling behavior based on drag state.
-      })}
+      // className={variations({
+      //   dragging: dndContext.active ? "active" : "default", // Change scrolling behavior based on drag state.
+      // })}
+      className="w-full"
     >
       {/* <div className="flex gap-4 items-center flex-row justify-center"> */}
-      <div className="flex flex-row flex-wrap gap-4 justify-center">
+      <div className="flex flex-row gap-4 justify-center">
         {/* Render the columns passed as children. */}
         {children}
       </div>

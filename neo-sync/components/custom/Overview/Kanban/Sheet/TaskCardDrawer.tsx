@@ -101,7 +101,7 @@ export default function TaskCardDrawer({
         onOpenChange={onClose}>
         <SheetContent
           side="right"
-          className="w-full max-w-[100vw] sm:max-w-[100vw] lg:max-w-[50vw] p-2">
+          className="w-full max-w-[100vw] sm:max-w-[100vw] lg:max-w-[30vw] p-2">
           <div className="flex items-center justify-center h-full">
             <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
           </div>
@@ -116,7 +116,7 @@ export default function TaskCardDrawer({
       onOpenChange={onClose}>
       <SheetContent
         side="right"
-        className="w-full max-w-[100vw] sm:max-w-[100vw] lg:max-w-[50vw] p-2 flex flex-col h-full"
+        className="w-full max-w-[100vw] sm:max-w-[100vw] lg:max-w-[30vw] p-2 flex flex-col h-full"
       >
         <div className="flex-grow overflow-y-auto space-y-6">
           {requirementData && (

@@ -1,7 +1,5 @@
-// ProjectsComponent.tsx (Client Component)
-"use client";
-
-import React, { useState } from "react";
+"use client"
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +8,7 @@ import {
   ChevronDown,
   UserPlus,
   Users,
+  Bot,
 } from "lucide-react";
 import SearchBar from "@/components/custom/Overview/SearchBar";
 import { KanbanBoard } from "@/components/custom/Overview/Kanban/KanbanBoard";
@@ -17,11 +16,12 @@ import CustomSeparator from "@/components/custom/Overview/CustomSeparator";
 import BlueButton from "@/components/custom/BlueButton";
 import { Task } from "@/components/custom/Overview/Kanban/TaskCard";
 import { NewProject } from "@/components/custom/Alerts/NewProject";
-// import { NewProject } from "@/components/custom/Alerts/NewProject/NewProject";
 import { AddUser } from "@/components/custom/Alerts/AddUser";
 import UserManagement from "@/components/custom/Alerts/UserManagement";
 import Header from "@/components/global/Container/Header";
 import Container from "@/components/global/Container/Container";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ProjectsComponentProps {
   projects: Task[];
@@ -31,6 +31,7 @@ export default function ProjectsComponent({
   projects,
 }: ProjectsComponentProps) {
   const [filteredProjects, setFilteredProjects] = useState<Task[]>(projects);
+  const [showAlert, setShowAlert] = useState(true);
 
   const router = useRouter();
   const handleSearch = (query: string) => {
@@ -65,9 +66,7 @@ export default function ProjectsComponent({
 
       setFilteredProjects((prevProjects) => [...prevProjects, newProject]);
 
-      
       router.refresh();
-
     } catch (error) {
       console.error("Error creating project:", error);
     }
@@ -99,7 +98,14 @@ export default function ProjectsComponent({
     }
   };
 
-  //* Use parent container to render title and content
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowAlert(false);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <Container>
       <Header title="Dashboard">
@@ -108,49 +114,29 @@ export default function ProjectsComponent({
         </BlueButton>
       </Header>
 
-      {/* Content */}
       <SearchBar onSearch={handleSearch} />
       <KanbanBoard data={filteredProjects} />
+      <AnimatePresence>
+        {showAlert && (
+          <motion.div
+            className="fixed bottom-4 right-4 mb-4 ml-4 w-auto"
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 100, opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Alert className="flex items-center space-x-2 p-4 bg-blue-100 border border-blue-200 rounded-md shadow-md">
+              <Bot className="h-5 w-5 text-blue-600" />
+              <div>
+                <AlertTitle className="font-semibold text-blue-800">¡Hey, soy Botsie!</AlertTitle>
+                <AlertDescription className="text-blue-700">
+                  Soy tu agente con IA, si necesitas ayuda aquí estaré.
+                </AlertDescription>
+              </div>
+            </Alert>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Container>
   );
-
-  //* Old way of rendering content, without parent container
-  return (
-    <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 mx-auto">
-      <Header title="Dashboard">
-        <BlueButton text="Nuevo proyecto" icon={<Plus className="h-4 w-4" />}>
-          <NewProject onSubmit={handleCreateProject} />
-        </BlueButton>
-        <BlueButton
-          text="Agregar usuario"
-          icon={<UserPlus className="h-4 w-4" />}
-        >
-          <AddUser onSubmit={handleAddUser} />
-        </BlueButton>
-        <BlueButton
-          text="Gestionar usuarios"
-          icon={<Users className="h-4 w-4" />}
-        >
-          <UserManagement />
-        </BlueButton>
-        <Button
-          size={"sm"}
-          variant="outline"
-          className="bg-gray-200 text-gray-700 hover:bg-gray-300 border-gray-300 rounded-md shadow-sm"
-        >
-          <SlidersHorizontal className="mr-2 h-4 w-4" />
-          Filtrar proyectos
-          <ChevronDown className="ml-2 h-4 w-4" />
-        </Button>
-      </Header>
-
-      <div className="flex flex-col gap-3 rounded-lg shadow-sm">
-        <CustomSeparator />
-        <SearchBar onSearch={handleSearch} />
-        <KanbanBoard data={filteredProjects} />
-      </div>
-    </div>
-  );
 }
-
-

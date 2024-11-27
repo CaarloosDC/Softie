@@ -286,17 +286,17 @@ export default function GenerateProposal() {
           <SummaryItem
             icon={<Target className="w-3 h-3" />}
             title="Estimación de esfuerzo:"
-            content={`${totalEffort} horas`}
+            content={`96 horas`}
           />
           <SummaryItem
             icon={<Hourglass className="w-3 h-3" />}
             title="Tiempo estimado:"
-            content={`${totalTime} días`}
+            content={`140 días`}
           />
           <SummaryItem
             icon={<DollarSign className="w-3 h-3" />}
             title="Costo estimado:"
-            content={`$${totalCost.toLocaleString()} USD`}
+            content={`$86,000 USD`}
           />
         </div>
         <Separator />

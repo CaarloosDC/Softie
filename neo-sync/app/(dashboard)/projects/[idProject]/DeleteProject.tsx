@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal, Trash, Trash2 } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
 import { toast } from '@/hooks/use-toast';
 
@@ -76,7 +76,7 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({ projectId }) => {
           variant="outline"
           className="bg-red-600 hover:bg-red-700 text-white hover:text-white rounded-md px-4 py-2 text-sm font-medium flex items-center"
         >
-          <SlidersHorizontal className="mr-2 h-4 w-4" />
+          <Trash2 className="mr-2 h-4 w-4" />
           Eliminar
         </Button>
       </AlertDialogTrigger>
