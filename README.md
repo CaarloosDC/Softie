@@ -3,7 +3,8 @@
 Neosync es una plataforma de gestion de preventa de proyectos de software que utiliza Inteligenecia Artificial para eficientizar y agilizar el proceso de preventa.
 
 ## Índice
-1.Vistas
+
+1. Vistas
 2. [Documentos Entregados](#documentos-entregados)
 3. [Planeación](#planeación)
 4. [Diagrama de Componentes](#diagrama-de-componentes)
