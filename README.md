@@ -5,9 +5,9 @@ Neosync es una plataforma de gestion de preventa de proyectos de software que ut
 ## Índice
 
 1. Vistas
-2. [Documentos Entregados](#documentos-entregados)
-3. [Planeación](#planeación)
-4. [Diagrama de Componentes](#diagrama-de-componentes)
+2. Documentos Entregados
+3. Planeación
+4. Diagrama de Componentes
 5. Equipo
 
 ## Vistas
@@ -50,6 +50,8 @@ En este bloque hemos entregado los siguientes documentos. Puedes acceder a ellos
 - [Manual de usuario](https://drive.google.com/file/d/1n9Ychw43489FwdVwIGkBCDhTArJ--snm/view?usp=drive_link)
 
 Estos documentos se encuentran detallados en la Wiki del proyecto para un acceso más fácil y una consulta rápida durante el desarrollo.
+- [Toda la documentación en un solo archivo](https://drive.google.com/drive/folders/1w6jUVSuGOqnkgqzgaTLeev0EHfYkJ-Cd?usp=sharing)
+
 
 ---
 
