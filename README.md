@@ -48,9 +48,11 @@ En este bloque hemos entregado los siguientes documentos. Puedes acceder a ellos
 - [Documento de Requerimientos](https://docs.google.com/document/d/1K-KegpOpBIw_idXq83HhmWMXVDrcLAwU8OVUlaL_J_4/edit?usp=sharing)
 - [Manual de instalación](https://docs.google.com/document/d/1UC9Yet0tuBFgqQFPemzgqg_fsjXTaBZyCAqrMHvxRpY/edit?usp=sharing)
 - [Manual de usuario](https://drive.google.com/file/d/1n9Ychw43489FwdVwIGkBCDhTArJ--snm/view?usp=drive_link)
+- [Pruebas realizadas](https://github.com/CaarloosDC/Softie/tree/main/cypress)
 
 El SDD, Plan de Pruebas, Plan de Trabajo, Manual técnico y de instalación, y videos de la aplicación se encuentran en el siguiente link:
 - [Toda la documentación en un solo archivo](https://drive.google.com/drive/folders/1w6jUVSuGOqnkgqzgaTLeev0EHfYkJ-Cd?usp=sharing)
+
 
 
 ---
