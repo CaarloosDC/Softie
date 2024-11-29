@@ -49,7 +49,7 @@ En este bloque hemos entregado los siguientes documentos. Puedes acceder a ellos
 - [Manual de instalación](https://docs.google.com/document/d/1UC9Yet0tuBFgqQFPemzgqg_fsjXTaBZyCAqrMHvxRpY/edit?usp=sharing)
 - [Manual de usuario](https://drive.google.com/file/d/1n9Ychw43489FwdVwIGkBCDhTArJ--snm/view?usp=drive_link)
 
-Estos documentos se encuentran detallados en la Wiki del proyecto para un acceso más fácil y una consulta rápida durante el desarrollo.
+El SDD, Plan de Pruebas, Plan de Trabajo, Manual técnico y de instalación, y videos de la aplicación se encuentran en el siguiente link:
 - [Toda la documentación en un solo archivo](https://drive.google.com/drive/folders/1w6jUVSuGOqnkgqzgaTLeev0EHfYkJ-Cd?usp=sharing)
 
 
