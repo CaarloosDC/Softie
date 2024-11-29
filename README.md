@@ -9,35 +9,34 @@ Neosync es una plataforma de gestion de preventa de proyectos de software que ut
 4. [Diagrama de Componentes](#diagrama-de-componentes)
 5. Equipo
 
-
 ## Vistas
-<img width="659" alt="Screenshot 2024-11-28 at 8 50 13 p m" src="https://github.com/user-attachments/assets/1e7c8849-abe2-4fb0-82ce-c3c4092b9ef5">
+<img width="659" alt="Screenshot 2024-11-28 at 8 50 13 p m" src="https://github.com/user-attachments/assets/1e7c8849-abe2-4fb0-82ce-c3c4092b9ef5">
 
-<img width="621" alt="Screenshot 2024-11-28 at 8 50 30 p m" src="https://github.com/user-attachments/assets/5703bb14-c657-4812-b945-e677a14d9f51">
+<img width="659" alt="Screenshot 2024-11-28 at 8 50 30 p m" src="https://github.com/user-attachments/assets/5703bb14-c657-4812-b945-e677a14d9f51">
 
-Resumen de Proyectos
-<img width="589" alt="Screenshot 2024-11-28 at 8 50 56 p m" src="https://github.com/user-attachments/assets/5a064f83-5071-4953-b35b-ee89a50f7a7e">
-<img width="586" alt="Screenshot 2024-11-28 at 8 51 21 p m" src="https://github.com/user-attachments/assets/246ce60a-e57d-4506-9a25-19f60b8a9378">
-<img width="579" alt="Screenshot 2024-11-28 at 8 51 32 p m" src="https://github.com/user-attachments/assets/7efff546-c281-4cc2-be55-ce7f7798b8f0">
+## Resumen de Proyectos
+<img width="659" alt="Screenshot 2024-11-28 at 8 50 56 p m" src="https://github.com/user-attachments/assets/5a064f83-5071-4953-b35b-ee89a50f7a7e">
+<img width="659" alt="Screenshot 2024-11-28 at 8 51 21 p m" src="https://github.com/user-attachments/assets/246ce60a-e57d-4506-9a25-19f60b8a9378">
+<img width="659" alt="Screenshot 2024-11-28 at 8 51 32 p m" src="https://github.com/user-attachments/assets/7efff546-c281-4cc2-be55-ce7f7798b8f0">
 
-Editar Requerimientos
-<img width="734" alt="Screenshot 2024-11-28 at 8 51 53 p m" src="https://github.com/user-attachments/assets/c212be61-ce85-4dee-8156-cc509509e9ba">
-<img width="787" alt="Screenshot 2024-11-28 at 8 52 22 p m" src="https://github.com/user-attachments/assets/fa20222f-f945-4f5e-8b9c-8aad2e9fe783">
+## Editar Requerimientos
+<img width="659" alt="Screenshot 2024-11-28 at 8 51 53 p m" src="https://github.com/user-attachments/assets/c212be61-ce85-4dee-8156-cc509509e9ba">
+<img width="659" alt="Screenshot 2024-11-28 at 8 52 22 p m" src="https://github.com/user-attachments/assets/fa20222f-f945-4f5e-8b9c-8aad2e9fe783">
 
-Contratos Marco
-<img width="475" alt="Screenshot 2024-11-28 at 8 53 58 p m" src="https://github.com/user-attachments/assets/76ffa0d0-f00b-45ef-a948-1f47faea1a53">
+## Contratos Marco
+<img width="659" alt="Screenshot 2024-11-28 at 8 53 58 p m" src="https://github.com/user-attachments/assets/76ffa0d0-f00b-45ef-a948-1f47faea1a53">
 
-<img width="600" alt="Screenshot 2024-11-28 at 8 54 58 p m" src="https://github.com/user-attachments/assets/cc239082-80a5-4420-bd85-51f327fc0603">
+<img width="659" alt="Screenshot 2024-11-28 at 8 54 58 p m" src="https://github.com/user-attachments/assets/cc239082-80a5-4420-bd85-51f327fc0603">
 
-Resumen de Propuesta
-<img width="534" alt="Screenshot 2024-11-28 at 8 55 38 p m" src="https://github.com/user-attachments/assets/f50a93ed-9245-4632-80c2-85ef6af9c67f">
+## Resumen de Propuesta
+<img width="659" alt="Screenshot 2024-11-28 at 8 55 38 p m" src="https://github.com/user-attachments/assets/f50a93ed-9245-4632-80c2-85ef6af9c67f">
 
-Roles
-<img width="766" alt="Screenshot 2024-11-28 at 8 56 08 p m" src="https://github.com/user-attachments/assets/9a88fbe7-1e5b-49ee-a024-488d5e9cbf35">
-<img width="857" alt="Screenshot 2024-11-28 at 8 56 26 p m" src="https://github.com/user-attachments/assets/0d27e641-7097-4574-8d96-d2e993e8453c">
+## Roles
+<img width="659" alt="Screenshot 2024-11-28 at 8 56 08 p m" src="https://github.com/user-attachments/assets/9a88fbe7-1e5b-49ee-a024-488d5e9cbf35">
+<img width="659" alt="Screenshot 2024-11-28 at 8 56 26 p m" src="https://github.com/user-attachments/assets/0d27e641-7097-4574-8d96-d2e993e8453c">
 
-Chatbot
-<img width="652" alt="Screenshot 2024-11-28 at 8 56 48 p m" src="https://github.com/user-attachments/assets/7692fe5e-8fbe-4d95-9d66-abaaa05b0124">
+## Chatbot
+<img width="659" alt="Screenshot 2024-11-28 at 8 56 48 p m" src="https://github.com/user-attachments/assets/7692fe5e-8fbe-4d95-9d66-abaaa05b0124">
 
 ## Documentos Entregados
 
