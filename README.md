@@ -11,6 +11,9 @@ Neosync es una plataforma de gestion de preventa de proyectos de software que ut
 5. Equipo
 
 ## Vistas
+[Prueba nuestra pagina!](https://neosync-stqt.vercel.app/)
+
+
 <img width="659" alt="Screenshot 2024-11-28 at 8 50 13 p m" src="https://github.com/user-attachments/assets/1e7c8849-abe2-4fb0-82ce-c3c4092b9ef5">
 
 <img width="659" alt="Screenshot 2024-11-28 at 8 50 30 p m" src="https://github.com/user-attachments/assets/5703bb14-c657-4812-b945-e677a14d9f51">
